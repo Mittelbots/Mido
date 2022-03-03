@@ -1,0 +1,25 @@
+{
+  "name": "hautnah_dc",
+  "version": "0.0.1",
+  "description": "An own discord bot for hautnah.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mittelbots/hautnah_dc.git"
+  },
+  "author": "BlackDayz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mittelbots/hautnah_dc/issues"
+  },
+  "homepage": "https://github.com/Mittelbots/hautnah_dc#readme",
+  "dependencies": {
+    "discord.js": "^13.6.0",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.15",
+    "simple-node-logger": "^21.8.12"
+  }
+}
