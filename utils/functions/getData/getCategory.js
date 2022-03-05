@@ -8,9 +8,7 @@ async function getCategory(channel) {
         .then(res => {
             if(res.length <= 0) return false;
 
-            res.map(todo => {
-
-            });
+            return res;
         })
         .catch(err => {
             return errorhandler(err, 'Etwas ist schiefgelaufen! Versuche es erneut oder reporte den Bug.', channel);
