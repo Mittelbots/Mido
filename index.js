@@ -55,9 +55,11 @@ bot.login(token.BOT_TOKEN);
 
 //! ERROR --
 process.on('unhandledRejection', err => {
+    console.log(err);
     return errorhandler(err, null, null)
 });
 
 process.on('uncaughtException', err => {
+    console.log(err);
     return errorhandler(err, null, null)
 });
