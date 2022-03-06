@@ -94,16 +94,20 @@ module.exports.run = async (bot, message, args) => {
             categories.map(cat => {
                 if(interaction.values.indexOf(select_catId + cat.id) !== -1) {
 
+                    newMessageEmbed = null;
+                    newMessageEmbed = new MessageEmbed()
                     newMessageEmbed.setTitle(`ToDo Liste - ${cat.name}`)
                     newMessageEmbed.setColor(cat.color)
                     todo.map(todo =>{
-                        newMessageEmbed.addField('‎\n⏹️ ' + todo.title, '- _' + todo.text + '_ \n ');
+                        if(todo.cat_id === cat.id) {
+                            newMessageEmbed.addField('‎\n⏹️ ' + todo.title, '- _' + todo.text + '_ \n ');
+                        }
                     })
 
                     interaction.message.edit({
                         embeds: []
                     })
-
+                    
                     return interaction.message.edit({
                         embeds: [newMessageEmbed]
                     })
