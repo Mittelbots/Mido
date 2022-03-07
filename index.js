@@ -10,6 +10,7 @@ const { log } = require("./logs");
 const token = require('./_secret/token.json');
 const config = require('./utils/assets/json/_config/config.json');
 const activity = require('./utils/assets/json/activity/activity.json');
+const version = require('./package.json').version;
 
 const bot = new Discord.Client({
     intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS", "GUILD_VOICE_STATES"],
@@ -31,19 +32,15 @@ bot.on("messageCreate", async message => {
 });
 
 bot.once('ready', async () => {
-    var codeLines;
-    await getLinesOfCode((cb) => {
+    getLinesOfCode((cb) => {
         setTimeout(() => {
-            return codeLines = ` | Lines of Code: ${cb}` || '';
-        }, 1000);
-    });
-
-    setTimeout(() => {
-        bot.user.setActivity({
-            name: activity.playing.name + codeLines || '',
+          var codeLines = ` | Lines of Code: ${cb}` || '';
+          bot.user.setActivity({
+            name: activity.playing.name + ' ' +  version + codeLines,
             type: activity.playing.type
-        });
-    }, 1100);
+          });
+        }, 10000);
+      });
 
     console.log(`****Ready! Logged in as ${bot.user.tag}! I'm on ${bot.guilds.cache.size} Server****`);
 
