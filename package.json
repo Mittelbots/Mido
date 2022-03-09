@@ -1,6 +1,6 @@
 {
   "name": "hautnah_dc",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "An own discord bot for hautnah.",
   "main": "index.js",
   "scripts": {
