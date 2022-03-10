@@ -1,6 +1,4 @@
-const {Database} = require('../../../bot/db/db');
-
-const database = new Database();
+const database = require('../../../bot/db/db');
 
 async function hasPermissions(user) {
     return database.query('SELECT * FROM hn_perms')

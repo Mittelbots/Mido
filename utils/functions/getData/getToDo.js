@@ -1,7 +1,5 @@
-const { Database } = require('../../../bot/db/db');
+const database = require('../../../bot/db/db');
 const { errorhandler } = require('../errorhandler/errorhandler');
-
-const database = new Database();
 
 async function getToDo(channel) {
     return await database.query('SELECT * FROM hn_todo')

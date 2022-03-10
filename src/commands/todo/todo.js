@@ -4,9 +4,7 @@ const {
     MessageEmbed,
     MessageSelectMenu
 } = require('discord.js');
-const {
-    Database
-} = require('../../../bot/db/db');
+const database = require('../../../bot/db/db');
 const config = require('../../../utils/assets/json/_config/config.json');
 const { delay } = require('../../../utils/functions/delay/delay');
 
@@ -35,8 +33,6 @@ const {
     newToDoEmbed,
     newToDoButtons
 } = require('../../../utils/functions/toDoList/newToDo');
-
-const database = new Database();
 
 
 var sent = false;
@@ -357,6 +353,63 @@ module.exports.run = async (bot, message, args) => {
                             break;
 
                         case 'delete_toDo':
+                            await todo_item_interaction.channel.send({
+                                content: 'Bitte gebe die ID ein, von der Task, die du löschen möchtest.',
+                                ephemeral: true
+                            });
+
+                            var messageCollectorDeleteToDo = await message.channel.createMessageCollector({
+                                filter: (() => message.author.id),
+                                time: 15000,
+                                max: 1
+                            });
+
+                            messageCollectorDeleteToDo.on('collect', async reply => {
+                                if(isNaN(reply.content)) {
+                                    return reply.reply({
+                                        content: 'Es sind nur Nummern erlaubt! Versuche es erneut.'
+                                    }).then(async msg => {
+                                        await delay(50000);
+                                        reply.delete();
+                                        msg.delete();
+                                    })
+                                }else {
+                                    const task = await database.query('SELECT id FROM hn_todo WHERE id = ?', [reply.content])
+                                        .then(res => {return res[0]})
+                                        .catch(err => console.log(err));
+
+                                    if(task) {
+                                        return await database.query('DELETE FROM hn_todo WHERE id = ?', [reply.content])
+                                            .then(async () => {
+                                                return reply.reply({
+                                                    content: 'Erfolgreich gelöscht!'
+                                                }).then(async msg => {
+                                                    await delay(50000);
+                                                    reply.delete();
+                                                    msg.delete();
+                                                })
+                                            })
+                                            .catch(err => {
+                                                console.log(err);
+                                                return reply.reply({
+                                                    content: 'Etwas ist schief gelaufen!'
+                                                }).then(async msg => {
+                                                    await delay(50000);
+                                                    reply.delete();
+                                                    msg.delete();
+                                                })
+                                            })
+                                    }else {
+                                        return reply.reply({
+                                            content: 'Es wurde keine ToDo Task mit der ID gefunden!'
+                                        }).then(async msg => {
+                                            await delay(50000);
+                                            reply.delete();
+                                            msg.delete();
+                                        })
+                                    }
+                                }
+                            });
                             break;
                     }
                 });
