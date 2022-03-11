@@ -9,7 +9,7 @@ module.exports.welcome_message = async (member) => {
         .setTitle(`Willkommen auf ${member.guild.name}!`)
         .setDescription('Um dem Meeting zu joinen drücke auf "Meeting beitreten"')
         .setThumbnail(member.guild.iconURL())
-        .setColor('#1a2a4c')
+        .setColor('#e8d475')
         .setTimestamp()
 
     const button =  new MessageButton()
