@@ -18,8 +18,14 @@ const addButtons = () => {
         label: `ToDo Item löschen`,
         customId: 'delete_toDo'
     });
+    
+    const end_interaction = new MessageButton({
+        style: 'SECONDARY',
+        label: `Interaktion beenden`,
+        customId: 'end_int'
+    });
 
-    return [add_toDo, change_cat, delete_toDo]
+    return [add_toDo, change_cat, delete_toDo, end_interaction]
 }
 
 module.exports = {addButtons}
