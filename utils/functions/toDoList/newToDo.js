@@ -54,8 +54,8 @@ module.exports.newToDoButtons = (secondPage) => {
 
     const delete_button = new MessageButton({
         style: 'DANGER',
-        label: `Delete`,
-        customId: 'delete'
+        label: `Cancel`,
+        customId: 'cancel'
     });
 
     const back_button = new MessageButton({
