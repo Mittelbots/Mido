@@ -11,6 +11,8 @@ const token = require('./_secret/token.json');
 const config = require('./utils/assets/json/_config/config.json');
 const activity = require('./utils/assets/json/activity/activity.json');
 const { welcome_message } = require("./utils/functions/welcome_message/welcome_message");
+const todoListInteaction = require("./src/commands/todo/todo");
+const { todoListInteraction } = require("./utils/functions/toDoList/toDoListInteraction");
 const version = require('./package.json').version;
 
 const bot = new Discord.Client({
@@ -37,6 +39,14 @@ bot.on('guildMemberAdd', async member => {
 })
 
 bot.once('ready', async () => {
+    bot.on('interactionCreate', async (main_interaction) => {
+        await main_interaction.deferUpdate();
+    
+        try {
+            todoListInteraction(main_interaction)
+        }catch(err) {
+        }
+    });
     getLinesOfCode((cb) => {
         setTimeout(() => {
           var codeLines = ` | Lines of Code: ${cb}` || '';
