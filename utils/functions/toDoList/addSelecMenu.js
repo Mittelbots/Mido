@@ -2,30 +2,24 @@ const {
     MessageSelectMenu
 } = require('discord.js');
 
-const addSelectMenu = (categories, select_catId, add_catId) => {
+const addSelectMenu = async (categories, select_catId, add_catId) => {
     var menu = new MessageSelectMenu()
         .setCustomId(select_catId)
-        .setPlaceholder((categories) ? 'Select category' : 'Füge eine neue hinzu.')
+        .setPlaceholder((categories) ? 'Projekt wählen' : 'Füge ein neues Projekt hinzu.')
         .addOptions([{
             'value': 'add_cat',
-            'label': '----Kategorie hinzufügen----',
-            'description': 'Klicke hier  um eine Kategorie hinzuzufügen'
+            'label': '----Projekt hinzufügen----',
+            'description': 'Klicke hier um ein Projekt hinzuzufügen.'
         }])
 
-    if (categories !== false) {
+    if (categories) {
         categories.map(cat => {
             menu.addOptions([{
                 'value': select_catId + cat.id,
                 'label': cat.name,
-                'description': 'Klicke hier um Kategorie auszuwählen',
+                'description': 'Klicke hier um ein Projekt auszuwählen.',
             }])
         })
-    } else {
-        menu.addOptions([{
-            'value': add_catId,
-            'label': 'Füge eine neue Kategorie hinzu.',
-            'description': 'Klicke hier'
-        }])
     }
 
     return menu;
