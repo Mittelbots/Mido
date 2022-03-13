@@ -5,14 +5,14 @@ const { deployCommands } = require("./utils/functions/deployCommands/deployComma
 const { messageCreate } = require("./bot/events/messageCreate");
 const { getLinesOfCode } = require("./utils/functions/getLinesOfCode/getLinesOfCode");
 const { log } = require("./logs");
+const { welcome_message } = require("./utils/functions/welcome_message/welcome_message");
+const { todoListInteraction } = require("./utils/functions/toDoList/toDoListInteraction");
 
 //? JSON --
 const token = require('./_secret/token.json');
 const config = require('./utils/assets/json/_config/config.json');
 const activity = require('./utils/assets/json/activity/activity.json');
-const { welcome_message } = require("./utils/functions/welcome_message/welcome_message");
-const todoListInteaction = require("./src/commands/todo/todo");
-const { todoListInteraction } = require("./utils/functions/toDoList/toDoListInteraction");
+const { watchToDoList } = require("./utils/functions/watchToDoList/watchToDoList");
 const version = require('./package.json').version;
 
 const bot = new Discord.Client({
@@ -20,7 +20,7 @@ const bot = new Discord.Client({
     makeCache: Discord.Options.cacheWithLimits({
         MessageManager: 10,
         PresenceManager: 0,
-        disableMentions: 'everyone'
+        disableMentions: '@everyone, @here'
         // Add more class names here
     }),
 });
@@ -39,9 +39,9 @@ bot.on('guildMemberAdd', async member => {
 })
 
 bot.once('ready', async () => {
+    //watchToDoList();
     bot.on('interactionCreate', async (main_interaction) => {
         await main_interaction.deferUpdate();
-    
         try {
             todoListInteraction(main_interaction)
         }catch(err) {
