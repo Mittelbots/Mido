@@ -9,18 +9,26 @@ const { removeMention } = require("../removeCharacters/removeCharacters");
 const { addButtons } = require("./addButtonsToList");
 const { addSelectMenu } = require("./addSelecMenu");
 const { newToDoEmbed, newToDoButtons } = require("./newToDo");
+const { viewToDoList } = require("./viewToDoList");
 
 var count = 0;
 
 module.exports.todoListInteraction = async (main_interaction) => {
 
-    var categories = await getCategory(main_interaction.message.channel);
-    var todo = await getToDo(main_interaction.message.channel);
+    var categories;
+    var todo;
+
+    async function refreshCategories_ToDo() {
+        categories = await getCategory(main_interaction.message.channel);
+        todo = await getToDo(main_interaction.message.channel);
+    }
+    await refreshCategories_ToDo();
 
     if (main_interaction.isSelectMenu() && main_interaction.customId === 'select_cat') {
         //? WENN KEINE KATEGORIE EXISTIERT
         if (main_interaction.values.indexOf(add_catId) !== -1) {
-            await main_interaction.message.channel.send('Bitte gebe einen Namen ein!')
+            var giveNameMessage = await main_interaction.message.channel.send('Bitte gebe einen Namen ein!');
+
             var messageCollector = await main_interaction.message.channel.createMessageCollector({
                 filter: (() => main_interaction.message.author.id),
                 time: 15000,
@@ -28,12 +36,42 @@ module.exports.todoListInteraction = async (main_interaction) => {
             });
 
             messageCollector.on('collect', async reply => {
+                if(reply.content.toLowerCase() === 'cancel') {
+                    await reply.reply({
+                        content: 'Abgebrochen!'
+                    }).then(async msg => {
+                        await delay(2000);
+                        msg.delete();
+                    });
+                    count = count - 1;
+                    reply.delete();
+                    giveNameMessage.delete();
+                    giveNameMessage = null;
+                    return; 
+                }
                 return await database.query('INSERT INTO hn_category (name, color) VALUES (?, ?)', [reply.content, '#021982'])
-                    .then(() => {
+                    .then(async () => {
+                        await refreshCategories_ToDo();
+
+                        var newMessageEmbed = new MessageEmbed()
+                        .setTitle('Wähle ein neues Projekt aus.')
+                        .setTimestamp()
+
+                        const newSelectMenu = await addSelectMenu(categories, select_catId, add_catId)
+
+                        main_interaction.message.edit({
+                            embeds: [newMessageEmbed],
+                            components: [new MessageActionRow({
+                                components: [newSelectMenu]
+                            })]
+                        })
                         return reply.reply({
                             content: 'Saved',
-                            ephemeral: true,
-                            components: []
+                        }).then(async msg => {
+                            await delay(3000);
+                            reply.delete();
+                            msg.delete();
+                            giveNameMessage.delete();
                         })
                     })
                     .catch(err => {
@@ -41,36 +79,36 @@ module.exports.todoListInteraction = async (main_interaction) => {
                     });
             });
 
-        } else {
-            //? WENN KATEGORIEN EXISTIEREN
-            var currentCatId;
-            categories.map(async cat => {
-                if (main_interaction.values.indexOf(select_catId + cat.id) !== -1) {
-
-                    newMessageEmbed = new MessageEmbed()
-                    newMessageEmbed.setTitle(`ToDo Liste - ${cat.name}`)
-                    newMessageEmbed.setColor(cat.color)
-
-                    todo.map(todo => {
-                        if (todo.cat_id === cat.id) {
-                            newMessageEmbed.addField('‎\n⏹️ ' + todo.title, '- _' + todo.text + '_ \n ||ID:' + todo.id + '||');
+            messageCollector.on('end', (collected, reason) => {
+                if(reason === 'time') {
+                    try {
+                        var comp = giveNameMessage.components[0].components
+                        for(let i in comp) {
+                            comp[i].setDisabled(true)
                         }
-                    });
-
-                    currentCatId = cat.id;
+                        giveNameMessage.edit({content: '**Time limit reached (15s)**', components: [giveNameMessage.components[0]]})
+                    }catch(err) {
+                        console.log(err);
+                    }
                 }
-            });
+            })
+
+        } else {
+            //? ------WENN KATEGORIEN EXISTIEREN-----
+
+            const currentToDoList = await viewToDoList(categories, todo, main_interaction)
+
+            var currentCatId = currentToDoList[0];
 
             const todolist = await main_interaction.message.edit({
-                embeds: [newMessageEmbed],
+                embeds: [currentToDoList[1]],
                 components: [new MessageActionRow({
                     components: [addButtons()[0], addButtons()[1], addButtons()[2], addButtons()[3]]
                 })]
             })
 
             const collector = await todolist.createMessageComponentCollector({
-                filter: (() => main_interaction.message.author.id),
-                time: 60000
+                filter: (() => main_interaction.message.author.id)
             });
 
             collector.on('collect', async todo_item_interaction => {
@@ -82,7 +120,6 @@ module.exports.todoListInteraction = async (main_interaction) => {
 
                 switch (todo_item_interaction.customId) {
                     case 'add_toDo':
-
                         count++;
                         if (count > 1) {
                             return;
@@ -142,16 +179,20 @@ module.exports.todoListInteraction = async (main_interaction) => {
 
                                     if(title == '') {
                                         canPass = false;
-                                        todo_interaction.channel.send('Der Titel fehlt!').then(async msg => {
-                                            await delay(10000);
+                                        todo_interaction.channel.send({
+                                            content:'Der Titel fehlt!'
+                                        }).then(async msg => {
+                                            await delay(3000);
                                             msg.delete();
                                         })
                                     }
 
                                     if(text == '' && canPass) {
                                         canPass = false;
-                                        todo_interaction.channel.send('Der Text fehlt!').then(async msg => {
-                                            await delay(10000);
+                                        todo_interaction.channel.send({
+                                            content: 'Der Text fehlt!'
+                                        }).then(async msg => {
+                                            await delay(3000);
                                             msg.delete();
                                         })
                                     }
@@ -159,22 +200,26 @@ module.exports.todoListInteraction = async (main_interaction) => {
                                     if(canPass) {
                                         await database.query('INSERT INTO hn_todo (user_id, title, text, deadline, other_user, cat_id) VALUES (?, ?, ?, ?, ?, ?)', [main_interaction.message.author.id, title, text, deadline, user, currentCatId])
                                             .then(() => {
-                                                todo_interaction.channel.send('Die neue Task wurde erfolgreich gespeichert!').then(async msg => {
-                                                    await delay(10000);
+                                                todo_interaction.channel.send({
+                                                    content: 'Die neue Task wurde erfolgreich gespeichert!'
+                                                }).then(async msg => {
+                                                    await delay(3000);
                                                     msg.delete();
                                                 })
                                             })
                                             .catch(err => {
                                                 console.log(err);
-                                                todo_interaction.channel.send('Irgendetwas ist falsch gelaufen!').then(async msg => {
-                                                    await delay(10000);
+                                                todo_interaction.channel.send({
+                                                    content:'Irgendetwas ist falsch gelaufen!'
+                                                }).then(async msg => {
+                                                    await delay(3000);
                                                     msg.delete();
                                                 })
                                             })
 
-                                            await delay(10000);
+                                            await delay(5000);
                                             task.delete();
-                                            count--;
+                                            count = count - 1;
                                     }
                                     break;
 
@@ -188,14 +233,13 @@ module.exports.todoListInteraction = async (main_interaction) => {
                                     break;
 
                                 case 'cancel':
-                                    count--;
+                                    count = count - 1;
                                     await todo_interaction.message.delete();
                                     interactionCount--;
                             }
 
                             var messageCollector = await main_interaction.message.channel.createMessageCollector({
                                 filter: (() => main_interaction.message.author.id),
-                                time: 60000,
                                 max: 1
                             });
 
@@ -244,7 +288,7 @@ module.exports.todoListInteraction = async (main_interaction) => {
                                             reply.channel.send({
                                                 content: 'Du hast ein falsches Format übermittelt! DD.MM.YYYY oder DD.MM'
                                             }).then(async msg => {
-                                                await delay(10000);
+                                                await delay(3000);
                                                 msg.delete();
                                             })
                                         }
@@ -266,7 +310,7 @@ module.exports.todoListInteraction = async (main_interaction) => {
                                                 reply.channel.send({
                                                     content: `Der Spieler wurde nicht gefunden!`
                                                 }).then(async msg => {
-                                                    await delay(10000);
+                                                    await delay(3000);
                                                     msg.delete();
                                                 })
                                                 i = other_user.length;
@@ -291,16 +335,26 @@ module.exports.todoListInteraction = async (main_interaction) => {
                     case 'change_cat':
                         var old_int = todo_item_interaction;
                         todo_item_interaction = null;
+                        var newSelectMenu = await addSelectMenu(categories, select_catId, add_catId)
                         old_int.message.edit({
                             components: [new MessageActionRow({
-                                components: [addSelectMenu(categories, select_catId, add_catId)]
+                                components: [newSelectMenu]
                             })]
-                        })
+                        });
+                        if(count > 0) --count;
                         break;
 
                     case 'delete_toDo':
-                        await todo_item_interaction.channel.send({
-                            content: 'Bitte gebe die ID ein, von der Task, die du löschen möchtest.',
+                    console.log('Countdel: '+ count)
+                        if(count < 0) count = 0;
+
+                        count++;
+
+                        if (count > 1) {
+                            return;
+                        }
+                        var del_todoMessage = await todo_item_interaction.channel.send({
+                            content: 'Bitte gebe die ID ein, von der Task, die du löschen möchtest. (Tipp: "cancel" bricht diesen Vorgang ab!)',
                             ephemeral: true
                         });
 
@@ -311,7 +365,20 @@ module.exports.todoListInteraction = async (main_interaction) => {
                         });
 
                         messageCollectorDeleteToDo.on('collect', async reply => {
+                            if(reply.content.toLowerCase() === 'cancel') {
+                                await reply.reply({
+                                    content: 'Abgebrochen!'
+                                }).then(async msg => {
+                                    await delay(3000);
+                                    msg.delete();
+                                });
+                                count = count - 1;
+                                reply.delete();
+                                del_todoMessage.delete();
+                                return;
+                            }
                             if(isNaN(reply.content)) {
+                                count = count - 1;
                                 return reply.reply({
                                     content: 'Es sind nur Nummern erlaubt! Versuche es erneut.'
                                 }).then(async msg => {
@@ -327,6 +394,7 @@ module.exports.todoListInteraction = async (main_interaction) => {
                                 if(task) {
                                     return await database.query('DELETE FROM hn_todo WHERE id = ?', [reply.content])
                                         .then(async () => {
+                                            count = count - 1;
                                             return reply.reply({
                                                 content: 'Erfolgreich gelöscht!'
                                             }).then(async msg => {
@@ -336,6 +404,7 @@ module.exports.todoListInteraction = async (main_interaction) => {
                                             })
                                         })
                                         .catch(err => {
+                                            count = count - 1;
                                             console.log(err);
                                             return reply.reply({
                                                 content: 'Etwas ist schief gelaufen!'
@@ -346,6 +415,7 @@ module.exports.todoListInteraction = async (main_interaction) => {
                                             })
                                         })
                                 }else {
+                                    count = count - 1;
                                     return reply.reply({
                                         content: 'Es wurde keine ToDo Task mit der ID gefunden!'
                                     }).then(async msg => {
@@ -357,13 +427,14 @@ module.exports.todoListInteraction = async (main_interaction) => {
                             }
                         });
                         break;
-
                     case 'end_int':
                         var comp = todo_item_interaction.message.components[0].components
                         for(let i in comp) {
                             comp[i].setDisabled(true)
                         }
-                        todolist.edit({components: [todo_item_interaction.message.components[0]]})
+                        todolist.edit({components: [todo_item_interaction.message.components[0]]});
+                        count = 0;
+                        interactionCount = 0;
                     break;
                 }
             });
