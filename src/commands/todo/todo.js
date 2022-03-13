@@ -20,29 +20,25 @@ module.exports.select_catId = 'select_cat';
 
 module.exports.run = async (bot, message, args) => {
     if (!await hasPermissions(message.member)) {
-        return message.reply('Du hast keine Berechtigung dafür.');
+        return message.reply('Du hast keine Berechtigung dafür. Falls dies falsch ist, kontaktiere den Discord Support.');
     }
 
-    var todo = await getToDo(message.channel);
     var categories = await getCategory(message.channel);
 
-    if (!todo) return message.channel.send('Keine To-Do Liste in der Datenbank.');
-
     var newMessageEmbed = new MessageEmbed()
-        .setTitle((categories) ? 'Wähle eine neue Kategorie aus.' : 'Füge zuerst eine neue Kategorie hinzu.')
+        .setTitle((categories) ? 'Wähle ein neues Projekt aus.' : 'Füge zuerst ein neues Projekt hinzu.')
         .setTimestamp()
 
-
-
-    var newMessageEmbedInteraction = new MessageActionRow()
-        .addComponents(addSelectMenu(categories, this.select_catId, this.add_catId))
-
-    message.reply({
+    var newMessageEmbedInteraction = await addSelectMenu(categories, this.select_catId, this.add_catId);
+    await message.reply({
         embeds: [newMessageEmbed],
-        components: [newMessageEmbedInteraction]
-    });
-
+        components: [new MessageActionRow({
+            components: [newMessageEmbedInteraction]
+        })]
+    }); 
     
+
+    return;
 }
 module.exports.help = {
     name: "todo",
