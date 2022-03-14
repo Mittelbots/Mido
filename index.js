@@ -1,4 +1,4 @@
-//?MODULES --
+//? MODULES --
 const Discord = require("discord.js");
 const { errorhandler } = require("./utils/functions/errorhandler/errorhandler");
 const { deployCommands } = require("./utils/functions/deployCommands/deployCommands");
@@ -7,12 +7,13 @@ const { getLinesOfCode } = require("./utils/functions/getLinesOfCode/getLinesOfC
 const { log } = require("./logs");
 const { welcome_message } = require("./utils/functions/welcome_message/welcome_message");
 const { todoListInteraction } = require("./utils/functions/toDoList/toDoListInteraction");
+const { watchToDoList } = require("./utils/functions/watchToDoList/watchToDoList");
+const { getLang } = require("./utils/functions/getData/getLang");
 
 //? JSON --
 const token = require('./_secret/token.json');
 const config = require('./utils/assets/json/_config/config.json');
 const activity = require('./utils/assets/json/activity/activity.json');
-const { watchToDoList } = require("./utils/functions/watchToDoList/watchToDoList");
 const version = require('./package.json').version;
 
 const bot = new Discord.Client({
@@ -31,6 +32,8 @@ bot.commands = new Discord.Collection();
 deployCommands(bot);
 
 bot.on("messageCreate", async message => {
+    module.exports.lang = await getLang(message.guild.id);
+
     return await messageCreate(message, bot);
 });
 

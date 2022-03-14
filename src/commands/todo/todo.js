@@ -6,17 +6,12 @@ const {
     getCategory
 } = require('../../../utils/functions/getData/getCategory');
 const {
-    getToDo
-} = require('../../../utils/functions/getData/getToDo');
-const {
     hasPermissions
 } = require('../../../utils/functions/hasPermissions/hasPermissions');
 const {
     addSelectMenu
 } = require('../../../utils/functions/toDoList/addSelecMenu');
-
-module.exports.add_catId = 'add_cat';
-module.exports.select_catId = 'select_cat';
+const { select_catId, add_catId } = require('../../../utils/variables/variables');
 
 module.exports.run = async (bot, message, args) => {
     if (!await hasPermissions(message.member)) {
@@ -29,7 +24,7 @@ module.exports.run = async (bot, message, args) => {
         .setTitle((categories) ? 'Wähle ein neues Projekt aus.' : 'Füge zuerst ein neues Projekt hinzu.')
         .setTimestamp()
 
-    var newMessageEmbedInteraction = await addSelectMenu(categories, this.select_catId, this.add_catId);
+    var newMessageEmbedInteraction = await addSelectMenu(categories, select_catId, add_catId);
     await message.reply({
         embeds: [newMessageEmbed],
         components: [new MessageActionRow({

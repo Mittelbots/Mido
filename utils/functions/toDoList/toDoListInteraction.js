@@ -1,6 +1,6 @@
 const { MessageEmbed, MessageActionRow } = require("discord.js");
 const database = require("../../../bot/db/db");
-const { add_catId, select_catId } = require("../../../src/commands/todo/todo");
+const { add_catId, select_catId, categories, todo } = require("../../variables/variables");
 const { delay } = require("../delay/delay");
 const { errorhandler } = require("../errorhandler/errorhandler");
 const { getCategory } = require("../getData/getCategory");
@@ -14,9 +14,6 @@ const { viewToDoList } = require("./viewToDoList");
 var count = 0;
 
 module.exports.todoListInteraction = async (main_interaction) => {
-
-    var categories;
-    var todo;
 
     async function refreshCategories_ToDo() {
         categories = await getCategory(main_interaction.message.channel);
