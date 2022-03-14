@@ -237,6 +237,18 @@ module.exports.todoListInteraction = async (main_interaction) => {
                                     count = count - 1;
                                     await todo_interaction.message.delete();
                                     interactionCount--;
+                                    newToDocollector = null;
+                                    todo_interaction = null;
+                                    break;
+
+                                case 'back':
+                                    await todo_interaction.message.edit({
+                                        components: [new MessageActionRow({
+                                            components: [newToDoButtons()[0], newToDoButtons()[1], newToDoButtons()[2], newToDoButtons()[3], newToDoButtons()[4]]
+                                        })]
+                                    });
+                                    interactionCount--;
+                                    break;
                             }
 
                             var messageCollector = await main_interaction.message.channel.createMessageCollector({
