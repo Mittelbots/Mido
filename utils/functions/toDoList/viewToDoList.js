@@ -15,7 +15,7 @@ module.exports.viewToDoList = async (categories, todo, main_interaction) => {
             if(todo) {
                 todo.map(todo => {
                     if (todo.cat_id === cat.id) {
-                        newMessageEmbed.addField('‎\n⏹️ ' + todo.title, '- _' + todo.text + '_ \n ||ID:' + todo.id + '||');
+                        newMessageEmbed.addField('‎\n⏹️ ' + todo.title + ' ||ID: ' + todo.id, ' || - _' + todo.text + '\nDeadline: ' + todo.deadline + ' \nAndere Nutzer: ');
                     }
                 });
             }
