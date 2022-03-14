@@ -65,6 +65,7 @@ module.exports.todoListInteraction = async (main_interaction) => {
                                 components: [newSelectMenu]
                             })]
                         })
+                        messageCollector = null;
                         return reply.reply({
                             content: 'Saved',
                         }).then(async msg => {
@@ -247,9 +248,21 @@ module.exports.todoListInteraction = async (main_interaction) => {
                                 switch (todo_interaction.customId) {
                                     case 'add_title':
                                         title = reply.content;
-                                        task.edit({
-                                            embeds: [newToDoEmbed(title, text, deadline, user)]
-                                        });
+                                        try {
+                                            await task.edit({
+                                                embeds: [newToDoEmbed(title, text, deadline, user)]
+                                            });
+                                        }catch(err) {
+                                            if(err.code == '50035') { //String too long
+                                                reply.reply({
+                                                    content: 'Dein Titel ist zu lang!. Die perfekte Länge sind max. 50 Zeichen!'
+                                                }).then(async msg => {
+                                                    await delay(4000);
+                                                    msg.delete();
+                                                })
+                                                await delay(4000);
+                                            }
+                                        }
                                         reply.delete();
                                         todo_interaction_reply.delete();
                                         interactionCount--;
@@ -257,9 +270,21 @@ module.exports.todoListInteraction = async (main_interaction) => {
 
                                     case 'add_text':
                                         text = reply.content;
-                                        task.edit({
-                                            embeds: [newToDoEmbed(title, text, deadline, user)]
-                                        });
+                                        try {
+                                            task.edit({
+                                                embeds: [newToDoEmbed(title, text, deadline, user)]
+                                            });
+                                        }catch(err) {
+                                            if(err.code == '50035') { //String too long
+                                                reply.reply({
+                                                    content: 'Dein Titel ist zu lang!. Die perfekte Länge sind max. 50 Zeichen!'
+                                                }).then(async msg => {
+                                                    await delay(4000);
+                                                    msg.delete();
+                                                })
+                                                await delay(4000);
+                                            }
+                                        }
                                         reply.delete();
                                         todo_interaction_reply.delete();
                                         interactionCount--;
@@ -345,7 +370,6 @@ module.exports.todoListInteraction = async (main_interaction) => {
                         break;
 
                     case 'delete_toDo':
-                    console.log('Countdel: '+ count)
                         if(count < 0) count = 0;
 
                         count++;
