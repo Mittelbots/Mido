@@ -1,2 +1,3 @@
-module.exports.add_catId = 'add_cat';
-module.exports.select_catId = 'select_cat';
+module.exports.add_ProjectId = 'add_project';
+module.exports.select_ProjectId = 'select_project';
+module.exports.delete_Project = 'delete_project';

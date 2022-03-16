@@ -1,10 +1,10 @@
-const { MessageEmbed, MessageActionRow } = require("discord.js");
+const { MessageActionRow } = require("discord.js");
 const database = require("../../../bot/db/db");
-const { add_catId, select_catId } = require("../../variables/variables");
+const { add_ProjectId, select_ProjectId, delete_Project } = require("../../variables/variables");
 const { delay } = require("../delay/delay");
-const { errorhandler } = require("../errorhandler/errorhandler");
-const { getCategory } = require("../getData/getCategory");
-const { getToDo } = require("../getData/getToDo");
+const { refreshCategories_ToDo } = require("../getData/refreshCategories_ToDo");
+const { addProject } = require("../projects/addProject");
+const { deleteProject } = require("../projects/deleteProject");
 const { removeMention } = require("../removeCharacters/removeCharacters");
 const { addButtons } = require("./addButtonsToList");
 const { addSelectMenu } = require("./addSelecMenu");
@@ -12,87 +12,24 @@ const { newToDoEmbed, newToDoButtons } = require("./newToDo");
 const { viewToDoList } = require("./viewToDoList");
 
 var count = 0;
+var categories;
+var todo;
 
 module.exports.todoListInteraction = async (main_interaction) => {
 
-    var categories;
-    var todo;
+    const refresh = await refreshCategories_ToDo(main_interaction);
+    categories = refresh[0];
+    todo = refresh[1];
 
-    async function refreshCategories_ToDo() {
-        categories = await getCategory(main_interaction.message.channel);
-        todo = await getToDo(main_interaction.message.channel);
-    }
-    await refreshCategories_ToDo();
+    if (main_interaction.isSelectMenu() && main_interaction.customId === select_ProjectId) {
 
-    if (main_interaction.isSelectMenu() && main_interaction.customId === 'select_cat') {
-        //? WENN KEINE KATEGORIE EXISTIERT
-        if (main_interaction.values.indexOf(add_catId) !== -1) {
-            var giveNameMessage = await main_interaction.message.channel.send('Bitte gebe einen Namen ein!');
+        if (main_interaction.values.indexOf(add_ProjectId) !== -1) { //? WENN KEINE KATEGORIE EXISTIERT
 
-            var messageCollector = await main_interaction.message.channel.createMessageCollector({
-                filter: (() => main_interaction.message.author.id),
-                time: 15000,
-                max: 1
-            });
+            return await addProject(main_interaction, count);
 
-            messageCollector.on('collect', async reply => {
-                if(reply.content.toLowerCase() === 'cancel') {
-                    await reply.reply({
-                        content: 'Abgebrochen!'
-                    }).then(async msg => {
-                        await delay(2000);
-                        msg.delete();
-                    });
-                    count = count - 1;
-                    reply.delete();
-                    giveNameMessage.delete();
-                    giveNameMessage = null;
-                    return; 
-                }
-                return await database.query('INSERT INTO hn_category (name, color) VALUES (?, ?)', [reply.content, '#021982'])
-                    .then(async () => {
-                        await refreshCategories_ToDo();
+        }else if(main_interaction.values.indexOf(delete_Project) !== -1) {
 
-                        var newMessageEmbed = new MessageEmbed()
-                        .setTitle('Wähle ein neues Projekt aus.')
-                        .setTimestamp()
-
-                        const newSelectMenu = await addSelectMenu(categories, select_catId, add_catId)
-
-                        main_interaction.message.edit({
-                            embeds: [newMessageEmbed],
-                            components: [new MessageActionRow({
-                                components: [newSelectMenu]
-                            })]
-                        })
-                        messageCollector = null;
-                        return reply.reply({
-                            content: 'Saved',
-                        }).then(async msg => {
-                            await delay(3000);
-                            reply.delete();
-                            msg.delete();
-                            giveNameMessage.delete();
-                        })
-                    })
-                    .catch(err => {
-                        return errorhandler(err, 'Fehler beim hinzufügen.', main_interaction.message.channel);
-                    });
-            });
-
-            messageCollector.on('end', (collected, reason) => {
-                if(reason === 'time') {
-                    try {
-                        var comp = giveNameMessage.components[0].components
-                        for(let i in comp) {
-                            comp[i].setDisabled(true)
-                        }
-                        giveNameMessage.edit({content: '**Time limit reached (15s)**', components: [giveNameMessage.components[0]]})
-                    }catch(err) {
-                        console.log(err);
-                    }
-                }
-            })
+            return await deleteProject(main_interaction, categories, false);
 
         } else {
             //? ------WENN KATEGORIEN EXISTIEREN-----
@@ -372,7 +309,7 @@ module.exports.todoListInteraction = async (main_interaction) => {
                     case 'change_cat':
                         var old_int = todo_item_interaction;
                         todo_item_interaction = null;
-                        var newSelectMenu = await addSelectMenu(categories, select_catId, add_catId)
+                        var newSelectMenu = await addSelectMenu(categories, false)
                         old_int.message.edit({
                             components: [new MessageActionRow({
                                 components: [newSelectMenu]
@@ -487,5 +424,11 @@ module.exports.todoListInteraction = async (main_interaction) => {
 
             return;
         }
+    }else if(main_interaction.isSelectMenu() && main_interaction.customId === delete_Project) {
+
+        await deleteProject(main_interaction, categories, true)
+
+    }else {
+
     }
 }

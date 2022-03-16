@@ -9,7 +9,8 @@ class Database {
       user: dbconfig.user,
       password: dbconfig.password,
       database: dbconfig.database,
-      debug: false
+      debug: false,
+      multipleStatements: true
     });
 
     this.connection.getConnection((err, connection) => {

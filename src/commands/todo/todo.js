@@ -14,7 +14,6 @@ const {
     addSelectMenu
 } = require('../../../utils/functions/toDoList/addSelecMenu');
 const { viewUserToDo } = require('../../../utils/functions/toDoList/viewUserToDo');
-const { select_catId, add_catId } = require('../../../utils/variables/variables');
 
 module.exports.run = async (bot, message, args) => {
     if (!await hasPermissions(message.member)) {
@@ -58,7 +57,7 @@ module.exports.run = async (bot, message, args) => {
         .setTitle((categories) ? 'Wähle ein neues Projekt aus.' : 'Füge zuerst ein neues Projekt hinzu.')
         .setTimestamp()
 
-    var newMessageEmbedInteraction = await addSelectMenu(categories, select_catId, add_catId);
+    var newMessageEmbedInteraction = await addSelectMenu(categories, false);
     await message.reply({
         embeds: [newMessageEmbed],
         components: [new MessageActionRow({

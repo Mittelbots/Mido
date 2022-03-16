@@ -1,13 +1,12 @@
 const { MessageEmbed } = require("discord.js");
-const { select_catId } = require("../../../src/commands/todo/todo");
+const { select_ProjectId } = require("../../variables/variables");
 
 module.exports.viewToDoList = async (categories, todo, main_interaction) => {
     var currentCatId;
     var newMessageEmbed;
     
     categories.map(async cat => {
-        if (main_interaction.values.indexOf(select_catId + cat.id) !== -1) {
-
+        if (main_interaction.values.indexOf(select_ProjectId + cat.id) !== -1) {
             newMessageEmbed = new MessageEmbed()
             newMessageEmbed.setTitle(`ToDo Liste - ${cat.name}`)
             newMessageEmbed.setColor(cat.color)
