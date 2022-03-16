@@ -17,7 +17,7 @@ module.exports.viewUserToDo = async (user_id, guild_id, channel) => {
                 res.map(todo => {
                     categories.map(cat => {
                         if(todo.cat_id === cat.id) {
-                            newEmbed.addField(`Kategorie: ${cat.name}\n⏹️ ${todo.title} ||ID: ${todo.id}||`, `_ ${todo.text}_ \n\n**Deadline:** ${todo.deadline || 'Keine'} \n**Andere Nutzer:** ${todo.other_user ||'No one'}`)
+                            newEmbed.addField(`Kategorie: ${cat.name}\n⏹️ ${todo.title} ||ID: ${todo.id}||`, `_ ${todo.text}_ \n**Deadline:** ${todo.deadline || 'Keine'} \n**Andere Nutzer:** ${todo.other_user ||'No one'}`)
                         }
                     });
                 });
