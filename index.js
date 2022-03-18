@@ -42,7 +42,7 @@ bot.on('guildMemberAdd', async member => {
 })
 
 bot.once('ready', async () => {
-    //watchToDoList();
+    watchToDoList(bot);
     bot.on('interactionCreate', async (main_interaction) => {
         await main_interaction.deferUpdate();
         try {
@@ -60,7 +60,7 @@ bot.once('ready', async () => {
         }, 10000);
       });
 
-    console.log(`****Ready! Logged in as ${bot.user.tag}! I'm on ${bot.guilds.cache.size} Server****`);
+    console.info(`****Ready! Logged in as ${bot.user.tag}! I'm on ${bot.guilds.cache.size} Server****`);
 
     if(config.debug) log.info('------------BOT SUCCESSFULLY STARTED------------', new Date());
 });
@@ -70,11 +70,11 @@ bot.login(token.BOT_TOKEN);
 
 //! ERROR --
 process.on('unhandledRejection', err => {
-    console.log(err);
+    if(config.debug) console.log(err);
     return errorhandler(err, null, null)
 });
 
 process.on('uncaughtException', err => {
-    console.log(err);
+    if(config.debug) console.log(err);
     return errorhandler(err, null, null)
 });

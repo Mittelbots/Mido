@@ -1,15 +1,41 @@
-const { MessageActionRow } = require("discord.js");
+const {
+    MessageActionRow
+} = require("discord.js");
 const database = require("../../../bot/db/db");
-const { add_ProjectId, select_ProjectId, delete_Project } = require("../../variables/variables");
-const { delay } = require("../delay/delay");
-const { refreshCategories_ToDo } = require("../getData/refreshCategories_ToDo");
-const { addProject } = require("../projects/addProject");
-const { deleteProject } = require("../projects/deleteProject");
-const { removeMention } = require("../removeCharacters/removeCharacters");
-const { addButtons } = require("./addButtonsToList");
-const { addSelectMenu } = require("./addSelecMenu");
-const { newToDoEmbed, newToDoButtons } = require("./newToDo");
-const { viewToDoList } = require("./viewToDoList");
+const {
+    add_ProjectId,
+    select_ProjectId,
+    delete_Project,
+    toDoState_Active
+} = require("../../variables/variables");
+const {
+    delay
+} = require("../delay/delay");
+const {
+    refreshCategories_ToDo
+} = require("../getData/refreshCategories_ToDo");
+const {
+    addProject
+} = require("../projects/addProject");
+const {
+    deleteProject
+} = require("../projects/deleteProject");
+const {
+    removeMention
+} = require("../removeCharacters/removeCharacters");
+const {
+    addButtons
+} = require("./addButtonsToList");
+const {
+    addSelectMenu
+} = require("./addSelecMenu");
+const {
+    newToDoEmbed,
+    newToDoButtons
+} = require("./newToDo");
+const {
+    viewToDoList
+} = require("./viewToDoList");
 
 var count = 0;
 var categories;
@@ -27,7 +53,7 @@ module.exports.todoListInteraction = async (main_interaction) => {
 
             return await addProject(main_interaction, count);
 
-        }else if(main_interaction.values.indexOf(delete_Project) !== -1) {
+        } else if (main_interaction.values.indexOf(delete_Project) !== -1) {
 
             return await deleteProject(main_interaction, categories, false);
 
@@ -46,7 +72,7 @@ module.exports.todoListInteraction = async (main_interaction) => {
             })
 
             const collector = await todolist.createMessageComponentCollector({
-                filter: (() => main_interaction.message.author.id)
+                filter: ((user) => user.user.id === main_interaction.user.id)
             });
 
             collector.on('collect', async todo_item_interaction => {
@@ -55,6 +81,8 @@ module.exports.todoListInteraction = async (main_interaction) => {
                 var deadline = '';
                 var dateFormatDC = '';
                 var user = '';
+                var reminder = '';
+                var reminderFormatDC = '';
 
                 switch (todo_item_interaction.customId) {
                     case 'add_toDo':
@@ -71,7 +99,7 @@ module.exports.todoListInteraction = async (main_interaction) => {
                         });
 
                         const newToDocollector = await task.createMessageComponentCollector({
-                            filter: (() => main_interaction.message.author.id),
+                            filter: ((user) => user.user.id === main_interaction.user.id),
                             time: 120000
                         });
 
@@ -100,7 +128,7 @@ module.exports.todoListInteraction = async (main_interaction) => {
 
                                 case 'add_deadline':
                                     todo_interaction_reply = await todo_interaction.message.reply({
-                                        content: 'Bitte sende eine DeadLine in den Channel. [DD.MM.JJJJ]',
+                                        content: 'Bitte sende eine Deadline wann das Projekt enden soll. [DD.MM.JJJJ]',
                                         ephemeral: true
                                     });
                                     break;
@@ -115,17 +143,17 @@ module.exports.todoListInteraction = async (main_interaction) => {
                                 case 'save':
                                     var canPass = true;
 
-                                    if(title == '') {
+                                    if (title == '') {
                                         canPass = false;
                                         todo_interaction.channel.send({
-                                            content:'Der Titel fehlt!'
+                                            content: 'Der Titel fehlt!'
                                         }).then(async msg => {
                                             await delay(3000);
                                             msg.delete();
                                         })
                                     }
 
-                                    if(text == '' && canPass) {
+                                    if (text == '' && canPass) {
                                         canPass = false;
                                         todo_interaction.channel.send({
                                             content: 'Der Text fehlt!'
@@ -135,8 +163,8 @@ module.exports.todoListInteraction = async (main_interaction) => {
                                         })
                                     }
 
-                                    if(canPass) {
-                                        await database.query('INSERT INTO hn_todo (user_id, title, text, deadline, other_user, cat_id) VALUES (?, ?, ?, ?, ?, ?)', [main_interaction.message.author.id, title, text, deadline, user, currentCatId])
+                                    if (canPass) {
+                                        await database.query('INSERT INTO hn_todo (user_id, title, text, deadline, other_user, cat_id, guild_id, state, reminder) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [main_interaction.user.id, title, text, deadline, user, currentCatId, main_interaction.member.guild.id, toDoState_Active, reminder])
                                             .then(() => {
                                                 todo_interaction.channel.send({
                                                     content: 'Die neue Task wurde erfolgreich gespeichert!'
@@ -148,16 +176,16 @@ module.exports.todoListInteraction = async (main_interaction) => {
                                             .catch(err => {
                                                 console.log(err);
                                                 todo_interaction.channel.send({
-                                                    content:'Irgendetwas ist falsch gelaufen!'
+                                                    content: 'Irgendetwas ist falsch gelaufen!'
                                                 }).then(async msg => {
                                                     await delay(3000);
                                                     msg.delete();
                                                 })
                                             })
 
-                                            await delay(5000);
-                                            task.delete();
-                                            count = count - 1;
+                                        await delay(5000);
+                                        task.delete();
+                                        count = count - 1;
                                     }
                                     break;
 
@@ -189,7 +217,7 @@ module.exports.todoListInteraction = async (main_interaction) => {
                             }
 
                             var messageCollector = await main_interaction.message.channel.createMessageCollector({
-                                filter: (() => main_interaction.message.author.id),
+                                filter: ((user) => user.author.id === main_interaction.user.id),
                                 max: 1
                             });
 
@@ -201,8 +229,8 @@ module.exports.todoListInteraction = async (main_interaction) => {
                                             await task.edit({
                                                 embeds: [newToDoEmbed(title, text, deadline, user)]
                                             });
-                                        }catch(err) {
-                                            if(err.code == '50035') { //String too long
+                                        } catch (err) {
+                                            if (err.code == '50035') { //String too long
                                                 reply.reply({
                                                     content: 'Dein Titel ist zu lang!. Die perfekte Länge sind max. 50 Zeichen!'
                                                 }).then(async msg => {
@@ -223,8 +251,8 @@ module.exports.todoListInteraction = async (main_interaction) => {
                                             task.edit({
                                                 embeds: [newToDoEmbed(title, text, deadline, user)]
                                             });
-                                        }catch(err) {
-                                            if(err.code == '50035') { //String too long
+                                        } catch (err) {
+                                            if (err.code == '50035') { //String too long
                                                 reply.reply({
                                                     content: 'Dein Titel ist zu lang!. Die perfekte Länge sind max. 50 Zeichen!'
                                                 }).then(async msg => {
@@ -247,18 +275,68 @@ module.exports.todoListInteraction = async (main_interaction) => {
                                         let month = deadline[1]
                                         let year = deadline[2];
 
-                                        if(year === undefined) {
+                                        if (year === undefined) {
                                             year = new Date().getFullYear().toString();
                                         }
-                                        var date = new Date(JSON.stringify(`${year}-${month}-${day}`))
+                                        let date = new Date(JSON.stringify(`${year}-${month}-${day}`));
+
                                         await delay(1000);
-                                        if(JSON.stringify(date) != 'null') {
+
+                                        if (JSON.stringify(date) != 'null') {
+
                                             deadline = `${day}.${month}.${year}`;
                                             dateFormatDC = ` <t:${Math.floor(date/1000)}:R>`
+
+                                            const reminderMessage = await reply.channel.send('Möchtest du an einem bestimmten Datum errinnert werden? [DD.MM.JJJJ HH:MM] oder "none" wenn nicht.')
+                                            const collector = main_interaction.message.channel.createMessageCollector({
+                                                max: 1,
+                                                time: 30000
+                                            });
+
+                                            await collector.on('collect', async reply => {
+
+                                                reminder = reply.content;
+
+                                                if (reminder.toLowerCase() === 'none') {
+                                                    interactionCount--;
+                                                    return reminderMessage.delete();
+                                                }
+                                                try {
+                                                    reminder = reminder.split(' ');
+                                                } catch (err) {
+                                                    return reply.reply('Achte darauf ein Leerzeichen zwischen dem Datum und der Uhrzeit zu haben!')
+                                                }
+
+                                                try {
+                                                    var date = reminder[0].split('.');
+                                                    var time = reminder[1].split(':');
+                                                } catch (err) {
+                                                    return reply.reply('Achte darauf ein _._ zwischen dem Datum und ein _:_ zwischen der Uhrzeit zu haben!');
+                                                }
+
+                                                if (!date[2]) date[2] = new Date().getFullYear().toString();
+                                                let checkDate = new Date(date[2], date[1], date[0], time[0], time[1]);
+
+                                                await delay(1000);
+                                                if (JSON.stringify(checkDate) != 'null') {
+                                                    reminder = `${date[2]}-${date[1]}-${date[0]} ${time[0]}:${time[1]}`;
+                                                    reminderFormatDC = ` <t:${Math.floor(checkDate/1000)}:R>`
+                                                } else {
+                                                    return reply.reply('Du hast ein falsches Format übermittelt! DD.MM.YYYY oder DD:MM')
+                                                }
+                                                interactionCount--;
+                                                reply.delete();
+                                                reminderMessage.delete();
+                                                task.edit({
+                                                    embeds: [newToDoEmbed(title, text, deadline + dateFormatDC + `\n**Reminder:** ${date[0]}.${date[1]}.${date[2]} ${time[0]}:${time[1]} ${reminderFormatDC}`, user)]
+                                                });
+
+                                            });
+
                                             task.edit({
                                                 embeds: [newToDoEmbed(title, text, deadline + dateFormatDC, user)]
                                             });
-                                        }else {
+                                        } else {
                                             reply.channel.send({
                                                 content: 'Du hast ein falsches Format übermittelt! DD.MM.YYYY oder DD.MM'
                                             }).then(async msg => {
@@ -268,19 +346,18 @@ module.exports.todoListInteraction = async (main_interaction) => {
                                         }
                                         reply.delete();
                                         todo_interaction_reply.delete();
-                                        interactionCount--;
                                         break;
 
                                     case 'add_other':
                                         let other_user = reply.content.split(' ');
 
-                                        for(let i in other_user) {
+                                        for (let i in other_user) {
                                             other_user[i] = removeMention(other_user[i]);
 
                                             try {
                                                 other_user[i] = main_interaction.message.guild.members.cache.find(member => member.id.includes(other_user[i])).user
 
-                                            }catch(err) {
+                                            } catch (err) {
                                                 reply.channel.send({
                                                     content: `Der Spieler wurde nicht gefunden!`
                                                 }).then(async msg => {
@@ -315,11 +392,11 @@ module.exports.todoListInteraction = async (main_interaction) => {
                                 components: [newSelectMenu]
                             })]
                         });
-                        if(count > 0) --count;
+                        if (count > 0) --count;
                         break;
 
                     case 'delete_toDo':
-                        if(count < 0) count = 0;
+                        if (count < 0) count = 0;
 
                         count++;
 
@@ -332,13 +409,13 @@ module.exports.todoListInteraction = async (main_interaction) => {
                         });
 
                         var messageCollectorDeleteToDo = await main_interaction.message.channel.createMessageCollector({
-                            filter: (() => main_interaction.message.author.id),
+                            filter: ((user) => user.user.id === main_interaction.user.id),
                             time: 15000,
                             max: 1
                         });
 
                         messageCollectorDeleteToDo.on('collect', async reply => {
-                            if(reply.content.toLowerCase() === 'cancel') {
+                            if (reply.content.toLowerCase() === 'cancel') {
                                 await reply.reply({
                                     content: 'Abgebrochen!'
                                 }).then(async msg => {
@@ -350,7 +427,7 @@ module.exports.todoListInteraction = async (main_interaction) => {
                                 del_todoMessage.delete();
                                 return;
                             }
-                            if(isNaN(reply.content)) {
+                            if (isNaN(reply.content)) {
                                 count = count - 1;
                                 return reply.reply({
                                     content: 'Es sind nur Nummern erlaubt! Versuche es erneut.'
@@ -359,12 +436,14 @@ module.exports.todoListInteraction = async (main_interaction) => {
                                     reply.delete();
                                     msg.delete();
                                 })
-                            }else {
+                            } else {
                                 const task = await database.query('SELECT id FROM hn_todo WHERE id = ?', [reply.content])
-                                    .then(res => {return res[0]})
+                                    .then(res => {
+                                        return res[0]
+                                    })
                                     .catch(err => console.log(err));
 
-                                if(task) {
+                                if (task) {
                                     return await database.query('DELETE FROM hn_todo WHERE id = ?', [reply.content])
                                         .then(async () => {
                                             count = count - 1;
@@ -387,7 +466,7 @@ module.exports.todoListInteraction = async (main_interaction) => {
                                                 msg.delete();
                                             })
                                         })
-                                }else {
+                                } else {
                                     count = count - 1;
                                     return reply.reply({
                                         content: 'Es wurde keine ToDo Task mit der ID gefunden!'
@@ -402,33 +481,38 @@ module.exports.todoListInteraction = async (main_interaction) => {
                         break;
                     case 'end_int':
                         var comp = todo_item_interaction.message.components[0].components
-                        for(let i in comp) {
+                        for (let i in comp) {
                             comp[i].setDisabled(true)
                         }
-                        todolist.edit({components: [todo_item_interaction.message.components[0]]});
+                        todolist.edit({
+                            components: [todo_item_interaction.message.components[0]]
+                        });
                         count = 0;
                         interactionCount = 0;
-                    break;
+                        break;
                 }
             });
 
             collector.on('end', (collected, reason) => {
-                if(reason === 'time') {
+                if (reason === 'time') {
                     var comp = todolist.components[0].components
-                    for(let i in comp) {
+                    for (let i in comp) {
                         comp[i].setDisabled(true)
                     }
-                    todolist.edit({content: '**Time limit reached (60s)**', components: [todolist.components[0]]})
+                    todolist.edit({
+                        content: '**Time limit reached (60s)**',
+                        components: [todolist.components[0]]
+                    })
                 }
             });
 
             return;
         }
-    }else if(main_interaction.isSelectMenu() && main_interaction.customId === delete_Project) {
+    } else if (main_interaction.isSelectMenu() && main_interaction.customId === delete_Project) {
 
         await deleteProject(main_interaction, categories, true)
 
-    }else {
+    } else {
 
     }
 }
