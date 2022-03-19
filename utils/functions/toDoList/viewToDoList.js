@@ -1,5 +1,6 @@
 const { MessageEmbed } = require("discord.js");
 const { select_ProjectId } = require("../../variables/variables");
+const { getLang } = require('../getData/getLang');
 
 module.exports.viewToDoList = async (categories, todo, main_interaction) => {
     const lang = require(`../../assets/json/language/${await getLang(main_interaction.message.guild.id)}.json`)

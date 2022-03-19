@@ -150,21 +150,23 @@ module.exports.newToDoInteraction = async (todo_item_interaction, main_interacti
                         if (title == '') {
                             canPass = false;
                             todo_interaction.channel.send({
-                                content: 'Der Titel fehlt!'
+                                content: lang.todo.newtodo.errors.title_missing
                             }).then(async msg => {
                                 await delay(3000);
                                 msg.delete();
-                            })
+                            });
+                            interactionCount--;
                         }
 
                         if (text == '' && canPass) {
                             canPass = false;
                             todo_interaction.channel.send({
-                                content: 'Der Text fehlt!'
+                                content: lang.todo.newtodo.errors.text_missing
                             }).then(async msg => {
                                 await delay(3000);
                                 msg.delete();
-                            })
+                            });
+                            interactionCount--;
                         }
 
                         if (canPass) {
@@ -184,7 +186,8 @@ module.exports.newToDoInteraction = async (todo_item_interaction, main_interacti
                                     }).then(async msg => {
                                         await delay(3000);
                                         msg.delete();
-                                    })
+                                    });
+                                    interactionCount--;
                                 })
 
                             await delay(5000);

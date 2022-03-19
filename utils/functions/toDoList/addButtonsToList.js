@@ -27,7 +27,7 @@ const addButtons = async (guild_id) => {
         label: lang.todo.buttons.end_int,
         customId: 'end_int'
     });
-    console.log(add_toDo)
+    
     return [add_toDo, change_cat, delete_toDo, end_interaction]
 }
 
