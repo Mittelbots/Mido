@@ -299,6 +299,7 @@ module.exports.newToDoInteraction = async (todo_item_interaction, main_interacti
 
                                     if (reminder.toLowerCase() === 'none') {
                                         interactionCount--;
+                                        reply.delete();
                                         return reminderMessage.delete();
                                     }
                                     try {
