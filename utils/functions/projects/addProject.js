@@ -3,10 +3,12 @@ const { MessageEmbed } = require("discord.js");
 const database = require("../../../bot/db/db");
 const { delay } = require("../delay/delay");
 const { errorhandler } = require("../errorhandler/errorhandler");
+const { getLang } = require("../getData/getLang");
 const { refreshCategories_ToDo } = require("../getData/refreshCategories_ToDo");
 const { addSelectMenu } = require("../toDoList/addSelecMenu");
-
 module.exports.addProject = async (main_interaction, count) => {
+    const lang = require(`../../assets/json/language/${await getLang(main_interaction.message.guild.id)}.json`);
+
     var giveNameMessage = await main_interaction.message.channel.send('Bitte gebe einen Namen ein!');
 
     var messageCollector = await main_interaction.message.channel.createMessageCollector({
@@ -14,11 +16,10 @@ module.exports.addProject = async (main_interaction, count) => {
         time: 15000,
         max: 1
     });
-
     messageCollector.on('collect', async reply => {
         if(reply.content.toLowerCase() === 'cancel') {
             await reply.reply({
-                content: 'Abgebrochen!'
+                content: `${lang.errors.canceled}!`
             }).then(async msg => {
                 await delay(2000);
                 msg.delete();
@@ -35,10 +36,10 @@ module.exports.addProject = async (main_interaction, count) => {
                 categories = refresh[0];
 
                 var newMessageEmbed = new MessageEmbed()
-                .setTitle('Wähle ein neues Projekt aus.')
+                .setTitle(lang.projects.choose_new_project)
                 .setTimestamp()
 
-                const newSelectMenu = await addSelectMenu(categories)
+                const newSelectMenu = await addSelectMenu(categories, null, main_interaction.message.guild.id)
 
                 main_interaction.message.edit({
                     embeds: [newMessageEmbed],
@@ -48,7 +49,7 @@ module.exports.addProject = async (main_interaction, count) => {
                 })
                 messageCollector = null;
                 return reply.reply({
-                    content: 'Saved',
+                    content: `${lang.success.saved}!`,
                 }).then(async msg => {
                     await delay(3000);
                     reply.delete();
@@ -57,18 +58,14 @@ module.exports.addProject = async (main_interaction, count) => {
                 })
             })
             .catch(err => {
-                return errorhandler(err, 'Fehler beim hinzufügen.', main_interaction.message.channel);
+                return errorhandler(err, lang.projects.errors.failed_add, main_interaction.message.channel);
             });
     });
 
     messageCollector.on('end', (collected, reason) => {
         if(reason === 'time') {
             try {
-                var comp = giveNameMessage.components[0].components
-                for(let i in comp) {
-                    comp[i].setDisabled(true)
-                }
-                giveNameMessage.edit({content: '**Time limit reached (15s)**', components: [giveNameMessage.components[0]]})
+                giveNameMessage.edit({content: `**${lang.errors.time_limit_reached} (15s)**`, components: [giveNameMessage.components[0]]})
             }catch(err) {
                 console.log(err);
             }

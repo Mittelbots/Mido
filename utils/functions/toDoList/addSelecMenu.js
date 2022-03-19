@@ -2,17 +2,20 @@ const {
     MessageSelectMenu
 } = require('discord.js');
 const { select_ProjectId, add_ProjectId, delete_Project } = require('../../variables/variables');
+const { getLang } = require('../getData/getLang');
 
-const addSelectMenu = async (categories, isDelete) => {
+const addSelectMenu = async (categories, isDelete, guild_id) => {
+    const lang = require(`../../assets/json/language/${await getLang(guild_id)}.json`)
+
     var menu = new MessageSelectMenu()
         .setCustomId((isDelete) ? delete_Project : select_ProjectId)
-        .setPlaceholder((categories) ? 'Projekt wählen' : 'Füge ein neues Projekt hinzu.')
+        .setPlaceholder((categories) ? lang.projects.selectmenu.choose_project : lang.projects.selectmenu.add_new_project)
         
     if(!isDelete) {
         menu.addOptions([{
             'value': add_ProjectId,
-            'label': '----Projekt hinzufügen----',
-            'description': 'Klicke hier um ein Projekt hinzuzufügen.'
+            'label': `----${lang.projects.selectmenu.add_new_project}----`,
+            'description': lang.projects.selectmenu.add_new_project_desc
         }])
     }
 
@@ -21,14 +24,14 @@ const addSelectMenu = async (categories, isDelete) => {
             menu.addOptions([{
                 'value': (isDelete) ? 'del_' + cat.id : select_ProjectId + cat.id,
                 'label': cat.name,
-                'description': 'Klicke hier um ein Projekt auszuwählen.',
+                'description': lang.projects.selectmenu.choose_project_desc,
             }])
         })
         if(!isDelete) {
             menu.addOptions([{
                 'value': delete_Project,
-                'label': '----Projekt löschen----',
-                'description': 'Klicke hier um ein Projekt zu löschen.'
+                'label': `----${lang.projects.selectmenu.delete_project}----`,
+                'description': lang.projects.selectmenu.delete_project_desc
             }])
         }
     }

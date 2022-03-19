@@ -1,5 +1,98 @@
 {
+    "success": {
+        "saved": "Erfolgreich gespeichert",
+        "deleted": "Erfolgreich gelöscht"
+    },
     "errors": {
-        "noperms": "Du hast keine Berechtigung dafür. Falls dies falsch ist, kontaktiere den Discord Support."
+        "general": "Es ist ein Fehler aufgetreten. Versuche es erneut oder kontaktiere einen Bot Supporter",
+        "noperms": "Du hast keine Berechtigung dafür. Falls dies falsch ist, kontaktiere den Discord Support.",
+        "canceled": "Abgebrochen",
+        "time_limit_reached": "Das Zeitlimit wurde erreicht",
+        "user_notfount": "Der Spieler wurde nicht gefunden",
+        "only_numbers": "Es sind nur Nummern erlaubt! Versuche es erneut."
+    },
+    "tips": {
+        "cancel": "(Tipp: \"cancel\" bricht diesen Vorgang ab!)"
+    },
+    "projects": {
+        "project": "Projekt",
+        "choose_new_project": "Wähle ein neues Projekt aus.",
+        "choose_project_to_delete": "Wähle das gewünschte Projekt aus um dieses zu löschen!",
+        "choose_project_to_delete_warning": "ACHTUNG! Dieser Vorgang kann nicht zurückgesetzt werden.",
+        "first_add_new_project": "Füge zuerst ein neues Projekt hinzu.",
+        "errors": {
+            "failed_add": "Es gab ein Fehler beim hinzufügen.",
+            "error_at_delete": "Es ist beim Löschen des Projektes ein Fehler aufgetreten"
+        },
+        "selectmenu": {
+            "add_new_project": "Füge ein neues Projekt hinzu.",
+            "add_new_project_desc": "Klicke hier um ein Projekt hinzuzufügen.",
+            "choose_project": "Wähle ein Projekt aus",
+            "choose_project_desc": "Klicke hier um ein Projekt auszuwählen.",
+            "delete_project": "Lösche ein Project",
+            "delete_project_desc": "Klicke hier um ein Projekt zu löschen."
+        }
+    },
+    "todo": {
+        "reminder": "Errinerung",
+        "todo_list": "Aufgaben Liste",
+        "deadline": "Deadline",
+        "other_user": "Andere Nutzer",
+        "no_other_user": "Niemand ausgewählt",
+        "no_deadline": "Keine Deadline gesetzt",
+        "all_open_task_from": "Alle offenen Aufgaben von",
+        "buttons": {
+            "add": "Aufgabe hinzufügen",
+            "change_project": "Projekt wechseln",
+            "delete": "Aufgabe löschen",
+            "end_int": "Interaktion beenden"
+        },
+        "newtodo": {
+            "buttons": {
+                "add_title": "Titel hinzufügen",
+                "add_text": "Text hinzufügen",
+                "add_deadline": "Deadline hinzufügen",
+                "add_user": "Andere Benutzer hinzufügen",
+                "next": "Weiter",
+                "save": "Speichern",
+                "cancel": "Abbrechen",
+                "back": "Zurück"
+            },
+            "interaction": {
+                "add_title": "Bitte sende den Titel in den Channel.",
+                "add_text": "Bitte sende den Text in den Channel.",
+                "add_deadline": "Bitte sende eine Deadline wann das Projekt enden soll. [DD.MM.JJJJ]",
+                "add_other": "Bitte sende andere Nutzer in den Channel, indem Du diese Taggst [@Mittelblut9].",
+                "add_reminder": "Möchtest du an einem bestimmten Datum errinnert werden? [DD.MM.JJJJ HH:MM] oder  \"none\" wenn nicht."
+            },
+            "errors": {
+                "title_missing": "Der Titel fehlt!",
+                "text_missing": "Der Text fehlt!",
+                "save_error": "Irgendetwas ist falsch gelaufen!",
+                "title_tolong": "Dein Titel ist zu lang!. Die perfekte Länge sind max. 50 Zeichen!",
+                "text_tolong": "Dein Text ist zu lang!. Die perfekte Länge sind max. 200 Zeichen!",
+                "no_point_comma_in_reminder": "Achte darauf ein _._ zwischen dem Datum und ein _:_ zwischen der Uhrzeit zu haben!",
+                "no_space_in_reminder": "Achte darauf ein Leerzeichen zwischen dem Datum und der Uhrzeit zu haben!",
+                "reminder_wrong_date_format": "Du hast ein falsches Format übermittelt! DD.MM.YYYY oder DD:MM"
+            },
+            "success": {
+                "saved": "Die neue Task wurde erfolgreich gespeichert!"
+            }
+        },
+        "delete_todo": {
+            "interaction": {
+                "insert_id": "Bitte gebe die ID ein, von der Task, die du löschen möchtest."
+            },
+            "errors": {
+                "delete_todo_error": "Etwas ist beim Löschen der Aufgabe schiefgelaufen",
+                "item_notfound_withId": "Es wurde keine ToDo Task mit der ID gefunden!"
+            }
+        },
+        "watchToDoList": {
+            "message": {
+                "the_task": "Die Task",
+                "last": "hat heute die Deadline! Noch nicht fertig? Dann mach dich mal an die Arbeit!"
+            }
+        }
     }
 }

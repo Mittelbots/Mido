@@ -3,7 +3,9 @@ const { MessageButton } = require("discord.js");
 const { MessageEmbed } = require("discord.js");
 const database = require("../../../bot/db/db");
 const { delay } = require("../delay/delay");
+const { getLang } = require("../getData/getLang");
 const { removeMention } = require("../removeCharacters/removeCharacters");
+const { addSelectMenu } = require("./addSelecMenu");
 
 module.exports.newToDoEmbed = (title, text, deadline, other_user) => {
     const messageEmbed = new MessageEmbed()
@@ -19,52 +21,52 @@ module.exports.newToDoEmbed = (title, text, deadline, other_user) => {
 }
 
 
-module.exports.newToDoButtons = (secondPage) => {
+module.exports.newToDoButtons = (secondPage, lang) => {
     const title_button = new MessageButton({
         style: 'SUCCESS',
-        label: `Add Titel`,
+        label: lang.todo.newtodo.buttons.add_title,
         customId: 'add_title'
     });
 
     const text_button = new MessageButton({
         style: 'SUCCESS',
-        label: `Add Text`,
+        label: lang.todo.newtodo.buttons.add_text,
         customId: 'add_text'
     });
 
     const deadline_button = new MessageButton({
         style: 'SECONDARY',
-        label: `Add Deadline`,
+        label: lang.todo.newtodo.buttons.add_deadline,
         customId: 'add_deadline'
     });
 
     const other_button = new MessageButton({
         style: 'SECONDARY',
-        label: `Add user`,
+        label: lang.todo.newtodo.buttons.add_user,
         customId: 'add_other'
     });
 
     const next_button = new MessageButton({
         style: 'SECONDARY',
-        label: `NEXT`,
+        label: lang.todo.newtodo.buttons.next,
         customId: 'next'
     });
 
     const save_button = new MessageButton({
         style: 'SUCCESS',
-        label: `Save`,
+        label: lang.todo.newtodo.buttons.save,
         customId: 'save'
     });
 
     const delete_button = new MessageButton({
         style: 'DANGER',
-        label: `Cancel`,
+        label: lang.todo.newtodo.buttons.cancel,
         customId: 'cancel'
     });
 
     const back_button = new MessageButton({
         style: 'SECONDARY',
-        label: `Back`,
+        label: lang.todo.newtodo.buttons.back,
         customId: 'back'
     })
 
@@ -75,7 +77,9 @@ module.exports.newToDoButtons = (secondPage) => {
     }
 }
 
-module.exports.newToDoInteraction = async (todo_item_interaction, main_interaction, count, currentCatId) => {
+module.exports.newToDoInteraction = async (todo_item_interaction, main_interaction, count, currentCatId, categories, todolist, guild_id) => {
+    const lang = require(`../../assets/json/language/${await getLang(guild_id)}.json`)
+
     var title = '';
     var text = '';
     var deadline = '';
@@ -94,7 +98,7 @@ module.exports.newToDoInteraction = async (todo_item_interaction, main_interacti
             const task = await todo_item_interaction.channel.send({
                 embeds: [this.newToDoEmbed()],
                 components: [new MessageActionRow({
-                    components: [this.newToDoButtons()[0], this.newToDoButtons()[1], this.newToDoButtons()[2], this.newToDoButtons()[3], this.newToDoButtons()[4]]
+                    components: [this.newToDoButtons(false, lang)[0], this.newToDoButtons(false, lang)[1], this.newToDoButtons(false, lang)[2], this.newToDoButtons(false, lang)[3], this.newToDoButtons(false, lang)[4]]
                 })]
             });
 
@@ -114,28 +118,28 @@ module.exports.newToDoInteraction = async (todo_item_interaction, main_interacti
                 switch (todo_interaction.customId) {
                     case 'add_title':
                         todo_interaction_reply = await todo_interaction.message.reply({
-                            content: 'Bitte sende den Titel in den Channel.',
+                            content: lang.todo.newtodo.interaction.add_title,
                             ephemeral: true
                         });
                         break;
 
                     case 'add_text':
                         todo_interaction_reply = await todo_interaction.message.reply({
-                            content: 'Bitte sende den Text in den Channel.',
+                            content: lang.todo.newtodo.interaction.add_text,
                             ephemeral: true
                         });
                         break;
 
                     case 'add_deadline':
                         todo_interaction_reply = await todo_interaction.message.reply({
-                            content: 'Bitte sende eine Deadline wann das Projekt enden soll. [DD.MM.JJJJ]',
+                            content: lang.todo.newtodo.interaction.add_deadline,
                             ephemeral: true
                         });
                         break;
 
                     case 'add_other':
                         todo_interaction_reply = await todo_interaction.message.reply({
-                            content: 'Bitte sende andere Nutzer in den Channel, indem Du diese Taggst [@Mittelblut9].',
+                            content: lang.todo.newtodo.interaction.add_other,
                             ephemeral: true
                         });
                         break;
@@ -167,7 +171,7 @@ module.exports.newToDoInteraction = async (todo_item_interaction, main_interacti
                             await database.query('INSERT INTO hn_todo (user_id, title, text, deadline, other_user, cat_id, guild_id, state, reminder) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [main_interaction.user.id, title, text, deadline, user, currentCatId, main_interaction.member.guild.id, toDoState_Active, reminder])
                                 .then(() => {
                                     todo_interaction.channel.send({
-                                        content: 'Die neue Task wurde erfolgreich gespeichert!'
+                                        content: lang.todo.newtodo.success.saved
                                     }).then(async msg => {
                                         await delay(3000);
                                         msg.delete();
@@ -176,7 +180,7 @@ module.exports.newToDoInteraction = async (todo_item_interaction, main_interacti
                                 .catch(err => {
                                     console.log(err);
                                     todo_interaction.channel.send({
-                                        content: 'Irgendetwas ist falsch gelaufen!'
+                                        content: lang.todo.newtodo.errors.save_error
                                     }).then(async msg => {
                                         await delay(3000);
                                         msg.delete();
@@ -192,7 +196,7 @@ module.exports.newToDoInteraction = async (todo_item_interaction, main_interacti
                     case 'next':
                         await todo_interaction.message.edit({
                             components: [new MessageActionRow({
-                                components: [this.newToDoButtons(true)[0], this.newToDoButtons(true)[1], this.newToDoButtons(true)[2]]
+                                components: [this.newToDoButtons(true, lang)[0], this.newToDoButtons(true, lang)[1], this.newToDoButtons(true, lang)[2]]
                             })]
                         });
                         interactionCount--;
@@ -209,7 +213,7 @@ module.exports.newToDoInteraction = async (todo_item_interaction, main_interacti
                     case 'back':
                         await todo_interaction.message.edit({
                             components: [new MessageActionRow({
-                                components: [this.newToDoButtons()[0], this.newToDoButtons()[1], this.newToDoButtons()[2], this.newToDoButtons()[3], this.newToDoButtons()[4]]
+                                components: [this.newToDoButtons(false, lang)[0], this.newToDoButtons(false, lang)[1], this.newToDoButtons(false, lang)[2], this.newToDoButtons(false, lang)[3], this.newToDoButtons(false, lang)[4]]
                             })]
                         });
                         interactionCount--;
@@ -232,7 +236,7 @@ module.exports.newToDoInteraction = async (todo_item_interaction, main_interacti
                             } catch (err) {
                                 if (err.code == '50035') { //String too long
                                     reply.reply({
-                                        content: 'Dein Titel ist zu lang!. Die perfekte Länge sind max. 50 Zeichen!'
+                                        content: lang.todo.newtodo.errors.title_tolong
                                     }).then(async msg => {
                                         await delay(4000);
                                         msg.delete();
@@ -254,7 +258,7 @@ module.exports.newToDoInteraction = async (todo_item_interaction, main_interacti
                             } catch (err) {
                                 if (err.code == '50035') { //String too long
                                     reply.reply({
-                                        content: 'Dein Titel ist zu lang!. Die perfekte Länge sind max. 50 Zeichen!'
+                                        content: lang.todo.newtodo.errors.text_tolong
                                     }).then(async msg => {
                                         await delay(4000);
                                         msg.delete();
@@ -287,7 +291,7 @@ module.exports.newToDoInteraction = async (todo_item_interaction, main_interacti
                                 deadline = `${day}.${month}.${year}`;
                                 dateFormatDC = ` <t:${Math.floor(date/1000)}:R>`
 
-                                const reminderMessage = await reply.channel.send('Möchtest du an einem bestimmten Datum errinnert werden? [DD.MM.JJJJ HH:MM] oder "none" wenn nicht.')
+                                const reminderMessage = await reply.channel.send(lang.todo.newtodo.interaction.add_reminder)
                                 const collector = main_interaction.message.channel.createMessageCollector({
                                     max: 1,
                                     time: 30000
@@ -305,14 +309,14 @@ module.exports.newToDoInteraction = async (todo_item_interaction, main_interacti
                                     try {
                                         reminder = reminder.split(' ');
                                     } catch (err) {
-                                        return reply.reply('Achte darauf ein Leerzeichen zwischen dem Datum und der Uhrzeit zu haben!')
+                                        return reply.reply(lang.todo.newtodo.errors.no_space_in_reminder)
                                     }
 
                                     try {
                                         var date = reminder[0].split('.');
                                         var time = reminder[1].split(':');
                                     } catch (err) {
-                                        return reply.reply('Achte darauf ein _._ zwischen dem Datum und ein _:_ zwischen der Uhrzeit zu haben!');
+                                        return reply.reply(lang.todo.newtodo.errors.no_point_comma_in_reminder);
                                     }
 
                                     if (!date[2]) date[2] = new Date().getFullYear().toString();
@@ -323,13 +327,13 @@ module.exports.newToDoInteraction = async (todo_item_interaction, main_interacti
                                         reminder = `${date[2]}-${date[1]}-${date[0]} ${time[0]}:${time[1]}`;
                                         reminderFormatDC = ` <t:${Math.floor(checkDate/1000)}:R>`
                                     } else {
-                                        return reply.reply('Du hast ein falsches Format übermittelt! DD.MM.YYYY oder DD:MM')
+                                        return reply.reply(lang.todo.newtodo.errors.reminder_wrong_date_format)
                                     }
                                     interactionCount--;
                                     reply.delete();
                                     reminderMessage.delete();
                                     task.edit({
-                                        embeds: [this.newToDoEmbed(title, text, deadline + dateFormatDC + `\n**Reminder:** ${date[0]}.${date[1]}.${date[2]} ${time[0]}:${time[1]} ${reminderFormatDC}`, user)]
+                                        embeds: [this.newToDoEmbed(title, text, deadline + dateFormatDC + `\n**${lang.todo.reminder}:** ${date[0]}.${date[1]}.${date[2]} ${time[0]}:${time[1]} ${reminderFormatDC}`, user)]
                                     });
 
                                 });
@@ -339,7 +343,7 @@ module.exports.newToDoInteraction = async (todo_item_interaction, main_interacti
                                 });
                             } else {
                                 reply.channel.send({
-                                    content: 'Du hast ein falsches Format übermittelt! DD.MM.YYYY oder DD.MM'
+                                    content: lang.todo.newtodo.errors.reminder_wrong_date_format
                                 }).then(async msg => {
                                     await delay(3000);
                                     msg.delete();
@@ -360,7 +364,7 @@ module.exports.newToDoInteraction = async (todo_item_interaction, main_interacti
 
                                 } catch (err) {
                                     reply.channel.send({
-                                        content: `Der Spieler wurde nicht gefunden!`
+                                        content: lang.errors.user_notfound
                                     }).then(async msg => {
                                         await delay(3000);
                                         msg.delete();
@@ -387,7 +391,7 @@ module.exports.newToDoInteraction = async (todo_item_interaction, main_interacti
         case 'change_cat':
             var old_int = todo_item_interaction;
             todo_item_interaction = null;
-            var newSelectMenu = await addSelectMenu(categories, false)
+            var newSelectMenu = await addSelectMenu(categories, false, main_interaction.message.guild.id)
             old_int.message.edit({
                 components: [new MessageActionRow({
                     components: [newSelectMenu]
@@ -405,12 +409,12 @@ module.exports.newToDoInteraction = async (todo_item_interaction, main_interacti
                 return;
             }
             var del_todoMessage = await todo_item_interaction.channel.send({
-                content: 'Bitte gebe die ID ein, von der Task, die du löschen möchtest. (Tipp: "cancel" bricht diesen Vorgang ab!)',
+                content: `${lang.todo.delete_todo.interaction.insert_id} ${lang.tips.cancel}`,
                 ephemeral: true
             });
 
             var messageCollectorDeleteToDo = await main_interaction.message.channel.createMessageCollector({
-                filter: ((user) => user.user.id === main_interaction.user.id),
+                filter: ((user) => user.author.id === main_interaction.user.id),
                 time: 15000,
                 max: 1
             });
@@ -418,20 +422,20 @@ module.exports.newToDoInteraction = async (todo_item_interaction, main_interacti
             messageCollectorDeleteToDo.on('collect', async reply => {
                 if (reply.content.toLowerCase() === 'cancel') {
                     await reply.reply({
-                        content: 'Abgebrochen!'
+                        content: lang.errors.canceled
                     }).then(async msg => {
                         await delay(3000);
                         msg.delete();
                     });
-                    count = count - 1;
+                    --count;
                     reply.delete();
                     del_todoMessage.delete();
                     return;
                 }
                 if (isNaN(reply.content)) {
-                    count = count - 1;
+                    --count
                     return reply.reply({
-                        content: 'Es sind nur Nummern erlaubt! Versuche es erneut.'
+                        content: lang.errors.only_numbers
                     }).then(async msg => {
                         await delay(50000);
                         reply.delete();
@@ -447,9 +451,9 @@ module.exports.newToDoInteraction = async (todo_item_interaction, main_interacti
                     if (task) {
                         return await database.query('DELETE FROM hn_todo WHERE id = ?', [reply.content])
                             .then(async () => {
-                                count = count - 1;
+                                --count
                                 return reply.reply({
-                                    content: 'Erfolgreich gelöscht!'
+                                    content: lang.success.deleted
                                 }).then(async msg => {
                                     await delay(50000);
                                     reply.delete();
@@ -457,10 +461,10 @@ module.exports.newToDoInteraction = async (todo_item_interaction, main_interacti
                                 })
                             })
                             .catch(err => {
-                                count = count - 1;
+                                --count
                                 console.log(err);
                                 return reply.reply({
-                                    content: 'Etwas ist schief gelaufen!'
+                                    content: lang.todo.delete_todo.errors.delete_todo_error
                                 }).then(async msg => {
                                     await delay(50000);
                                     reply.delete();
@@ -468,9 +472,9 @@ module.exports.newToDoInteraction = async (todo_item_interaction, main_interacti
                                 })
                             })
                     } else {
-                        count = count - 1;
+                        --count;
                         return reply.reply({
-                            content: 'Es wurde keine ToDo Task mit der ID gefunden!'
+                            content: lang.todo.delete_todo.errors.item_notfound_withId
                         }).then(async msg => {
                             await delay(50000);
                             reply.delete();

@@ -6,9 +6,7 @@ const {
     select_ProjectId,
     delete_Project
 } = require("../../variables/variables");
-const {
-    delay
-} = require("../delay/delay");
+const { getLang } = require("../getData/getLang");
 const {
     refreshCategories_ToDo
 } = require("../getData/refreshCategories_ToDo");
@@ -22,9 +20,6 @@ const {
     addButtons
 } = require("./addButtonsToList");
 const {
-    addSelectMenu
-} = require("./addSelecMenu");
-const {
     newToDoInteraction
 } = require("./newToDo");
 const {
@@ -36,6 +31,9 @@ var categories;
 var todo;
 
 module.exports.todoListInteraction = async (main_interaction) => {
+    const guildid = main_interaction.message.guild.id;
+
+    const lang = require(`../../assets/json/language/${await getLang(guildid)}.json`)
 
     const refresh = await refreshCategories_ToDo(main_interaction);
     categories = refresh[0];
@@ -57,11 +55,12 @@ module.exports.todoListInteraction = async (main_interaction) => {
             const currentToDoList = await viewToDoList(categories, todo, main_interaction)
 
             var currentCatId = currentToDoList[0];
-
+            const buttons = await addButtons(guildid);
+            
             const todolist = await main_interaction.message.edit({
                 embeds: [currentToDoList[1]],
                 components: [new MessageActionRow({
-                    components: [addButtons()[0], addButtons()[1], addButtons()[2], addButtons()[3]]
+                    components: [buttons[0], buttons[1], buttons[2], buttons[3]]
                 })]
             });
 
@@ -70,7 +69,7 @@ module.exports.todoListInteraction = async (main_interaction) => {
             });
 
             collector.on('collect', async todo_item_interaction => {
-                await newToDoInteraction(todo_item_interaction, main_interaction, count, currentCatId)
+                await newToDoInteraction(todo_item_interaction, main_interaction, count, currentCatId, categories, todolist, guildid)
             });
 
             collector.on('end', (collected, reason) => {
@@ -80,7 +79,7 @@ module.exports.todoListInteraction = async (main_interaction) => {
                         comp[i].setDisabled(true)
                     }
                     todolist.edit({
-                        content: '**Time limit reached (60s)**',
+                        content: `**${lang.errors.time_limit_reached} (60s)**`,
                         components: [todolist.components[0]]
                     })
                 }

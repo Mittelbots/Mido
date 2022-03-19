@@ -32,8 +32,6 @@ bot.commands = new Discord.Collection();
 deployCommands(bot);
 
 bot.on("messageCreate", async message => {
-    module.exports.lang = await getLang(message.guild.id);
-
     return await messageCreate(message, bot);
 });
 

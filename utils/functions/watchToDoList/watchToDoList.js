@@ -5,6 +5,7 @@ const {
 const {
     errorhandler
 } = require("../errorhandler/errorhandler");
+const { getLang } = require("../getData/getLang");
 
 module.exports.watchToDoList = (bot) => {
     setInterval(async () => {
@@ -21,6 +22,9 @@ module.exports.watchToDoList = (bot) => {
                     var currentTime = new Date();
                     
                     if (currentTime.getTime() >= deadlineTime.getTime()) { //DeadLine passed
+
+                        const lang = require(`../../assets/json/language/${await getLang(task.guild_id)}.json`)
+
                         const taskid = task.id;
                         const user = task.user_id;
                         const title = task.title;
@@ -29,7 +33,7 @@ module.exports.watchToDoList = (bot) => {
                         const project_id = task.cat_id;
                         const reminderDate = new Date(task.reminder);
                         const guild = await bot.guilds.cache.get(task.guild_id);
-                        const message = `Die Task ${title} hat heute die Deadline! Noch nicht fertig? Dann mach dich mal an die Arbeit!`;
+                        const message = `${lang.todo.watchToDoList.message.the_task} ${title} ${lang.todo.watchToDoList.message.last}`;
 
                         if (reminderDate && currentTime.getTime() >= reminderDate.getTime()) {
                             return sendMessageToUser();

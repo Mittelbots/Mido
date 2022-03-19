@@ -2,8 +2,11 @@ const { MessageEmbed } = require("discord.js");
 const database = require("../../../bot/db/db");
 const { errorhandler } = require("../errorhandler/errorhandler");
 const { getCategory } = require("../getData/getCategory");
+const { getLang } = require("../getData/getLang");
 
 module.exports.viewUserToDo = async (user_id, guild_id, channel) => {
+    const lang = require(`../../assets/json/language/${await getLang(guild_id)}.json`)
+
     return await database.query('SELECT * FROM hn_todo WHERE user_id = ?', [user_id])
         .then(async res => {
             if(res.length <= 0) {
@@ -12,12 +15,12 @@ module.exports.viewUserToDo = async (user_id, guild_id, channel) => {
                 const categories = await getCategory(channel);
 
                 const newEmbed = new MessageEmbed();
-                newEmbed.setDescription(`Alle offenen Task von <@${user_id}>`)
+                newEmbed.setDescription(`${lang.todo.all_open_task_from} <@${user_id}>`)
                 
                 res.map(todo => {
                     categories.map(cat => {
                         if(todo.cat_id === cat.id) {
-                            newEmbed.addField(`Kategorie: ${cat.name}\n⏹️ ${todo.title} ||ID: ${todo.id}||`, `_ ${todo.text}_ \n**Deadline:** ${todo.deadline || 'Keine'} \n**Andere Nutzer:** ${todo.other_user ||'No one'}`)
+                            newEmbed.addField(`${lang.projects.project}: ${cat.name}\n⏹️ ${todo.title} ||ID: ${todo.id}||`, `_ ${todo.text}_ \n**${lang.todo.deadline}:** ${todo.deadline || lang.todo.no_deadline} \n**${lang.todo.other_user}:** ${todo.other_user || lang.todo.no_other_user}`)
                         }
                     });
                 });
@@ -26,7 +29,7 @@ module.exports.viewUserToDo = async (user_id, guild_id, channel) => {
             }
         })
         .catch(err => {
-            errorhandler(err, 'Error due database request!', channel);
+            errorhandler(err, lang.errors.general, channel);
             return false;
         })
 }

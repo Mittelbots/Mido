@@ -1,4 +1,7 @@
 const config = require('../../utils/assets/json/_config/config.json');
+const { getLang } = require('../../utils/functions/getData/getLang');
+
+var language;
 
 async function messageCreate(message, bot) {
     if (message.author.bot) return;
@@ -12,6 +15,7 @@ async function messageCreate(message, bot) {
 
     if (cmd.startsWith(config.defaultprefix)) {
 
+        language = await getLang(message.guild.id);
         let commandfile = bot.commands.get(cmd.slice(config.defaultprefix.length));
 
         if (commandfile) { //&& blacklist(0, message)
@@ -24,5 +28,6 @@ async function messageCreate(message, bot) {
 }
 
 module.exports = {
-    messageCreate
+    messageCreate,
+    language
 }
