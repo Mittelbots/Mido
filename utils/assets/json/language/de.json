@@ -5,7 +5,7 @@
     },
     "errors": {
         "general": "Es ist ein Fehler aufgetreten. Versuche es erneut oder kontaktiere einen Bot Supporter",
-        "noperms": "Du hast keine Berechtigung dafür. Falls dies falsch ist, kontaktiere den Discord Support.",
+        "noperms": "Du hast keine Berechtigung dafür. Falls dies falsch ist, kontaktiere einen Bot Supporter.",
         "canceled": "Abgebrochen",
         "time_limit_reached": "Das Zeitlimit wurde erreicht",
         "user_notfount": "Der Spieler wurde nicht gefunden",
@@ -41,6 +41,7 @@
         "no_other_user": "Niemand ausgewählt",
         "no_deadline": "Keine Deadline gesetzt",
         "all_open_task_from": "Alle offenen Aufgaben von",
+        "no_active_todo": "Dieser Nutzer hat keine aktiven Aufgaben!",
         "buttons": {
             "add": "Aufgabe hinzufügen",
             "change_project": "Projekt wechseln",

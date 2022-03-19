@@ -6,6 +6,7 @@ const { delay } = require('../../../utils/functions/delay/delay');
 const {
     getCategory
 } = require('../../../utils/functions/getData/getCategory');
+const { getLang } = require('../../../utils/functions/getData/getLang');
 const {
     hasPermissions
 } = require('../../../utils/functions/hasPermissions/hasPermissions');
@@ -16,8 +17,11 @@ const {
 const { viewUserToDo } = require('../../../utils/functions/toDoList/viewUserToDo');
 
 module.exports.run = async (bot, message, args) => {
+
+    const lang = require(`../../../utils/assets/json/language/${await getLang(message.guild.id)}.json`)
+
     if (!await hasPermissions(message.member)) {
-        return message.reply('Du hast keine Berechtigung dafür. Falls dies falsch ist, kontaktiere den Discord Support.');
+        return message.reply(lang.errros.noperms);
     }
 
     var value = args[0];
@@ -28,7 +32,7 @@ module.exports.run = async (bot, message, args) => {
         }catch(err) {
             console.log(err);
             return message.reply({
-                content: `Der Spieler wurde nicht gefunden!`
+                content: lang.errors.user_notfound
             }).then(async msg => {
                 await delay(3000);
                 msg.delete();
@@ -38,7 +42,7 @@ module.exports.run = async (bot, message, args) => {
         const embed = await viewUserToDo(value, message.guild.id, message.channel);
         if(!embed) {
             return message.reply({
-                content: 'Dieser Nutzer hat keine aktiven Tasks!'
+                content: lang.todo.no_active_todo
             }).then(async msg => {
                 await delay(3000);
                 msg.delete();
@@ -54,10 +58,10 @@ module.exports.run = async (bot, message, args) => {
     var categories = await getCategory(message.channel);
 
     var newMessageEmbed = new MessageEmbed()
-        .setTitle((categories) ? 'Wähle ein neues Projekt aus.' : 'Füge zuerst ein neues Projekt hinzu.')
+        .setTitle((categories) ? lang.projects.choose_new_project : lang.projects.first_add_new_project)
         .setTimestamp()
 
-    var newMessageEmbedInteraction = await addSelectMenu(categories, false);
+    var newMessageEmbedInteraction = await addSelectMenu(categories, false, message.guild.id);
     await message.reply({
         embeds: [newMessageEmbed],
         components: [new MessageActionRow({
