@@ -59,7 +59,7 @@ bot.once('ready', async () => {
 
     console.info(`****Ready! Logged in as ${bot.user.tag}! I'm on ${bot.guilds.cache.size} Server****`);
 
-    if(config.debug) log.info('------------BOT SUCCESSFULLY STARTED------------', new Date());
+    if(!config.debug) log.info('------------BOT SUCCESSFULLY STARTED------------', new Date());
 });
 
 bot.login(token.BOT_TOKEN);
