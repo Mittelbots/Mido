@@ -20,7 +20,6 @@ module.exports.getLangFromDatabase = async (guild_id) => {
                 return lang;
             }
         }).catch(err => {
-            console.log(err);
             errorhandler(err);
             return false;
         })

@@ -6,7 +6,8 @@ function errorhandler(err, message, channel) {
     else log.fatal(err);
 
     if(channel && message) return channel.send(message); 
-    else return;
+    
+    return;
 }
 
 module.exports = {errorhandler}

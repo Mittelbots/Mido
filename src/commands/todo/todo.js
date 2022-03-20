@@ -30,15 +30,15 @@ module.exports.run = async (bot, message, args) => {
             value = removeMention(value);
             message.guild.members.cache.find(member => member.id.includes(value));
         }catch(err) {
-            console.log(err);
             return message.reply({
                 content: lang.errors.user_notfound
             }).then(async msg => {
-                await delay(3000);
+                await delay(2000);
                 msg.delete();
             })
 
         }
+
         const embed = await viewUserToDo(value, message.guild.id, message.channel);
         if(!embed) {
             return message.reply({
@@ -62,18 +62,16 @@ module.exports.run = async (bot, message, args) => {
         .setTimestamp()
 
     var newMessageEmbedInteraction = await addSelectMenu(categories, false, message.guild.id);
-    await message.reply({
+    return await message.reply({
         embeds: [newMessageEmbed],
         components: [new MessageActionRow({
             components: [newMessageEmbedInteraction]
         })]
     }); 
-    
-
-    return;
 }
+
 module.exports.help = {
     name: "todo",
-    description: "",
+    description: "todo [ID/@mention]",
     usage: "todo"
 }

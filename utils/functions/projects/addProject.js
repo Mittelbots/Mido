@@ -22,13 +22,13 @@ module.exports.addProject = async (main_interaction, toDoCountInteraction) => {
             await reply.reply({
                 content: `${lang.errors.canceled}!`
             }).then(async msg => {
-                await delay(2000);
+                await delay(1500);
                 msg.delete();
+                toDoCountInteraction = 0;
+                reply.delete();
+                giveNameMessage.delete();
+                giveNameMessage = null;
             });
-            toDoCountInteraction = 0;
-            reply.delete();
-            giveNameMessage.delete();
-            giveNameMessage = null;
             return; 
         }
         return await database.query('INSERT INTO hn_category (name, color) VALUES (?, ?)', [reply.content, '#021982'])
@@ -47,12 +47,13 @@ module.exports.addProject = async (main_interaction, toDoCountInteraction) => {
                     components: [new MessageActionRow({
                         components: [newSelectMenu]
                     })]
-                })
-                messageCollector = null;
-                return reply.reply({
+                });
+
+                return await reply.reply({
                     content: `${lang.success.saved}!`,
                 }).then(async msg => {
-                    await delay(3000);
+                    await delay(2000);
+                    messageCollector = null;
                     reply.delete();
                     msg.delete();
                     giveNameMessage.delete();
@@ -66,10 +67,17 @@ module.exports.addProject = async (main_interaction, toDoCountInteraction) => {
     messageCollector.on('end', (collected, reason) => {
         if(reason === 'time') {
             try {
-                giveNameMessage.edit({content: `**${lang.errors.time_limit_reached} (15s)**`, components: [giveNameMessage.components[0]]})
+                giveNameMessage.edit({
+                    content: `**${lang.errors.time_limit_reached} (15s)**`, 
+                    components: [giveNameMessage.components[0]]
+                });
             }catch(err) {
-                console.log(err);
+                return errorhandler(err);
             }
+        }else {
+            giveNameMessage.edit({
+                content: `**${lang.errors.int_unexpected_end} ${reason}**`
+            });
         }
     })
 }
