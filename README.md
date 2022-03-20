@@ -13,18 +13,15 @@ Just send one command and then navigate easily through everything with buttons a
 
 ## ✅ JUST TYPE <b>!todo</b>
 <br>
-<hr>
 <br>
 
 ## <b>❓ Meaning of the Botname</b>
-<hr>
 **Mi** = Mi-ttelbot
 <br>
 **Do** = To-Do
 <br>
 
 ## <b>🧑‍💻 Development</b>
-<hr>
 This masterpice was created by @Mittelblut9 with Node.js & Discord.js version 3
 
 <br>
