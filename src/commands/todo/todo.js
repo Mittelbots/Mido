@@ -13,7 +13,7 @@ const {
 const { removeMention } = require('../../../utils/functions/removeCharacters/removeCharacters');
 const {
     addSelectMenu
-} = require('../../../utils/functions/toDoList/addSelecMenu');
+} = require('../../../utils/functions/toDoList/addSelectMenu');
 const { viewUserToDo } = require('../../../utils/functions/toDoList/viewUserToDo');
 
 module.exports.run = async (bot, message, args) => {

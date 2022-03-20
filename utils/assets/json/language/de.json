@@ -9,7 +9,8 @@
         "canceled": "Abgebrochen",
         "time_limit_reached": "Das Zeitlimit wurde erreicht",
         "user_notfount": "Der Spieler wurde nicht gefunden",
-        "only_numbers": "Es sind nur Nummern erlaubt! Versuche es erneut."
+        "only_numbers": "Es sind nur Nummern erlaubt! Versuche es erneut.",
+        "int_unexpected_end": "Die Interaktion wurde beendet wegen:"
     },
     "tips": {
         "cancel": "(Tipp: \"cancel\" bricht diesen Vorgang ab!)"
@@ -74,7 +75,8 @@
                 "text_tolong": "Dein Text ist zu lang!. Die perfekte Länge sind max. 200 Zeichen!",
                 "no_point_comma_in_reminder": "Achte darauf ein _._ zwischen dem Datum und ein _:_ zwischen der Uhrzeit zu haben!",
                 "no_space_in_reminder": "Achte darauf ein Leerzeichen zwischen dem Datum und der Uhrzeit zu haben!",
-                "reminder_wrong_date_format": "Du hast ein falsches Format übermittelt! DD.MM.YYYY oder DD:MM"
+                "reminder_wrong_date_format": "Du hast ein falsches Format übermittelt! DD.MM.YYYY oder DD:MM",
+                "no_comma_in_shorthand": "Achte darauf ein _,_ zwischen den Angaben zu haben! [\"Projekt-Titel [req.], Projekt-Text [req.], Deadline [opt.], Reminder (or \"none\") [opt.], @Mittelblut9#1974\"[opt.] ]"
             },
             "success": {
                 "saved": "Die neue Task wurde erfolgreich gespeichert!"

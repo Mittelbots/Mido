@@ -31,12 +31,12 @@ bot.setMaxListeners(5);
 bot.commands = new Discord.Collection();
 deployCommands(bot);
 
-bot.on("messageCreate", async message => {
-    return await messageCreate(message, bot);
+bot.on("messageCreate", message => {
+    return messageCreate(message, bot);
 });
 
 bot.on('guildMemberAdd', async member => {
-    welcome_message(member);
+    return await welcome_message(member);
 })
 
 bot.once('ready', async () => {
@@ -45,8 +45,7 @@ bot.once('ready', async () => {
         await main_interaction.deferUpdate();
         try {
             todoListInteraction(main_interaction)
-        }catch(err) {
-        }
+        }catch(err) {}
     });
     getLinesOfCode((cb) => {
         setTimeout(() => {
@@ -69,10 +68,10 @@ bot.login(token.BOT_TOKEN);
 //! ERROR --
 process.on('unhandledRejection', err => {
     if(config.debug) console.log(err);
-    return errorhandler(err, null, null)
+    else return errorhandler(err, null, null)
 });
 
 process.on('uncaughtException', err => {
     if(config.debug) console.log(err);
-    return errorhandler(err, null, null)
+    else return errorhandler(err, null, null)
 });

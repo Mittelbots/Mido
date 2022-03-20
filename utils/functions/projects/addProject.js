@@ -5,8 +5,9 @@ const { delay } = require("../delay/delay");
 const { errorhandler } = require("../errorhandler/errorhandler");
 const { getLang } = require("../getData/getLang");
 const { refreshCategories_ToDo } = require("../getData/refreshCategories_ToDo");
-const { addSelectMenu } = require("../toDoList/addSelecMenu");
-module.exports.addProject = async (main_interaction, count) => {
+const { addSelectMenu } = require("../toDoList/addSelectMenu");
+
+module.exports.addProject = async (main_interaction, toDoCountInteraction) => {
     const lang = require(`../../assets/json/language/${await getLang(main_interaction.message.guild.id)}.json`);
 
     var giveNameMessage = await main_interaction.message.channel.send('Bitte gebe einen Namen ein!');
@@ -24,7 +25,7 @@ module.exports.addProject = async (main_interaction, count) => {
                 await delay(2000);
                 msg.delete();
             });
-            count = count - 1;
+            toDoCountInteraction = 0;
             reply.delete();
             giveNameMessage.delete();
             giveNameMessage = null;

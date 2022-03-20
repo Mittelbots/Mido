@@ -4,7 +4,7 @@ const { delay } = require("../delay/delay");
 const { errorhandler } = require("../errorhandler/errorhandler");
 const { getLang } = require("../getData/getLang");
 const { refreshCategories_ToDo } = require("../getData/refreshCategories_ToDo");
-const { addSelectMenu } = require("../toDoList/addSelecMenu");
+const { addSelectMenu } = require("../toDoList/addSelectMenu");
 module.exports.deleteProject = async (main_interaction, categories, isDelete) => {
 
     const lang = require(`../../assets/json/language/${await getLang(main_interaction.message.guild.id)}.json`);

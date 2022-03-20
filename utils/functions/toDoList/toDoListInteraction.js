@@ -20,13 +20,15 @@ const {
     addButtons
 } = require("./addButtonsToList");
 const {
-    newToDoInteraction
-} = require("./newToDo");
+    toDoListOverview
+} = require("./toDoListOverview");
 const {
     viewToDoList
 } = require("./viewToDoList");
 
-var count = 0;
+var toDoCountInteraction = 0;
+var todoListInteractionCount = 0;
+
 var categories;
 var todo;
 
@@ -41,16 +43,16 @@ module.exports.todoListInteraction = async (main_interaction) => {
 
     if (main_interaction.isSelectMenu() && main_interaction.customId === select_ProjectId) {
 
-        if (main_interaction.values.indexOf(add_ProjectId) !== -1) { //? WENN KEINE KATEGORIE EXISTIERT
+        if (main_interaction.values.indexOf(add_ProjectId) !== -1) { //? Menu zum hinzufügen der Projekte
 
-            return await addProject(main_interaction, count);
+            return await addProject(main_interaction, toDoCountInteraction);
 
-        } else if (main_interaction.values.indexOf(delete_Project) !== -1) {
+        } else if (main_interaction.values.indexOf(delete_Project) !== -1) { //? Menu zum löschen der Projekte
 
             return await deleteProject(main_interaction, categories, false);
 
         } else {
-            //? ------WENN KATEGORIEN EXISTIEREN-----
+            //? ------WENN KATEGORIEN EXISTIEREN - Liste alle Projekte auf-----
 
             const currentToDoList = await viewToDoList(categories, todo, main_interaction)
 
@@ -69,20 +71,19 @@ module.exports.todoListInteraction = async (main_interaction) => {
             });
 
             collector.on('collect', async todo_item_interaction => {
-                await newToDoInteraction(todo_item_interaction, main_interaction, count, currentCatId, categories, todolist, guildid)
+                todoListInteractionCount++;
+                if (todoListInteractionCount > 1) {
+                    return;
+                }else {
+                    await toDoListOverview(todo_item_interaction, main_interaction, toDoCountInteraction, currentCatId, categories, todolist, guildid)
+                    todoListInteractionCount = 0;
+                }
             });
 
             collector.on('end', (collected, reason) => {
-                if (reason === 'time') {
-                    var comp = todolist.components[0].components
-                    for (let i in comp) {
-                        comp[i].setDisabled(true)
-                    }
-                    todolist.edit({
-                        content: `**${lang.errors.time_limit_reached} (60s)**`,
-                        components: [todolist.components[0]]
-                    })
-                }
+                todolist.edit({
+                    content: `**${lang.errors.int_unexpected_end} ${reason}**`,
+                })
             });
 
             return;
