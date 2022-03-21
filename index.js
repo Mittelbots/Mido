@@ -51,7 +51,7 @@ bot.once('ready', async () => {
         setTimeout(() => {
           var codeLines = ` | Lines of Code: ${cb}` || '';
           bot.user.setActivity({
-            name: activity.playing.name + ' ' +  version + codeLines,
+            name: activity.playing.name + ' v' +  version + codeLines,
             type: activity.playing.type
           });
         }, 10000);
