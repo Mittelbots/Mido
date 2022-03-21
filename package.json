@@ -1,24 +1,24 @@
 {
   "name": "hautnah_dc",
   "version": "0.3.2",
-  "description": "An own discord bot for hautnah.",
+  "description": "Mido. Manage your tasks like a pro",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "prod": "pm2 start shard.js --name hautnah. --max-memory-restart 500M && pm2 monit",
-    "restart": "pm2 stop hautnah. && pm2 start shard.js --name hautnah. --max-memory-restart 500M && pm2 monit",
-    "kill": "pm2 stop hautnah. && pm2 delete hautnah."
+    "prod": "pm2 start shard.js --name Mido --max-memory-restart 500M && pm2 monit",
+    "restart": "pm2 stop Mido && pm2 start shard.js --name Mido --max-memory-restart 500M && pm2 monit",
+    "kill": "pm2 stop Mido && pm2 delete Mido"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Mittelbots/hautnah_dc.git"
+    "url": "git+https://github.com/Mittelbots/Mido.git"
   },
   "author": "BlackDayz",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Mittelbots/hautnah_dc/issues"
+    "url": "https://github.com/Mittelbots/Mido/issues"
   },
-  "homepage": "https://github.com/Mittelbots/hautnah_dc#readme",
+  "homepage": "https://github.com/Mittelbots/Mido#readme",
   "dependencies": {
     "discord.js": "^13.6.0",
     "mysql": "^2.18.1",
