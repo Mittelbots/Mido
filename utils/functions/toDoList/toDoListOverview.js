@@ -94,7 +94,7 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
             if (toDoCountInteraction > 1) {
                 return;
             }
-            await require('./newToDo/addNewToDo')(toDoCountInteraction, todo_item_interaction, main_interaction, lang)
+            await require('./newToDo/addNewToDo')(toDoCountInteraction, todo_item_interaction, main_interaction, lang, currentCatId)
             break;
         case 'change_cat':
             if (toDoCountInteraction < 0) toDoCountInteraction = 0;

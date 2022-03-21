@@ -13,7 +13,7 @@ const {
 
 var interactionCount = 0;
 
-module.exports = async (toDoCountInteraction, todo_item_interaction, main_interaction, lang) => {
+module.exports = async (toDoCountInteraction, todo_item_interaction, main_interaction, lang, currentCatId) => {
 
     const buttons = newToDoButtons(false, lang)
     const task = await todo_item_interaction.channel.send({
@@ -85,7 +85,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                         await delay(3000);
                         msg.delete();
                     });
-                    --interactionCount;
+                    interactionCount = 0;
                 }
 
                 if (text == '' && canPass) {
@@ -96,7 +96,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                         await delay(3000);
                         msg.delete();
                     });
-                    --interactionCount;
+                    interactionCount = 0;
                 }
 
                 if (canPass) {
@@ -117,7 +117,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                                 await delay(3000);
                                 msg.delete();
                             });
-                            --interactionCount;
+                            interactionCount = 0;
                         })
 
                     await delay(5000);
@@ -138,7 +138,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
             case 'cancel':
                 toDoCountInteraction = 0;
                 await todo_interaction.message.delete();
-                --interactionCount;
+                interactionCount = 0;
                 newToDocollector = null;
                 todo_interaction = null;
                 break;
@@ -149,7 +149,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                         components: [newToDoButtons(false, lang)[0], newToDoButtons(false, lang)[1], newToDoButtons(false, lang)[2], newToDoButtons(false, lang)[3], newToDoButtons(false, lang)[4]]
                     })]
                 });
-                --interactionCount;
+                interactionCount = 0;
                 break;
         }
 
@@ -179,7 +179,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                     }
                     reply.delete();
                     todo_interaction_reply.delete();
-                    --interactionCount;
+                    interactionCount = 0;
                     break;
 
                 case 'add_text':
@@ -201,7 +201,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                     }
                     reply.delete();
                     todo_interaction_reply.delete();
-                    --interactionCount;
+                    interactionCount = 0;
                     break;
 
                 case 'add_deadline':
@@ -235,7 +235,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                             reminder = reply.content;
 
                             if (reminder.toLowerCase() === 'none') {
-                                --interactionCount;
+                                interactionCount = 0;
                                 reply.delete();
                                 return reminderMessage.delete();
                             }
@@ -262,7 +262,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                             } else {
                                 return reply.reply(lang.todo.newtodo.errors.reminder_wrong_date_format)
                             }
-                            --interactionCount;
+                            interactionCount = 0;
                             reply.delete();
                             reminderMessage.delete();
                             task.edit({
@@ -313,7 +313,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                     });
                     reply.delete();
                     todo_interaction_reply.delete();
-                    --interactionCount;
+                    interactionCount = 0;
                     break;
 
                 default:
@@ -341,7 +341,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                 await delay(3000);
                 msg.delete();
             });
-            --interactionCount;
+            interactionCount = 0;
             reply.delete();
             return;
         }
@@ -356,7 +356,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                 msg.delete();
             });
             reply.delete();
-            --interactionCount;
+            interactionCount = 0;
             return;
         }
 
@@ -373,7 +373,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                 await delay(2000);
                 msg.delete();
             });
-            --interactionCount;
+            interactionCount = 0;
             return;
         }
         if (!text) {
@@ -383,7 +383,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                 await delay(2000);
                 msg.delete();
             });
-            --interactionCount;
+            interactionCount = 0;
             return;
         }
 
