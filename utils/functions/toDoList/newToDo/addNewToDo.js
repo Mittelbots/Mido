@@ -2,6 +2,7 @@ const {
     MessageActionRow
 } = require("discord.js");
 const database = require("../../../../bot/db/db");
+const { toDoState_Active } = require("../../../variables/variables");
 const {
     delay
 } = require("../../delay/delay");
@@ -107,7 +108,9 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                             }).then(async msg => {
                                 await delay(3000);
                                 msg.delete();
-                            })
+                                task.delete();
+                                toDoCountInteraction = 0;
+                            });
                         })
                         .catch(err => {
                             console.log(err);
@@ -118,11 +121,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                                 msg.delete();
                             });
                             interactionCount = 0;
-                        })
-
-                    await delay(5000);
-                    task.delete();
-                    toDoCountInteraction = 0;
+                        });
                 }
                 break;
 
