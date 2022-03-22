@@ -6,11 +6,13 @@ const { toDoState_Active } = require("../../../variables/variables");
 const {
     delay
 } = require("../../delay/delay");
+const { refreshCategories_ToDo } = require("../../getData/refreshCategories_ToDo");
 const { removeMention } = require("../../removeCharacters/removeCharacters");
 const {
     newToDoEmbed,
     newToDoButtons
 } = require("../toDoListOverview");
+const { viewToDoList } = require('../viewToDoList');
 
 var interactionCount = 0;
 
@@ -110,6 +112,16 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                                 msg.delete();
                                 task.delete();
                                 toDoCountInteraction = 0;
+                                interactionCount = 0;
+                                
+                                const refresh = await refreshCategories_ToDo(main_interaction);
+                                const categories = refresh[0]; 
+                                const todo = refresh[1];
+                                const newToDoList = await viewToDoList(categories, todo, main_interaction);
+
+                                await main_interaction.message.edit({
+                                    embeds: [newToDoList[1]]
+                                });
                             });
                         })
                         .catch(err => {
