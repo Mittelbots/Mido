@@ -4,7 +4,7 @@ const {
     MessageEmbed
 } = require("discord.js");
 const database = require("../../../bot/db/db");
-const { toDoState_Ready } = require("../../variables/variables");
+const { toDoState_Ready, toDoState_Deleted } = require("../../variables/variables");
 const {
     delay
 } = require("../delay/delay");
@@ -162,7 +162,7 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
                         .catch(err => console.log(err));
 
                     if (task) {
-                        return await database.query('DELETE FROM hn_todo WHERE id = ?', [reply.content])
+                        return await database.query('UPDATE hn_todo SET state = ? WHERE id = ?', [toDoState_Deleted , reply.content])
                             .then(async () => {
                                 toDoCountInteraction = 0;
                                 return reply.reply({
