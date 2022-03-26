@@ -53,18 +53,28 @@ module.exports.todoListInteraction = async (main_interaction) => {
 
         } else {
             //? ------WENN KATEGORIEN EXISTIEREN - Liste alle Projekte auf-----
+            var start = 0;
+            var currentCatId;
+            var todolist
 
-            const currentToDoList = await viewToDoList(categories, todo, main_interaction)
-
-            var currentCatId = currentToDoList[0];
             const buttons = await addButtons(guildid);
             
-            const todolist = await main_interaction.message.edit({
-                embeds: [currentToDoList[1]],
-                components: [new MessageActionRow({
-                    components: [buttons[0], buttons[1], buttons[2], buttons[3]]
-                })]
-            });
+            async function editToDoList() {  
+                const currentToDoList = await viewToDoList(categories, todo, main_interaction, start)
+
+                currentCatId = currentToDoList[0];
+
+                todolist = await main_interaction.message.edit({
+                    embeds: [currentToDoList[1]],
+                    components: [new MessageActionRow({
+                        components: [buttons[0], buttons[1], buttons[2], buttons[3], buttons[4]]
+                    })]
+                }).catch(async () => {
+                    start = Number(start) + 10;
+                    await editToDoList();
+                })
+            }
+            await editToDoList();
 
             const collector = await todolist.createMessageComponentCollector({
                 filter: ((user) => user.user.id === main_interaction.user.id)

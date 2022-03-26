@@ -39,6 +39,25 @@ const addSelectMenu = async (categories, isDelete, guild_id) => {
     return menu;
 }
 
+const addConfirmMenu = async () => {
+    let menu = new MessageSelectMenu()
+        .setCustomId('confirmDelete')
+        .setPlaceholder('Bitte bestätigen')
+        .addOptions([{
+            'value': 'yes',
+            'label': 'yes',
+            'description': 'Das Projekt wird automatisch gelöscht.'
+        }])
+        .addOptions([{
+            'value': 'no',
+            'label': 'no',
+            'description': 'Der Vorgang wird abgebrochen.'
+        }])
+
+    return menu;
+}
+
 module.exports = {
-    addSelectMenu
+    addSelectMenu,
+    addConfirmMenu
 }

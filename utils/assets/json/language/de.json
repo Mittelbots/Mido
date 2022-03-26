@@ -1,7 +1,8 @@
 {
     "success": {
         "saved": "Erfolgreich gespeichert",
-        "deleted": "Erfolgreich gelöscht"
+        "deleted": "Erfolgreich gelöscht",
+        "set_to_read": "Erfolgreich als fertig makiert."
     },
     "errors": {
         "general": "Es ist ein Fehler aufgetreten. Versuche es erneut oder kontaktiere einen Bot Supporter",
@@ -10,7 +11,8 @@
         "time_limit_reached": "Das Zeitlimit wurde erreicht",
         "user_notfount": "Der Spieler wurde nicht gefunden",
         "only_numbers": "Es sind nur Nummern erlaubt! Versuche es erneut.",
-        "int_unexpected_end": "Die Interaktion wurde beendet wegen:"
+        "int_unexpected_end": "Die Interaktion wurde beendet wegen:",
+        "task_already_ready": "Diese Aufgabe wurde schon als fertig makiert!"
     },
     "tips": {
         "cancel": "(Tipp: \"cancel\" bricht diesen Vorgang ab!)"
@@ -35,7 +37,7 @@
         }
     },
     "todo": {
-        "reminder": "Errinerung",
+        "reminder": "Erinnerung",
         "todo_list": "Aufgaben Liste",
         "deadline": "Deadline",
         "other_user": "Andere Nutzer",
@@ -47,7 +49,12 @@
             "add": "Aufgabe hinzufügen",
             "change_project": "Projekt wechseln",
             "delete": "Aufgabe löschen",
-            "end_int": "Interaktion beenden"
+            "set_todo_ready": "Aufgabe als fertig makieren",
+            "end_int": "Interaktion beenden",
+            "options": "Andere Optionen öffnen",
+            "options_backToMain": "Zurück zum Menü",
+            "options_next": "Nächste Seite",
+            "options_back": "Vorherige Seite"
         },
         "newtodo": {
             "buttons": {
@@ -79,21 +86,30 @@
                 "no_comma_in_shorthand": "Achte darauf ein _,_ zwischen den Angaben zu haben! [\"Projekt-Titel [req.], Projekt-Text [req.], Deadline [opt.], Reminder (or \"none\") [opt.], @Mittelblut9#1974\"[opt.] ]"
             },
             "success": {
-                "saved": "Die neue Task wurde erfolgreich gespeichert!"
+                "saved": "Die neue Aufgabe wurde erfolgreich gespeichert!"
             }
         },
         "delete_todo": {
             "interaction": {
-                "insert_id": "Bitte gebe die ID ein, von der Task, die du löschen möchtest."
+                "insert_id": "Bitte gebe die ID ein, von der Aufgabe, die du löschen möchtest."
             },
             "errors": {
-                "delete_todo_error": "Etwas ist beim Löschen der Aufgabe schiefgelaufen",
-                "item_notfound_withId": "Es wurde keine ToDo Task mit der ID gefunden!"
+                "delete_todo_error": "Etwas ist beim Löschen der Aufgabe etwas schiefgelaufen",
+                "item_notfound_withId": "Es wurde keine Aufgabe mit der ID gefunden!"
+            }
+        },
+        "set_todo_ready": {
+            "interaction": {
+                "insert_id": "Bitte gebe die ID ein, von der Aufgabe, die du als fertig makieren möchtest möchtest."
+            },
+            "errors": {
+                "set_todo_ready_error": "Etwas ist beim Ändern der Aufgabe etwas schiefgelaufen",
+                "item_notfound_withId": "Es wurde keine Aufgabe mit der ID gefunden!"
             }
         },
         "watchToDoList": {
             "message": {
-                "the_task": "Die Task",
+                "the_task": "Die Aufgabe",
                 "last": "hat heute die Deadline! Noch nicht fertig? Dann mach dich mal an die Arbeit!"
             }
         }

@@ -7,3 +7,4 @@ module.exports.delete_Project = 'delete_project';
 module.exports.toDoState_Active = 1;
 module.exports.toDoState_Inactive = 0;
 module.exports.toDoState_Deleted = 2;
+module.exports.toDoState_Ready = 3;

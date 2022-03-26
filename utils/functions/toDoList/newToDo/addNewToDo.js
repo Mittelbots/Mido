@@ -117,7 +117,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                                 const refresh = await refreshCategories_ToDo(main_interaction);
                                 const categories = refresh[0]; 
                                 const todo = refresh[1];
-                                const newToDoList = await viewToDoList(categories, todo, main_interaction);
+                                const newToDoList = await viewToDoList(categories, todo, main_interaction, 0);
 
                                 await main_interaction.message.edit({
                                     embeds: [newToDoList[1]]
@@ -277,7 +277,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                             reply.delete();
                             reminderMessage.delete();
                             task.edit({
-                                embeds: [newToDoEmbed(title, text, deadline + dateFormatDC + `\n**${lang.todo.reminder}:** ${reminder} ${reminderFormatDC}`, user)]
+                                embeds: [newToDoEmbed(title, text, deadline + dateFormatDC + `\n🕐 **${lang.todo.reminder}:** ${reminder} ${reminderFormatDC}`, user)]
                             });
 
                         });
