@@ -21,7 +21,7 @@ module.exports.run = async (bot, message, args) => {
     const lang = require(`../../../utils/assets/json/language/${await getLang(message.guild.id)}.json`)
 
     if (!await hasPermissions(message.member)) {
-        return message.reply(lang.errros.noperms);
+        return message.reply(lang.errors.noperms);
     }
 
     var value = args[0];
