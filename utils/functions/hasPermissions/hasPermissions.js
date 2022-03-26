@@ -1,7 +1,7 @@
 const database = require('../../../bot/db/db');
 
 async function hasPermissions(user) {
-    return database.query('SELECT * FROM hn_perms')
+    return database.query('SELECT * FROM hn_perms WHERE guild_id = ?', user.guild.id)
         .then(res => {
             var hasPermission = false;
             
