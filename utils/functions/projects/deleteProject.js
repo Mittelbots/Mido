@@ -3,7 +3,7 @@ const {
     MessageEmbed
 } = require("discord.js");
 const database = require("../../../bot/db/db");
-const { toDoState_Deleted } = require("../../variables/variables");
+const { toDoState_Deleted, cancel_delete_project } = require("../../variables/variables");
 const {
     delay
 } = require("../delay/delay");
@@ -37,6 +37,21 @@ module.exports.deleteProject = async (main_interaction, categories, isDelete) =>
             })]
         });
     } else {
+
+        if(main_interaction.values[0] === cancel_delete_project) {
+            var newMessageEmbed = new MessageEmbed()
+            .setTitle((categories) ? lang.projects.choose_new_project : lang.projects.first_add_new_project)
+            .setTimestamp()
+
+            var newMessageEmbedInteraction = await addSelectMenu(categories, false, main_interaction.message.guild.id);
+            main_interaction.message.edit({
+                embeds: [newMessageEmbed],
+                components: [new MessageActionRow({
+                    components: [newMessageEmbedInteraction]
+                })]
+            });
+            return;
+        }
         const confirmSelectMenu = await addConfirmMenu();
 
         const confirmMessage = await main_interaction.message.channel.send({
@@ -101,8 +116,6 @@ module.exports.deleteProject = async (main_interaction, categories, isDelete) =>
                         return errorhandler(err, lang.projects.errors.error_at_delete, main_interaction.message.channel);
                     });
             }
-        });
-
-
+        })
     }
 }

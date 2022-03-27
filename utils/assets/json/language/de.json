@@ -33,7 +33,9 @@
             "choose_project": "Wähle ein Projekt aus",
             "choose_project_desc": "Klicke hier um ein Projekt auszuwählen.",
             "delete_project": "Lösche ein Project",
-            "delete_project_desc": "Klicke hier um ein Projekt zu löschen."
+            "delete_project_desc": "Klicke hier um ein Projekt zu löschen.",
+            "cancel_delete": "Löschen abbrechen",
+            "cancel_delete_desc": "Löschen abbrechen und wieder auf die Startseite gelangen."
         }
     },
     "todo": {
