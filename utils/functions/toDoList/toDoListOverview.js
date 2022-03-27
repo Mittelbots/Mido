@@ -91,17 +91,14 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
 
     switch (todo_item_interaction.customId) {
         case 'add_toDo':
-            console.log(toDoCountInteraction);
             if (toDoCountInteraction < 0) toDoCountInteraction = 0;
             toDoCountInteraction++;
-            console.log(toDoCountInteraction);
             if (toDoCountInteraction > 1) {
                 return;
             }
             await require('./newToDo/addNewToDo')(toDoCountInteraction, todo_item_interaction, main_interaction, lang, currentCatId)
             break;
         case 'change_cat':
-            console.log(toDoCountInteraction)
             if (toDoCountInteraction < 0) toDoCountInteraction = 0;
             toDoCountInteraction++;
             if (toDoCountInteraction > 1) {
