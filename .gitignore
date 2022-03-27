@@ -103,7 +103,7 @@ dist
 .tern-port
 
 
-#_logs/*
+_logs/*
 _secret/token.json
 _secret/db/db.json
 _secret/secret_config/secret_config.json
