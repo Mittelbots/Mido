@@ -2,17 +2,25 @@ const {
     MessageActionRow
 } = require("discord.js");
 const database = require("../../../../bot/db/db");
-const { toDoState_Active } = require("../../../variables/variables");
+const {
+    toDoState_Active
+} = require("../../../variables/variables");
 const {
     delay
 } = require("../../delay/delay");
-const { refreshCategories_ToDo } = require("../../getData/refreshCategories_ToDo");
-const { removeMention } = require("../../removeCharacters/removeCharacters");
+const {
+    refreshCategories_ToDo
+} = require("../../getData/refreshCategories_ToDo");
+const {
+    removeMention
+} = require("../../removeCharacters/removeCharacters");
 const {
     newToDoEmbed,
     newToDoButtons
 } = require("../toDoListOverview");
-const { viewToDoList } = require('../viewToDoList');
+const {
+    viewToDoList
+} = require('../viewToDoList');
 
 var interactionCount = 0;
 
@@ -113,9 +121,9 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                                 task.delete();
                                 toDoCountInteraction = 0;
                                 interactionCount = 0;
-                                
+
                                 const refresh = await refreshCategories_ToDo(main_interaction);
-                                const categories = refresh[0]; 
+                                const categories = refresh[0];
                                 const todo = refresh[1];
                                 const newToDoList = await viewToDoList(categories, todo, main_interaction, 0);
 
@@ -172,6 +180,12 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
         messageCollector.on('collect', async reply => {
             switch (todo_interaction.customId) {
                 case 'add_title':
+                    if (reply.content.toLowerCase() === 'cancel' || reply.content.toLowerCase() === 'none') {
+                        interactionCount = 0;
+                        reply.delete();
+                        return;
+                    }
+
                     title = reply.content;
                     try {
                         await task.edit({
@@ -194,6 +208,12 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                     break;
 
                 case 'add_text':
+                    if (reply.content.toLowerCase() === 'cancel' || reply.content.toLowerCase() === 'none') {
+                        interactionCount = 0;
+                        reply.delete();
+                        return;
+                    }
+
                     text = reply.content;
                     try {
                         task.edit({
@@ -216,6 +236,13 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                     break;
 
                 case 'add_deadline':
+
+                    if (reply.content.toLowerCase() === 'cancel' || reply.content.toLowerCase() === 'none') {
+                        interactionCount = 0;
+                        reply.delete();
+                        return;
+                    }
+
                     deadline = reply.content;
                     deadline = deadline.split('.');
 
@@ -298,6 +325,12 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                     break;
 
                 case 'add_other':
+                    if (reply.content.toLowerCase() === 'cancel' || reply.content.toLowerCase() === 'none') {
+                        interactionCount = 0;
+                        reply.delete();
+                        return;
+                    }
+
                     let other_user = reply.content.split(' ');
 
                     for (let i in other_user) {
