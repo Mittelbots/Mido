@@ -14,7 +14,7 @@ module.exports.addProject = async (main_interaction, toDoCountInteraction) => {
 
     var messageCollector = await main_interaction.message.channel.createMessageCollector({
         filter: (() => main_interaction.message.author.id),
-        time: 15000,
+        time: 2000,
         max: 1
     });
     messageCollector.on('collect', async reply => {
@@ -36,14 +36,9 @@ module.exports.addProject = async (main_interaction, toDoCountInteraction) => {
                 const refresh = await refreshCategories_ToDo(main_interaction);
                 categories = refresh[0];
 
-                var newMessageEmbed = new MessageEmbed()
-                .setTitle(lang.projects.choose_new_project)
-                .setTimestamp()
-
                 const newSelectMenu = await addSelectMenu(categories, null, main_interaction.message.guild.id)
 
                 main_interaction.message.edit({
-                    embeds: [newMessageEmbed],
                     components: [new MessageActionRow({
                         components: [newSelectMenu]
                     })]
@@ -54,9 +49,9 @@ module.exports.addProject = async (main_interaction, toDoCountInteraction) => {
                 }).then(async msg => {
                     await delay(2000);
                     messageCollector = null;
-                    reply.delete();
-                    msg.delete();
-                    giveNameMessage.delete();
+                    reply.delete().catch(err => null)
+                    msg.delete().catch(err => null)
+                    giveNameMessage.delete().catch(err => null)
                 })
             })
             .catch(err => {
@@ -64,19 +59,36 @@ module.exports.addProject = async (main_interaction, toDoCountInteraction) => {
             });
     });
 
-    messageCollector.on('end', (collected, reason) => {
+    messageCollector.on('end', async (collected, reason) => {
+        giveNameMessage.delete().catch(err => null)
         if(reason === 'time') {
             try {
-                giveNameMessage.edit({
-                    content: `**${lang.errors.time_limit_reached} (15s)**`, 
-                    components: [giveNameMessage.components[0]]
+                main_interaction.message.edit({
+                    components: [main_interaction.message.components[0]]
                 });
+                
+                main_interaction.message.channel.send({
+                    content: `**${lang.errors.time_limit_reached}**`
+                }).then(async msg => {
+                    await delay(3000);
+                    msg.delete();
+                });
+
+
             }catch(err) {
                 return errorhandler(err);
             }
         }else {
-            giveNameMessage.edit({
+            
+            main_interaction.message.edit({
+                components: [main_interaction.message.components[0]]
+            });
+
+            main_interaction.message.channel.send({
                 content: `**${lang.errors.int_unexpected_end} ${reason}**`
+            }).then(async msg => {
+                await delay(3000);
+                msg.delete();
             });
         }
     })
