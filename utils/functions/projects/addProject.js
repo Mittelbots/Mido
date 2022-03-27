@@ -14,7 +14,7 @@ module.exports.addProject = async (main_interaction, toDoCountInteraction) => {
 
     var messageCollector = await main_interaction.message.channel.createMessageCollector({
         filter: (() => main_interaction.message.author.id),
-        time: 2000,
+        time: 20000,
         max: 1
     });
     messageCollector.on('collect', async reply => {
