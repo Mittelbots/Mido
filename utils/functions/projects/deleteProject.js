@@ -3,6 +3,7 @@ const {
     MessageEmbed
 } = require("discord.js");
 const database = require("../../../bot/db/db");
+const { toDoState_Deleted } = require("../../variables/variables");
 const {
     delay
 } = require("../delay/delay");
@@ -72,7 +73,7 @@ module.exports.deleteProject = async (main_interaction, categories, isDelete) =>
                 return;
             }else {
                 const id = main_interaction.values[0].slice(4, main_interaction.values[0].length);
-                return await database.query('DELETE FROM hn_category WHERE id = ?; DELETE FROM hn_todo WHERE cat_id = ?;', [Number(id), Number(id)])
+                return await database.query('DELETE FROM hn_projects WHERE id = ?; UPDATE hn_todo SET state = ? WHERE cat_id = ?;', [Number(id), toDoState_Deleted, Number(id)])
                     .then(async () => {
                         await main_interaction.channel.send({
                             content: `${lang.success.deleted}!`
