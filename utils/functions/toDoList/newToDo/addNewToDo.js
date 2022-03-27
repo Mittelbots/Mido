@@ -183,6 +183,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                     if (reply.content.toLowerCase() === 'cancel' || reply.content.toLowerCase() === 'none') {
                         interactionCount = 0;
                         reply.delete();
+                        todo_interaction_reply.delete();
                         return;
                     }
 
@@ -211,6 +212,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                     if (reply.content.toLowerCase() === 'cancel' || reply.content.toLowerCase() === 'none') {
                         interactionCount = 0;
                         reply.delete();
+                        todo_interaction_reply.delete();
                         return;
                     }
 
@@ -240,6 +242,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                     if (reply.content.toLowerCase() === 'cancel' || reply.content.toLowerCase() === 'none') {
                         interactionCount = 0;
                         reply.delete();
+                        todo_interaction_reply.delete();
                         return;
                     }
 
@@ -328,6 +331,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                     if (reply.content.toLowerCase() === 'cancel' || reply.content.toLowerCase() === 'none') {
                         interactionCount = 0;
                         reply.delete();
+                        todo_interaction_reply.delete();
                         return;
                     }
 
