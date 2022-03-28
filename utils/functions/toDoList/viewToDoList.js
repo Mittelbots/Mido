@@ -17,6 +17,7 @@ module.exports.viewToDoList = async (categories, todo, main_interaction, start) 
                 await todo.map((todo, index) => {
                     //if(index >= start && count <= start + 10) {
                         if (todo.cat_id === cat.id) {
+                            newMessageEmbed.setColor(cat.color);
                             let emoji = (todo.state === toDoState_Inactive) ? '🛑' : (todo.state === toDoState_Ready) ? '✅' : '⏹️';
                             newMessageEmbed.addField(`‎\n${emoji} ${todo.title} ||ID: ${todo.id}||`, `_ ${todo.text}_ \n\n**${lang.todo.deadline}:** ${todo.deadline || lang.todo.no_deadline} \n**${lang.todo.other_user}:** ${todo.other_user || lang.todo.no_other_user}`);
                             //count++;
