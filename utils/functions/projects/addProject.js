@@ -31,7 +31,7 @@ module.exports.addProject = async (main_interaction, toDoCountInteraction) => {
             });
             return; 
         }
-        return await database.query('INSERT INTO hn_projects (name, color, guild_id) VALUES (?, ?, ?)', [reply.content, '#021982', reply.guildId])
+        return await database.query('INSERT INTO mido_projects (name, color, guild_id) VALUES (?, ?, ?)', [reply.content, '#021982', reply.guildId])
             .then(async () => {
                 const refresh = await refreshCategories_ToDo(main_interaction);
                 categories = refresh[0];

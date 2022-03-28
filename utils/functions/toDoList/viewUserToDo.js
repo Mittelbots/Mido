@@ -7,7 +7,7 @@ const { getLang } = require("../getData/getLang");
 module.exports.viewUserToDo = async (user_id, guild_id, channel) => {
     const lang = require(`../../assets/json/language/${await getLang(guild_id)}.json`)
 
-    return await database.query('SELECT * FROM hn_todo WHERE user_id = ?', [user_id])
+    return await database.query('SELECT * FROM mido_todo WHERE user_id = ?', [user_id])
         .then(async res => {
             if(res.length <= 0) {
                 return false;

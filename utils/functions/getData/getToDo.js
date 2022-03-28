@@ -5,7 +5,7 @@ const { getLang } = require('./getLang');
 
 async function getToDo(channel) {
     const lang = require(`../../assets/json/language/${await getLang(channel.guild.id)}.json`)
-    return await database.query('SELECT * FROM hn_todo WHERE guild_id = ? AND NOT state = ?', [channel.guild.id, toDoState_Deleted])
+    return await database.query('SELECT * FROM mido_todo WHERE guild_id = ? AND NOT state = ?', [channel.guild.id, toDoState_Deleted])
         .then(res => {
             if(res.length <= 0) return false;
 

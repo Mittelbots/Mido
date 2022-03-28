@@ -13,7 +13,7 @@ module.exports.watchToDoList = (bot) => {
         var dmCount = 0;
         var failedCount = 0;
 
-        await database.query('SELECT * FROM hn_todo WHERE state = ?', ['1'])
+        await database.query('SELECT * FROM mido_todo WHERE state = ?', ['1'])
             .then(res => {
                 if (res.length <= 0) return;
 
@@ -61,7 +61,7 @@ module.exports.watchToDoList = (bot) => {
                                 failedCount++;
                             }
 
-                            await database.query(`UPDATE hn_todo SET state = ? WHERE id = ?`, [toDoState_Inactive, taskid])
+                            await database.query(`UPDATE mido_todo SET state = ? WHERE id = ?`, [toDoState_Inactive, taskid])
                                 .catch(err => {
                                     return errorhandler(err)
                                 });

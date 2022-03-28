@@ -152,14 +152,14 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
                         msg.delete();
                     })
                 } else {
-                    const task = await database.query('SELECT id FROM hn_todo WHERE id = ?', [reply.content])
+                    const task = await database.query('SELECT id FROM mido_todo WHERE id = ?', [reply.content])
                         .then(res => {
                             return res[0]
                         })
                         .catch(err => console.log(err));
 
                     if (task) {
-                        return await database.query('UPDATE hn_todo SET state = ? WHERE id = ?', [toDoState_Deleted , reply.content])
+                        return await database.query('UPDATE mido_todo SET state = ? WHERE id = ?', [toDoState_Deleted , reply.content])
                             .then(async () => {
                                 toDoCountInteraction = 0;
                                 return reply.reply({
@@ -234,7 +234,7 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
                         msg.delete();
                     })
                 } else {
-                    const task = await database.query('SELECT id, state FROM hn_todo WHERE id = ?', [reply.content])
+                    const task = await database.query('SELECT id, state FROM mido_todo WHERE id = ?', [reply.content])
                         .then(res => {
                             return res[0]
                         })
@@ -247,7 +247,7 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
                                 await delay()
                             })
                         }
-                        return await database.query('UPDATE hn_todo SET state = ? WHERE id = ?', [toDoState_Ready, reply.content])
+                        return await database.query('UPDATE mido_todo SET state = ? WHERE id = ?', [toDoState_Ready, reply.content])
                             .then(async () => {
                                 toDoCountInteraction = 0;
                                 return reply.reply({
