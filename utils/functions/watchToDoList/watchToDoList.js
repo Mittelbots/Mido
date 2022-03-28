@@ -6,6 +6,7 @@ const {
     errorhandler
 } = require("../errorhandler/errorhandler");
 const { getLang } = require("../getData/getLang");
+const config = require('../../assets/json/_config/config.json');
 
 module.exports.watchToDoList = (bot) => {
     setInterval(async () => {
@@ -13,7 +14,7 @@ module.exports.watchToDoList = (bot) => {
         var dmCount = 0;
         var failedCount = 0;
 
-        await database.query('SELECT * FROM mido_todo WHERE state = ?', ['1'])
+        await database.query(`SELECT * FROM ${config.tables.mido_todo} WHERE state = ?`, ['1'])
             .then(res => {
                 if (res.length <= 0) return;
 
@@ -61,7 +62,7 @@ module.exports.watchToDoList = (bot) => {
                                 failedCount++;
                             }
 
-                            await database.query(`UPDATE mido_todo SET state = ? WHERE id = ?`, [toDoState_Inactive, taskid])
+                            await database.query(`UPDATE ${config.tables.mido_todo} SET state = ? WHERE id = ?`, [toDoState_Inactive, taskid])
                                 .catch(err => {
                                     return errorhandler(err)
                                 });
