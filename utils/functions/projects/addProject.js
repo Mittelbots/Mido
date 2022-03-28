@@ -4,8 +4,9 @@ const database = require("../../../bot/db/db");
 const { delay } = require("../delay/delay");
 const { errorhandler } = require("../errorhandler/errorhandler");
 const { getLang } = require("../getData/getLang");
-const { refreshCategories_ToDo } = require("../getData/refreshCategories_ToDo");
+const { refreshProject_ToDo } = require("../getData/refreshProject_ToDo");
 const { addSelectMenu } = require("../toDoList/addSelectMenu");
+const config = require('../../assets/json/_config/config.json');
 
 module.exports.addProject = async (main_interaction, toDoCountInteraction) => {
     const lang = require(`../../assets/json/language/${await getLang(main_interaction.message.guild.id)}.json`);
@@ -31,9 +32,9 @@ module.exports.addProject = async (main_interaction, toDoCountInteraction) => {
             });
             return; 
         }
-        return await database.query('INSERT INTO hn_projects (name, color, guild_id) VALUES (?, ?, ?)', [reply.content, '#021982', reply.guildId])
+        return await database.query(`INSERT INTO ${config.tables.mido_projects} (name, color, guild_id) VALUES (?, ?, ?)`, [reply.content, '#021982', reply.guildId])
             .then(async () => {
-                const refresh = await refreshCategories_ToDo(main_interaction);
+                const refresh = await refreshProject_ToDo(main_interaction);
                 categories = refresh[0];
 
                 const newSelectMenu = await addSelectMenu(categories, null, main_interaction.message.guild.id)

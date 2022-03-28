@@ -4,8 +4,8 @@ const {
 } = require('discord.js');
 const { delay } = require('../../../utils/functions/delay/delay');
 const {
-    getCategory
-} = require('../../../utils/functions/getData/getCategory');
+    getProject
+} = require('../../../utils/functions/getData/getProject');
 const { getLang } = require('../../../utils/functions/getData/getLang');
 const {
     hasPermissions
@@ -55,7 +55,7 @@ module.exports.run = async (bot, message, args) => {
         }
     }
 
-    var categories = await getCategory(message.channel);
+    var categories = await getProject(message.channel);
 
     var newMessageEmbed = new MessageEmbed()
         .setTitle((categories) ? lang.projects.choose_new_project : lang.projects.first_add_new_project)

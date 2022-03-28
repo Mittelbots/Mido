@@ -9,8 +9,8 @@ const {
     delay
 } = require("../../delay/delay");
 const {
-    refreshCategories_ToDo
-} = require("../../getData/refreshCategories_ToDo");
+    refreshProject_ToDo
+} = require("../../getData/refreshProject_ToDo");
 const {
     removeMention
 } = require("../../removeCharacters/removeCharacters");
@@ -21,6 +21,7 @@ const {
 const {
     viewToDoList
 } = require('../viewToDoList');
+const config = require('../../../assets/json/_config/config.json');
 
 var interactionCount = 0;
 
@@ -111,7 +112,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                 }
 
                 if (canPass) {
-                    await database.query('INSERT INTO hn_todo (user_id, title, text, deadline, other_user, cat_id, guild_id, state, reminder) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [main_interaction.user.id, title, text, deadline, user, currentCatId, main_interaction.member.guild.id, toDoState_Active, reminder])
+                    await database.query(`INSERT INTO ${config.tables.mido_todo} (user_id, title, text, deadline, other_user, cat_id, guild_id, state, reminder) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, [main_interaction.user.id, title, text, deadline, user, currentCatId, main_interaction.member.guild.id, toDoState_Active, reminder])
                         .then(async () => {
                             await todo_interaction.channel.send({
                                 content: lang.todo.newtodo.success.saved
@@ -122,7 +123,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                                 toDoCountInteraction = 0;
                                 interactionCount = 0;
 
-                                const refresh = await refreshCategories_ToDo(main_interaction);
+                                const refresh = await refreshProject_ToDo(main_interaction);
                                 const categories = refresh[0];
                                 const todo = refresh[1];
                                 const newToDoList = await viewToDoList(categories, todo, main_interaction, 0);

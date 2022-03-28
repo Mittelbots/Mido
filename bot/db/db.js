@@ -5,10 +5,10 @@ class Database {
   constructor() {
     this.connection = mysql.createPool({
       connectionLimit: 5,
-      host: dbconfig.host,
-      user: dbconfig.user,
-      password: dbconfig.password,
-      database: dbconfig.database,
+      host: dbconfig.connection.host,
+      user: dbconfig.connection.user,
+      password: dbconfig.connection.password,
+      database: dbconfig.connection.database,
       debug: false,
       multipleStatements: true
     });

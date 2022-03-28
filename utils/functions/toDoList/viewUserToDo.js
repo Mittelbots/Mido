@@ -1,18 +1,19 @@
 const { MessageEmbed } = require("discord.js");
 const database = require("../../../bot/db/db");
 const { errorhandler } = require("../errorhandler/errorhandler");
-const { getCategory } = require("../getData/getCategory");
+const { getProject } = require("../getData/getProject");
 const { getLang } = require("../getData/getLang");
+const config = require('../../assets/json/_config/config.json');
 
 module.exports.viewUserToDo = async (user_id, guild_id, channel) => {
     const lang = require(`../../assets/json/language/${await getLang(guild_id)}.json`)
 
-    return await database.query('SELECT * FROM hn_todo WHERE user_id = ?', [user_id])
+    return await database.query(`SELECT * FROM ${config.tables.mido_todo} WHERE user_id = ?`, [user_id])
         .then(async res => {
             if(res.length <= 0) {
                 return false;
             }else {
-                const categories = await getCategory(channel);
+                const categories = await getProject(channel);
 
                 const newEmbed = new MessageEmbed();
                 newEmbed.setDescription(`${lang.todo.all_open_task_from} <@${user_id}>`)

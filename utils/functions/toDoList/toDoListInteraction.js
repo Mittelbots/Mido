@@ -8,8 +8,8 @@ const {
 } = require("../../variables/variables");
 const { getLang } = require("../getData/getLang");
 const {
-    refreshCategories_ToDo
-} = require("../getData/refreshCategories_ToDo");
+    refreshProject_ToDo
+} = require("../getData/refreshProject_ToDo");
 const {
     addProject
 } = require("../projects/addProject");
@@ -37,7 +37,7 @@ module.exports.todoListInteraction = async (main_interaction) => {
 
     const lang = require(`../../assets/json/language/${await getLang(guildid)}.json`)
 
-    const refresh = await refreshCategories_ToDo(main_interaction);
+    const refresh = await refreshProject_ToDo(main_interaction);
     categories = refresh[0];
     todo = refresh[1];
 

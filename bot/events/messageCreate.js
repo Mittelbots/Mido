@@ -15,7 +15,7 @@ async function messageCreate(message, bot) {
     var cmd = messageArray[0];
     var args = messageArray.slice(1);
 
-    const prefix = await database.query('SELECT prefix FROM hn_config WHERE guild_id = ?', message.guild.id)
+    const prefix = await database.query(`SELECT prefix FROM ${config.tables.mido_config} WHERE guild_id = ?`, message.guild.id)
     .then(res => {
         if(res === 0) {
             return config.defaultprefix;
