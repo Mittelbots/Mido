@@ -14,8 +14,8 @@ const {
     getLang
 } = require("../getData/getLang");
 const {
-    refreshCategories_ToDo
-} = require("../getData/refreshCategories_ToDo");
+    refreshProject_ToDo
+} = require("../getData/refreshProject_ToDo");
 const {
     addSelectMenu, addConfirmMenu
 } = require("../toDoList/addSelectMenu");
@@ -97,7 +97,7 @@ module.exports.deleteProject = async (main_interaction, categories, isDelete) =>
                             msg.delete();
                         });
         
-                        const refresh = await refreshCategories_ToDo(main_interaction);
+                        const refresh = await refreshProject_ToDo(main_interaction);
                         categories = refresh[0];
         
                         var newMessageEmbed = new MessageEmbed()

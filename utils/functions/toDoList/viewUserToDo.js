@@ -1,7 +1,7 @@
 const { MessageEmbed } = require("discord.js");
 const database = require("../../../bot/db/db");
 const { errorhandler } = require("../errorhandler/errorhandler");
-const { getCategory } = require("../getData/getCategory");
+const { getProject } = require("../getData/getProject");
 const { getLang } = require("../getData/getLang");
 
 module.exports.viewUserToDo = async (user_id, guild_id, channel) => {
@@ -12,7 +12,7 @@ module.exports.viewUserToDo = async (user_id, guild_id, channel) => {
             if(res.length <= 0) {
                 return false;
             }else {
-                const categories = await getCategory(channel);
+                const categories = await getProject(channel);
 
                 const newEmbed = new MessageEmbed();
                 newEmbed.setDescription(`${lang.todo.all_open_task_from} <@${user_id}>`)

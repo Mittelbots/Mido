@@ -2,5 +2,11 @@
     "Bot_Owner": "https://github.com/Mittelblut9",
     "Bot_Owner_ID": "395923095472570368",
     "defaultprefix": "!",
-    "debug": true
+    "debug": true,
+    "tables": {
+        "mido_config": "mido_config",
+        "mido_perms": "mido_perms",
+        "mido_projects": "mido_projects",
+        "mido_todo": "mido_todo"
+    }
 }

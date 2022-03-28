@@ -1,5 +1,5 @@
 const { MessageActionRow } = require("discord.js");
-const { refreshCategories_ToDo } = require("../../getData/refreshCategories_ToDo");
+const { refreshProject_ToDo } = require("../../getData/refreshProject_ToDo");
 const { addButtons } = require("../addButtonsToList");
 
 module.exports = async (todo_item_interaction, main_interaction, lang, todolist, toDoCountInteraction) => {
@@ -20,7 +20,7 @@ module.exports = async (todo_item_interaction, main_interaction, lang, todolist,
                 break;
             
             case 'options_next':
-                const refresh = refreshCategories_ToDo(main_interaction);
+                const refresh = refreshProject_ToDo(main_interaction);
                 const viewToDoList = await viewToDoList(refresh[0], refresh[1], main_interaction, )
                 break;
             case 'options_back':

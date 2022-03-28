@@ -9,8 +9,8 @@ const {
     delay
 } = require("../../delay/delay");
 const {
-    refreshCategories_ToDo
-} = require("../../getData/refreshCategories_ToDo");
+    refreshProject_ToDo
+} = require("../../getData/refreshProject_ToDo");
 const {
     removeMention
 } = require("../../removeCharacters/removeCharacters");
@@ -122,7 +122,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                                 toDoCountInteraction = 0;
                                 interactionCount = 0;
 
-                                const refresh = await refreshCategories_ToDo(main_interaction);
+                                const refresh = await refreshProject_ToDo(main_interaction);
                                 const categories = refresh[0];
                                 const todo = refresh[1];
                                 const newToDoList = await viewToDoList(categories, todo, main_interaction, 0);
