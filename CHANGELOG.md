@@ -15,6 +15,17 @@
 
 # **MIDO CHANGELOG**
 
+## **BETA VERSION 0.4.0**
+
+### Added things:
+    - added changelog
+    - made all sql queries dynamically
+
+### Bug fixes:
+    - /
+
+<br><br>
+
 ## **BETA VERSION 0.3.9**
 
 ### Added things:
