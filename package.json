@@ -1,6 +1,6 @@
 {
   "name": "hautnah_dc",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Mido. Manage your tasks like a pro",
   "main": "index.js",
   "scripts": {
@@ -25,6 +25,7 @@
     "mysql": "^2.18.1",
     "nodemon": "^2.0.15",
     "pm2": "^5.2.0",
+    "randomcolor": "^0.6.2",
     "simple-node-logger": "^21.8.12",
     "sloc": "^0.2.1"
   }

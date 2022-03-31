@@ -15,6 +15,16 @@
 
 # **MIDO CHANGELOG**
 
+## **BETA VERSION 0.4.1**
+
+### Added things:
+    - added random color to projects
+
+### Bug fixes:
+    - fixed deleteProject bug where the confirm message didnt got deleted after confirm
+
+<br><br>
+
 ## **BETA VERSION 0.4.0**
 
 ### Added things:

@@ -1,11 +1,11 @@
 const { MessageActionRow } = require("discord.js");
-const { MessageEmbed } = require("discord.js");
 const database = require("../../../bot/db/db");
 const { delay } = require("../delay/delay");
 const { errorhandler } = require("../errorhandler/errorhandler");
 const { getLang } = require("../getData/getLang");
 const { refreshProject_ToDo } = require("../getData/refreshProject_ToDo");
 const { addSelectMenu } = require("../toDoList/addSelectMenu");
+const randomColor = require('randomcolor');
 const config = require('../../assets/json/_config/config.json');
 
 module.exports.addProject = async (main_interaction, toDoCountInteraction) => {
@@ -18,6 +18,7 @@ module.exports.addProject = async (main_interaction, toDoCountInteraction) => {
         time: 20000,
         max: 1
     });
+
     messageCollector.on('collect', async reply => {
         if(reply.content.toLowerCase() === 'cancel') {
             await reply.reply({
@@ -32,7 +33,7 @@ module.exports.addProject = async (main_interaction, toDoCountInteraction) => {
             });
             return; 
         }
-        return await database.query(`INSERT INTO ${config.tables.mido_projects} (name, color, guild_id) VALUES (?, ?, ?)`, [reply.content, '#021982', reply.guildId])
+        return await database.query(`INSERT INTO ${config.tables.mido_projects} (name, color, guild_id) VALUES (?, ?, ?)`, [reply.content, randomColor(), reply.guildId])
             .then(async () => {
                 const refresh = await refreshProject_ToDo(main_interaction);
                 categories = refresh[0];

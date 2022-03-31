@@ -97,6 +97,7 @@ module.exports.deleteProject = async (main_interaction, categories, isDelete) =>
                         }).then(async msg => {
                             await delay(3000);
                             msg.delete();
+                            confirm_interaction.message.delete();
                         });
         
                         const refresh = await refreshProject_ToDo(main_interaction);
