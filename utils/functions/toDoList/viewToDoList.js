@@ -40,6 +40,8 @@ module.exports.viewToDoList = async (projects, todo, main_interaction) => {
                     newMessageEmbed.setColor(cat.color)
                     pass = true;
                 }
+            }else {
+                pass = true;
             }
             currentCatId = cat.id
         }
