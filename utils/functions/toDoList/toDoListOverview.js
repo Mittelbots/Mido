@@ -16,6 +16,9 @@ const {
     addSelectMenu
 } = require("./addSelectMenu");
 const config = require('../../assets/json/_config/config.json');
+const { errorhandler } = require("../errorhandler/errorhandler");
+const { editToDoList } = require("./editToDoList/editToDoList");
+const { refreshProject_ToDo } = require("../getData/refreshProject_ToDo");
 
 module.exports.newToDoEmbed = (title, text, deadline, other_user) => {
     const messageEmbed = new MessageEmbed()
@@ -136,21 +139,23 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
                         content: lang.errors.canceled
                     }).then(async msg => {
                         await delay(3000);
+                        toDoCountInteraction = 0;
+                        reply.delete();
+                        del_todoMessage.delete();
                         msg.delete();
                     });
-                    toDoCountInteraction = 0;
-                    reply.delete();
-                    del_todoMessage.delete();
+
                     return;
                 }
                 if (isNaN(reply.content)) {
-                    toDoCountInteraction = 0;
                     return reply.reply({
                         content: lang.errors.only_numbers
                     }).then(async msg => {
-                        await delay(50000);
+                        await delay(3000);
+                        toDoCountInteraction = 0;
                         reply.delete();
                         msg.delete();
+                        del_todoMessage.delete();
                     })
                 } else {
                     const task = await database.query(`SELECT id FROM ${config.tables.mido_todo} WHERE id = ?`, [reply.content])
@@ -162,34 +167,43 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
                     if (task) {
                         return await database.query(`UPDATE ${config.tables.mido_todo} SET state = ? WHERE id = ?`, [toDoState_Deleted , reply.content])
                             .then(async () => {
-                                toDoCountInteraction = 0;
                                 return reply.reply({
                                     content: lang.success.deleted
                                 }).then(async msg => {
-                                    await delay(50000);
+                                    await delay(3000);
+
+                                    const refresh = await refreshProject_ToDo(main_interaction);
+                                    let projects = refresh[0];
+                                    let todo = refresh[1];
+                                    await editToDoList(projects, todo, main_interaction, true);
+
+                                    toDoCountInteraction = 0;
                                     reply.delete();
                                     msg.delete();
+                                    del_todoMessage.delete();
                                 })
                             })
                             .catch(err => {
-                                toDoCountInteraction = 0;
-                                console.log(err);
+                                errorhandler(err);
                                 return reply.reply({
                                     content: lang.todo.delete_todo.errors.delete_todo_error
                                 }).then(async msg => {
-                                    await delay(50000);
+                                    await delay(3000);
+                                    toDoCountInteraction = 0;
                                     reply.delete();
                                     msg.delete();
+                                    del_todoMessage.delete();
                                 })
                             })
                     } else {
-                        toDoCountInteraction = 0;
                         return reply.reply({
                             content: lang.todo.delete_todo.errors.item_notfound_withId
                         }).then(async msg => {
-                            await delay(50000);
+                            await delay(3000);
+                            toDoCountInteraction = 0;
                             reply.delete();
                             msg.delete();
+                            del_todoMessage.delete();
                         })
                     }
                 }
@@ -219,20 +233,22 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
                     }).then(async msg => {
                         await delay(3000);
                         msg.delete();
+                        toDoCountInteraction = 0;
+                        reply.delete();
+                        set_todo_ready_Message.delete();
                     });
-                    toDoCountInteraction = 0;
-                    reply.delete();
-                    set_todo_ready_Message.delete();
+
                     return;
                 }
                 if (isNaN(reply.content)) {
-                    toDoCountInteraction = 0;
                     return reply.reply({
                         content: lang.errors.only_numbers
                     }).then(async msg => {
-                        await delay(50000);
-                        reply.delete();
+                        await delay(3000);
                         msg.delete();
+                        toDoCountInteraction = 0;
+                        reply.delete();
+                        set_todo_ready_Message.delete();
                     })
                 } else {
                     const task = await database.query(`SELECT id, state FROM ${config.tables.mido_todo} WHERE id = ?`, [reply.content])
@@ -245,39 +261,50 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
                         if(task.id === reply.content) {
                             toDoCountInteraction = 0;
                             return reply.reply(lang.errors.task_already_ready).then(async msg => {
-                                await delay()
+                                await delay(2000);
+                                toDoCountInteraction = 0;
+                                reply.delete();
+                                set_todo_ready_Message.delete();
                             })
                         }
                         return await database.query(`UPDATE ${config.tables.mido_todo} SET state = ? WHERE id = ?`, [toDoState_Ready, reply.content])
                             .then(async () => {
-                                toDoCountInteraction = 0;
                                 return reply.reply({
                                     content: lang.success.set_to_read
                                 }).then(async msg => {
                                     await delay(3000);
-                                    reply.delete();
+                                    const refresh = await refreshProject_ToDo(main_interaction);
+                                    let projects = refresh[0];
+                                    let todo = refresh[1];
+                                    await editToDoList(projects, todo, main_interaction, true);
+
                                     msg.delete();
+                                    toDoCountInteraction = 0;
+                                    reply.delete();
+                                    set_todo_ready_Message.delete();
                                 })
                             })
                             .catch(err => {
-                                toDoCountInteraction = 0;
-                                console.log(err);
+                                errorhandler(err)
                                 return reply.reply({
                                     content: lang.todo.set_todo_ready.errors.set_todo_ready_error
                                 }).then(async msg => {
-                                    await delay(50000);
-                                    reply.delete();
+                                    await delay(3000);
                                     msg.delete();
+                                    toDoCountInteraction = 0;
+                                    reply.delete();
+                                    set_todo_ready_Message.delete();
                                 })
                             })
                     } else {
-                        toDoCountInteraction = 0;
                         return reply.reply({
                             content: lang.todo.set_todo_ready.errors.item_notfound_withId
                         }).then(async msg => {
                             await delay(50000);
-                            reply.delete();
                             msg.delete();
+                            toDoCountInteraction = 0;
+                            reply.delete();
+                            set_todo_ready_Message.delete();
                         })
                     }
                 }
@@ -286,14 +313,11 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
             break;
 
         case 'options': 
-            const optionsButtons = await addOptionButtons(guild_id);
+            const optionsButtons = await addOptionButtons(guild_id, currentCatId);
             todolist.edit({
                 components: [new MessageActionRow({
                     components: [optionsButtons[0], optionsButtons[1], optionsButtons[2], optionsButtons[3]]
                 })]
             });
-
-            require('./toDoSiteInteraction/toDoSiteInteraction')(todo_item_interaction, main_interaction, lang, todolist, toDoCountInteraction)
-            break;
     }
 }

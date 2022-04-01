@@ -3,7 +3,7 @@ const {
 } = require("discord.js");
 const database = require("../../../../bot/db/db");
 const {
-    toDoState_Active
+    toDoState_Active, getCurrentSiteCount
 } = require("../../../variables/variables");
 const {
     delay
@@ -22,11 +22,11 @@ const {
     viewToDoList
 } = require('../viewToDoList');
 const config = require('../../../assets/json/_config/config.json');
+const { errorhandler } = require("../../errorhandler/errorhandler");
 
 var interactionCount = 0;
 
 module.exports = async (toDoCountInteraction, todo_item_interaction, main_interaction, lang, currentCatId) => {
-
     const buttons = newToDoButtons(false, lang)
     const task = await todo_item_interaction.channel.send({
         embeds: [newToDoEmbed()],
@@ -37,7 +37,6 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
 
     var newToDocollector = await task.createMessageComponentCollector({
         filter: ((user) => user.user.id === main_interaction.user.id),
-        time: 120000
     });
 
     var title = '';
@@ -60,29 +59,25 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
         switch (todo_interaction.customId) {
             case 'add_title':
                 todo_interaction_reply = await todo_interaction.message.reply({
-                    content: lang.todo.newtodo.interaction.add_title,
-                    ephemeral: true
+                    content: lang.todo.newtodo.interaction.add_title
                 });
                 break;
 
             case 'add_text':
                 todo_interaction_reply = await todo_interaction.message.reply({
-                    content: lang.todo.newtodo.interaction.add_text,
-                    ephemeral: true
+                    content: lang.todo.newtodo.interaction.add_text
                 });
                 break;
 
             case 'add_deadline':
                 todo_interaction_reply = await todo_interaction.message.reply({
-                    content: lang.todo.newtodo.interaction.add_deadline,
-                    ephemeral: true
+                    content: lang.todo.newtodo.interaction.add_deadline
                 });
                 break;
 
             case 'add_other':
                 todo_interaction_reply = await todo_interaction.message.reply({
-                    content: lang.todo.newtodo.interaction.add_other,
-                    ephemeral: true
+                    content: lang.todo.newtodo.interaction.add_other
                 });
                 break;
 
@@ -126,16 +121,16 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                                 const refresh = await refreshProject_ToDo(main_interaction);
                                 const categories = refresh[0];
                                 const todo = refresh[1];
-                                const newToDoList = await viewToDoList(categories, todo, main_interaction, 0);
+                                const newToDoList = await viewToDoList(categories, todo, main_interaction);
 
                                 await main_interaction.message.edit({
                                     embeds: [newToDoList[1]]
                                 });
                             });
                         })
-                        .catch(err => {
-                            console.log(err);
-                            todo_interaction.channel.send({
+                        .catch(async err => {
+                            errorhandler(err, null, null);
+                            await todo_interaction.channel.send({
                                 content: lang.todo.newtodo.errors.save_error
                             }).then(async msg => {
                                 await delay(3000);
@@ -371,74 +366,74 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
         });
     });
 
-    const shortHandMessageCollector = main_interaction.message.channel.createMessageCollector({
-        filter: ((user) => user.author.id === main_interaction.user.id),
-        max: 1
-    });
+    // const shortHandMessageCollector = main_interaction.message.channel.createMessageCollector({
+    //     filter: ((user) => user.author.id === main_interaction.user.id),
+    //     max: 1
+    // });
 
-    shortHandMessageCollector.on('collect', async reply => {
+    // shortHandMessageCollector.on('collect', async reply => {
 
-        interactionCount++;
-        if (interactionCount > 1) {
-            return;
-        }
+    //     interactionCount++;
+    //     if (interactionCount > 1) {
+    //         return;
+    //     }
 
-        if (reply.content.toLowerCase() === 'cancel') {
-            await reply.reply({
-                content: lang.errors.canceled
-            }).then(async msg => {
-                await delay(3000);
-                msg.delete();
-            });
-            interactionCount = 0;
-            reply.delete();
-            return;
-        }
+    //     if (reply.content.toLowerCase() === 'cancel') {
+    //         await reply.reply({
+    //             content: lang.errors.canceled
+    //         }).then(async msg => {
+    //             await delay(3000);
+    //             msg.delete();
+    //         });
+    //         interactionCount = 0;
+    //         reply.delete();
+    //         return;
+    //     }
 
-        try {
-            var content = reply.content.split(',');
-        } catch (err) {
-            await reply.reply({
-                content: lang.todo.newtodo.errors.no_comma_in_shorthand
-            }).then(async msg => {
-                await delay(3000);
-                msg.delete();
-            });
-            reply.delete();
-            interactionCount = 0;
-            return;
-        }
+    //     try {
+    //         var content = reply.content.split(',');
+    //     } catch (err) {
+    //         await reply.reply({
+    //             content: lang.todo.newtodo.errors.no_comma_in_shorthand
+    //         }).then(async msg => {
+    //             await delay(3000);
+    //             msg.delete();
+    //         });
+    //         reply.delete();
+    //         interactionCount = 0;
+    //         return;
+    //     }
 
-        title = content[0]; //!required
-        text = content[1]; //!required
-        deadline = content[2]; //!optional
-        reminder = content[3]; //!optional
-        other_user = content[4]; //!optional
+    //     title = content[0]; //!required
+    //     text = content[1]; //!required
+    //     deadline = content[2]; //!optional
+    //     reminder = content[3]; //!optional
+    //     other_user = content[4]; //!optional
 
-        if (!title) {
-            await reply.reply({
-                content: lang.todo.newtodo.errors.title_missing
-            }).then(async msg => {
-                await delay(2000);
-                msg.delete();
-            });
-            interactionCount = 0;
-            return;
-        }
-        if (!text) {
-            await reply.reply({
-                content: lang.todo.newtodo.errors.text_missing
-            }).then(async msg => {
-                await delay(2000);
-                msg.delete();
-            });
-            interactionCount = 0;
-            return;
-        }
+    //     if (!title) {
+    //         await reply.reply({
+    //             content: lang.todo.newtodo.errors.title_missing
+    //         }).then(async msg => {
+    //             await delay(2000);
+    //             msg.delete();
+    //         });
+    //         interactionCount = 0;
+    //         return;
+    //     }
+    //     if (!text) {
+    //         await reply.reply({
+    //             content: lang.todo.newtodo.errors.text_missing
+    //         }).then(async msg => {
+    //             await delay(2000);
+    //             msg.delete();
+    //         });
+    //         interactionCount = 0;
+    //         return;
+    //     }
 
-        task.edit({
-            embeds: [newToDoEmbed(title, text, deadline + dateFormatDC + `\n**${lang.todo.reminder}:** ${reminder} ${reminderFormatDC}`, user)]
-        });
+    //     task.edit({
+    //         embeds: [newToDoEmbed(title, text, deadline + dateFormatDC + `\n**${lang.todo.reminder}:** ${reminder} ${reminderFormatDC}`, user)]
+    //     });
 
-    });
+    // });
 }

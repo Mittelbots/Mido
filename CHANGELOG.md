@@ -15,6 +15,21 @@
 
 # **MIDO CHANGELOG**
 
+## **BETA VERSION 0.5.0**
+
+### Added things:
+    - users can now use "back home", "next site", "site back" & "end interaction" buttons
+    - if user set task to complete, the bot reply messages will get deleted and the embed gets edited to new version
+    - button order changed
+    - added emojis to buttons
+    - reworked "currentSite" system (interactionCount will follow in future versions)
+    - options buttons are available after bot restart (the others will follow in future versions)
+
+### Bug fixes:
+    - smaller bug fixes
+
+<br><br>
+
 ## **BETA VERSION 0.4.1**
 
 ### Added things:

@@ -7,65 +7,74 @@ const addButtons = async (guild_id) => {
     const add_toDo = new MessageButton({
         style: 'SUCCESS',
         label: lang.todo.buttons.add,
-        customId: 'add_toDo'
+        customId: 'add_toDo',
+        emoji: '📝'
     });
 
     const change_cat = new MessageButton({
         style: 'SECONDARY',
         label: lang.todo.buttons.change_project,
-        customId: 'change_cat'
+        customId: 'change_cat',
+        emoji: '📋'
     });
 
     const delete_toDo = new MessageButton({
         style: 'DANGER',
         label: lang.todo.buttons.delete,
-        customId: 'delete_toDo'
+        customId: 'delete_toDo',
+        emoji: '🗑️'
     });
     
     const set_todo_ready = new MessageButton({
         style: 'SUCCESS',
         label: lang.todo.buttons.set_todo_ready,
-        customId: 'set_todo_ready'
+        customId: 'set_todo_ready',
+        emoji: '✅'
     });
 
     const options = new MessageButton({
         style: 'SECONDARY',
         label: lang.todo.buttons.options,
-        customId: 'options'
+        customId: 'options',
+        emoji: '⚙️'
     });
     
-    return [add_toDo, change_cat, delete_toDo, set_todo_ready, options]
+    return [add_toDo, change_cat, set_todo_ready, delete_toDo, options]
 }
 
-const addOptionButtons = async (guild_id) => {
+const addOptionButtons = async (guild_id, currentProjectId) => {
     const lang = require(`../../assets/json/language/${await getLang(guild_id)}.json`)
 
     const backToMain = new MessageButton({
-        style: 'DANGER',
+        style: 'SUCCESS',
         label: lang.todo.buttons.options_backToMain,
-        customId: 'options_backToMain'
+        customId: 'options_backToMain_' + currentProjectId,
+        emoji: '🏠'
     });
 
     const options_next = new MessageButton({
         style: 'SECONDARY',
         label: lang.todo.buttons.options_next,
-        customId: 'options_next'
+        customId: 'options_next_' + currentProjectId,
+        emoji: '➡️'
     });
 
     const options_back = new MessageButton({
         style: 'SECONDARY',
         label: lang.todo.buttons.options_back,
-        customId: 'options_back'
+        customId: 'options_back_' + currentProjectId,
+        emoji: '⬅️'
     });
 
     const end_interaction = new MessageButton({
-        style: 'SECONDARY',
+        style: 'DANGER',
         label: lang.todo.buttons.end_int,
-        customId: 'end_int'
+        customId: 'end_int_' + currentProjectId,
+        emoji: '❌'
     });
 
 
-    return [backToMain, options_next, options_back, end_interaction];
+    return [backToMain, options_back, options_next, end_interaction];
 }
 
 module.exports = {addButtons, addOptionButtons}

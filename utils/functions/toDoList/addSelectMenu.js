@@ -4,12 +4,12 @@ const {
 const { select_ProjectId, add_ProjectId, delete_Project, cancel_delete_project } = require('../../variables/variables');
 const { getLang } = require('../getData/getLang');
 
-const addSelectMenu = async (categories, isDelete, guild_id) => {
+const addSelectMenu = async (projects, isDelete, guild_id) => {
     const lang = require(`../../assets/json/language/${await getLang(guild_id)}.json`)
 
     var menu = new MessageSelectMenu()
         .setCustomId((isDelete) ? delete_Project : select_ProjectId)
-        .setPlaceholder((categories) ? lang.projects.selectmenu.choose_project : lang.projects.selectmenu.add_new_project)
+        .setPlaceholder((projects) ? lang.projects.selectmenu.choose_project : lang.projects.selectmenu.add_new_project)
         
     if(!isDelete) {
         menu.addOptions([{
@@ -19,8 +19,8 @@ const addSelectMenu = async (categories, isDelete, guild_id) => {
         }])
     }
 
-    if (categories) {
-        categories.map(cat => {
+    if (projects) {
+        projects.map(cat => {
             menu.addOptions([{
                 'value': (isDelete) ? 'del_' + cat.id : select_ProjectId + cat.id,
                 'label': cat.name,
