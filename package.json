@@ -1,6 +1,6 @@
 {
   "name": "hautnah_dc",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Mido. Manage your tasks like a pro",
   "main": "index.js",
   "scripts": {
