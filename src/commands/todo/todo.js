@@ -54,7 +54,6 @@ module.exports.run = async (bot, message, args) => {
             });
         }
     }
-
     var categories = await getProject(message.channel);
 
     var newMessageEmbed = new MessageEmbed()
