@@ -28,7 +28,7 @@ module.exports.viewToDoList = async (projects, todo, main_interaction) => {
                         if (todo.cat_id === cat.id) {
                             newMessageEmbed.setColor(cat.color);
                             let emoji = (todo.state === toDoState_Inactive) ? '🛑' : (todo.state === toDoState_Ready) ? '✅' : '⏹️';
-                            newMessageEmbed.addField(`‎\n${emoji} ${todo.title} ||ID: ${todo.id}||`, `_ ${todo.text}_ \n\n**${lang.todo.deadline}:** ${todo.deadline || lang.todo.no_deadline} \n**${lang.todo.other_user}:** ${todo.other_user || lang.todo.no_other_user} \n**-----------------**`);
+                            newMessageEmbed.addField(`‎\n${emoji} ${todo.title} ||ID: ${todo.id}||`, `_ ${todo.text || lang.todo.no_text}_ \n\n**${lang.todo.deadline}:** ${todo.deadline || lang.todo.no_deadline} \n**${lang.todo.other_user}:** ${todo.other_user || lang.todo.no_other_user} \n**-----------------**`);
                             count++;
                             pass = true;
                         }

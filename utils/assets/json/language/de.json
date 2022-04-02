@@ -41,6 +41,7 @@
     "todo": {
         "reminder": "Erinnerung",
         "todo_list": "Aufgaben Liste",
+        "no_text": "‎",
         "deadline": "Deadline",
         "other_user": "Andere Nutzer",
         "no_other_user": "Niemand ausgewählt",

@@ -103,17 +103,6 @@ module.exports = async (main_interaction) => {
                     decrease_toDoAddCount();
                 }
 
-                if (text == '' && canPass) {
-                    canPass = false;
-                    todo_interaction.channel.send({
-                        content: lang.todo.newtodo.errors.text_missing
-                    }).then(async msg => {
-                        await delay(3000);
-                        msg.delete();
-                    });
-                    decrease_toDoAddCount()
-                }
-
                 if (canPass) {
                     await database.query(`INSERT INTO ${config.tables.mido_todo} (user_id, title, text, deadline, other_user, cat_id, guild_id, state, reminder) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, [main_interaction.user.id, title, text, deadline, user, getCurrentProjectId(), main_interaction.member.guild.id, toDoState_Active, reminder])
                         .then(async () => {
