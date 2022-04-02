@@ -72,3 +72,16 @@ module.exports.increase_toDoAddCount = () => {
 module.exports.decrease_toDoAddCount = () => {
     return toDoAddCount = 0;
 }
+
+//==========================================================
+
+//? CURRENT PROJECT ID
+let currentProjectId;
+
+module.exports.changeCurrentProjectId = (projectId) => {
+    currentProjectId = projectId;
+}
+
+module.exports.getCurrentProjectId = () => {
+    return currentProjectId;
+}

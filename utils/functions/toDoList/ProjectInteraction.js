@@ -2,11 +2,8 @@ const {
     add_ProjectId,
     select_ProjectId,
     delete_Project,
-    getCurrentSiteCount,
-    increase_todoListInteractionCount,
-    decrease_currentSiteCount
+    changeCurrentProjectId
 } = require("../../variables/variables");
-const { getLang } = require("../getData/getLang");
 const {
     refreshProject_ToDo
 } = require("../getData/refreshProject_ToDo");
@@ -17,16 +14,11 @@ const {
     deleteProject
 } = require("../projects/deleteProject");
 const { editToDoList } = require("./editToDoList/editToDoList");
-const {
-    toDoListOverview
-} = require("./toDoListOverview");
 const { buttonInteraction } = require('./buttonInteraction/buttonInteraction');
 
 
 module.exports.ProjectInteraction = async (main_interaction) => {
     //!CONST
-    const guildid = main_interaction.message.guild.id;
-    const lang = require(`../../assets/json/language/${await getLang(guildid)}.json`);
     const refresh = await refreshProject_ToDo(main_interaction);
 
     //!VARIABLES
@@ -45,26 +37,7 @@ module.exports.ProjectInteraction = async (main_interaction) => {
 
         } else {
             //? ------WENN KATEGORIEN EXISTIEREN - Liste alle Projekte auf-----
-            
-            var todolist = await editToDoList(projects, todo, main_interaction, true);
-            var currentCatId = todolist[0];
-            todolist = todolist[1];
-
-            const collector = await todolist.createMessageComponentCollector({
-                filter: ((user) => user.user.id === main_interaction.user.id)
-            });
-
-            collector.on('collect', async todo_item_interaction => {
-                await toDoListOverview(todo_item_interaction, main_interaction, currentCatId, projects, todolist, guildid);
-            });
-
-            collector.on('end', (collected, reason) => {
-                todolist.edit({
-                    content: `**${lang.errors.int_unexpected_end} ${reason}**`,
-                })
-            });
-
-            return;
+            return await editToDoList(projects, todo, main_interaction, true);
         }
     } else if (main_interaction.isSelectMenu() && main_interaction.customId === delete_Project) {
         //!RUNS WHEN DELETE PROJECT IS SELECTED
@@ -75,7 +48,6 @@ module.exports.ProjectInteraction = async (main_interaction) => {
             main_interaction,
             projects,
             todo,
-            currentCatId
         }
         buttonInteraction(buttonParams);
     }

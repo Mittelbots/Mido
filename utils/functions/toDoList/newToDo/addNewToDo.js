@@ -3,7 +3,7 @@ const {
 } = require("discord.js");
 const database = require("../../../../bot/db/db");
 const {
-    toDoState_Active, getCurrentSiteCount, increase_toDoAddCount, decrease_toDoAddCount, decrease_toDoInteractionCount
+    toDoState_Active, increase_toDoAddCount, decrease_toDoAddCount, decrease_toDoInteractionCount, increase_toDoInteractionCount, getCurrentProjectId, changeCurrentProjectId
 } = require("../../../variables/variables");
 const {
     delay
@@ -23,10 +23,21 @@ const {
 const config = require('../../../assets/json/_config/config.json');
 const { errorhandler } = require("../../errorhandler/errorhandler");
 const { newToDoButtons } = require("../addButtonsToList");
+const { getLang } = require("../../getData/getLang");
 
-module.exports = async (todo_item_interaction, main_interaction, lang, currentCatId) => {
+
+module.exports = async (main_interaction) => {
+
+    if (increase_toDoInteractionCount() > 1) {
+        return;
+    }
+
+    if(!getCurrentProjectId()) changeCurrentProjectId(main_interaction.customId.split('_')[1])
+
+    const lang = require(`../../../assets/json/language/${await getLang(main_interaction.message.guild.id)}.json`)
+    
     const buttons = newToDoButtons(false, lang)
-    const task = await todo_item_interaction.channel.send({
+    const task = await main_interaction.channel.send({
         embeds: [newToDoEmbed()],
         components: [new MessageActionRow({
             components: [buttons[0], buttons[1], buttons[2], buttons[3], buttons[4]]
@@ -104,7 +115,7 @@ module.exports = async (todo_item_interaction, main_interaction, lang, currentCa
                 }
 
                 if (canPass) {
-                    await database.query(`INSERT INTO ${config.tables.mido_todo} (user_id, title, text, deadline, other_user, cat_id, guild_id, state, reminder) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, [main_interaction.user.id, title, text, deadline, user, currentCatId, main_interaction.member.guild.id, toDoState_Active, reminder])
+                    await database.query(`INSERT INTO ${config.tables.mido_todo} (user_id, title, text, deadline, other_user, cat_id, guild_id, state, reminder) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, [main_interaction.user.id, title, text, deadline, user, getCurrentProjectId(), main_interaction.member.guild.id, toDoState_Active, reminder])
                         .then(async () => {
                             await todo_interaction.channel.send({
                                 content: lang.todo.newtodo.success.saved
@@ -119,9 +130,8 @@ module.exports = async (todo_item_interaction, main_interaction, lang, currentCa
                                 const categories = refresh[0];
                                 const todo = refresh[1];
                                 const newToDoList = await viewToDoList(categories, todo, main_interaction);
-
                                 await main_interaction.message.edit({
-                                    embeds: [newToDoList[1]]
+                                    embeds: [newToDoList]
                                 });
                             });
                         })

@@ -12,7 +12,7 @@
     "buttons": {
         "add_toDo": {
             "style": "SUCCESS",
-            "customId": "add_toDo",
+            "customId": "addtoDo",
             "emoji": "📝"
         },
         "change_prod": {
@@ -22,12 +22,12 @@
         },
         "delete_toDo": {
             "style": "DANGER",
-            "customId": "delete_toDo",
+            "customId": "deletetoDo",
             "emoji": "🗑️"
         },
         "set_todo_ready": {
             "style": "SUCCESS",
-            "customId": "set_todo_ready",
+            "customId": "settodoready",
             "emoji": "✅"
         },
         "options": {
