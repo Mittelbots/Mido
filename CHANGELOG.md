@@ -15,6 +15,27 @@
 
 # **MIDO CHANGELOG**
 
+## **BETA VERSION 0.6.0**
+
+### Added things:
+    - made every button clickable after bot restart
+    - improved performance and code
+
+### Bug fixes:
+    - /
+    
+<br><br>
+
+## **BETA VERSION 0.5.4**
+
+### Added things:
+    - added button information to config
+
+### Bug fixes:
+    - /
+    
+<br><br>
+
 ## **BETA VERSION 0.5.3**
 
 ### Added things:
