@@ -42,16 +42,10 @@ bot.on('guildMemberAdd', async member => {
 bot.once('ready', async () => {
     watchToDoList(bot);
 
-
-    var params = {
-        toDoCountInteraction: 0,
-        todoListInteractionCount: 0
-    }
-
     bot.on('interactionCreate', async (main_interaction) => {
         await main_interaction.deferUpdate();
         try {
-            ProjectInteraction(main_interaction, params)
+            ProjectInteraction(main_interaction)
         }catch(err) {}
     });
     getLinesOfCode((cb) => {

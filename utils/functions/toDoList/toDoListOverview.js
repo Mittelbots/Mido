@@ -4,7 +4,7 @@ const {
     MessageEmbed
 } = require("discord.js");
 const database = require("../../../bot/db/db");
-const { toDoState_Ready, toDoState_Deleted } = require("../../variables/variables");
+const { toDoState_Ready, toDoState_Deleted, increase_toDoInteractionCount, decrease_toDoInteractionCount } = require("../../variables/variables");
 const {
     delay
 } = require("../delay/delay");
@@ -90,22 +90,18 @@ module.exports.newToDoButtons = (secondPage, lang) => {
     }
 }
 
-module.exports.toDoListOverview = async (todo_item_interaction, main_interaction, toDoCountInteraction, currentCatId, categories, todolist, guild_id) => {
+module.exports.toDoListOverview = async (todo_item_interaction, main_interaction, currentCatId, categories, todolist, guild_id) => {
     const lang = require(`../../assets/json/language/${await getLang(guild_id)}.json`)
 
     switch (todo_item_interaction.customId) {
         case 'add_toDo':
-            if (toDoCountInteraction < 0) toDoCountInteraction = 0;
-            toDoCountInteraction++;
-            if (toDoCountInteraction > 1) {
+            if (increase_toDoInteractionCount() > 1) {
                 return;
             }
-            await require('./newToDo/addNewToDo')(toDoCountInteraction, todo_item_interaction, main_interaction, lang, currentCatId)
+            await require('./newToDo/addNewToDo')(todo_item_interaction, main_interaction, lang, currentCatId)
             break;
-        case 'change_cat':
-            if (toDoCountInteraction < 0) toDoCountInteraction = 0;
-            toDoCountInteraction++;
-            if (toDoCountInteraction > 1) {
+        case 'change_prod':
+            if (increase_toDoInteractionCount() > 1) {
                 return;
             }
             var newSelectMenu = await addSelectMenu(categories, false, main_interaction.message.guild.id)
@@ -117,9 +113,7 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
             return newSelectMenu = null;
 
         case 'delete_toDo':
-            if (toDoCountInteraction < 0) toDoCountInteraction = 0;
-            toDoCountInteraction++;
-            if (toDoCountInteraction > 1) {
+            if (increase_toDoInteractionCount() > 1) {
                 return;
             }
             var del_todoMessage = await todo_item_interaction.channel.send({
@@ -139,7 +133,7 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
                         content: lang.errors.canceled
                     }).then(async msg => {
                         await delay(3000);
-                        toDoCountInteraction = 0;
+                        decrease_toDoInteractionCount();
                         reply.delete();
                         del_todoMessage.delete();
                         msg.delete();
@@ -152,7 +146,7 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
                         content: lang.errors.only_numbers
                     }).then(async msg => {
                         await delay(3000);
-                        toDoCountInteraction = 0;
+                        decrease_toDoInteractionCount();
                         reply.delete();
                         msg.delete();
                         del_todoMessage.delete();
@@ -177,7 +171,7 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
                                     let todo = refresh[1];
                                     await editToDoList(projects, todo, main_interaction, true);
 
-                                    toDoCountInteraction = 0;
+                                    decrease_toDoInteractionCount();
                                     reply.delete();
                                     msg.delete();
                                     del_todoMessage.delete();
@@ -189,7 +183,7 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
                                     content: lang.todo.delete_todo.errors.delete_todo_error
                                 }).then(async msg => {
                                     await delay(3000);
-                                    toDoCountInteraction = 0;
+                                    decrease_toDoInteractionCount();
                                     reply.delete();
                                     msg.delete();
                                     del_todoMessage.delete();
@@ -200,7 +194,7 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
                             content: lang.todo.delete_todo.errors.item_notfound_withId
                         }).then(async msg => {
                             await delay(3000);
-                            toDoCountInteraction = 0;
+                            decrease_toDoInteractionCount();
                             reply.delete();
                             msg.delete();
                             del_todoMessage.delete();
@@ -210,9 +204,7 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
             });
             break;
         case 'set_todo_ready':
-            if (toDoCountInteraction < 0) toDoCountInteraction = 0;
-            toDoCountInteraction++;
-            if (toDoCountInteraction > 1) {
+            if (increase_toDoInteractionCount() > 1) {
                 return;
             }
             var set_todo_ready_Message = await todo_item_interaction.channel.send({
@@ -233,7 +225,7 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
                     }).then(async msg => {
                         await delay(3000);
                         msg.delete();
-                        toDoCountInteraction = 0;
+                        decrease_toDoInteractionCount();
                         reply.delete();
                         set_todo_ready_Message.delete();
                     });
@@ -246,7 +238,7 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
                     }).then(async msg => {
                         await delay(3000);
                         msg.delete();
-                        toDoCountInteraction = 0;
+                        decrease_toDoInteractionCount();
                         reply.delete();
                         set_todo_ready_Message.delete();
                     })
@@ -259,10 +251,10 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
 
                     if (task) {
                         if(task.id === reply.content) {
-                            toDoCountInteraction = 0;
+                            decrease_toDoInteractionCount();
                             return reply.reply(lang.errors.task_already_ready).then(async msg => {
                                 await delay(2000);
-                                toDoCountInteraction = 0;
+                                decrease_toDoInteractionCount();
                                 reply.delete();
                                 set_todo_ready_Message.delete();
                             })
@@ -279,7 +271,7 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
                                     await editToDoList(projects, todo, main_interaction, true);
 
                                     msg.delete();
-                                    toDoCountInteraction = 0;
+                                    decrease_toDoInteractionCount();
                                     reply.delete();
                                     set_todo_ready_Message.delete();
                                 })
@@ -291,7 +283,7 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
                                 }).then(async msg => {
                                     await delay(3000);
                                     msg.delete();
-                                    toDoCountInteraction = 0;
+                                    decrease_toDoInteractionCount();
                                     reply.delete();
                                     set_todo_ready_Message.delete();
                                 })
@@ -302,7 +294,7 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
                         }).then(async msg => {
                             await delay(50000);
                             msg.delete();
-                            toDoCountInteraction = 0;
+                            decrease_toDoInteractionCount();
                             reply.delete();
                             set_todo_ready_Message.delete();
                         })
