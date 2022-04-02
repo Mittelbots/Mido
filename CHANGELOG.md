@@ -15,6 +15,15 @@
 
 # **MIDO CHANGELOG**
 
+## **BETA VERSION 0.5.1**
+
+### Added things:
+    - /
+
+### Bug fixes:
+    - bug fixed where bot gets an error when no todo exits in database
+
+
 ## **BETA VERSION 0.5.0**
 
 ### Added things:
