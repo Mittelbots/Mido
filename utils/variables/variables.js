@@ -3,13 +3,14 @@ module.exports.select_ProjectId = 'select_project';
 module.exports.delete_Project = 'delete_project';
 module.exports.cancel_delete_project = 'cancel_delete_project';
 
-
+//==========================================================
 //? TODO STATES
 module.exports.toDoState_Active = 1;
 module.exports.toDoState_Inactive = 0;
 module.exports.toDoState_Deleted = 2;
 module.exports.toDoState_Ready = 3;
 
+//==========================================================
 //? SITE COUNT
 let currentSiteCountLocal = 0;
 module.exports.increase_currentSiteCount = () => {
@@ -23,4 +24,51 @@ module.exports.decrease_currentSiteCount = () => {
 
 module.exports.getCurrentSiteCount = () => {
     return currentSiteCountLocal;
+}
+
+//==========================================================
+//? TO-DO LIST COUNT
+let todoListInteractionCount = 0;
+
+module.exports.increase_todoListInteractionCount = () => {
+    return todoListInteractionCount = todoListInteractionCount + 1;
+}
+
+module.exports.decrease_todoListInteractionCount = () => {
+    return todoListInteractionCount = 0;
+}
+
+
+//==========================================================
+
+//? TO-DO INTERACTION COUNT
+let toDoInteractionCount = 0;
+
+module.exports.increase_toDoInteractionCount = () => {
+    if(toDoInteractionCount < 1) toDoInteractionCount = 0;
+
+    return toDoInteractionCount = toDoInteractionCount + 1;
+}
+
+module.exports.decrease_toDoInteractionCount = () => {
+    return toDoInteractionCount = 0;
+}
+
+module.exports.getCurrentInteractionCount = () => {
+    return toDoInteractionCount;
+}
+
+//==========================================================
+
+//? TO-DO ADD COUNT
+let toDoAddCount = 0;
+
+module.exports.increase_toDoAddCount = () => {
+    if(toDoAddCount < 1) toDoAddCount = 0;
+    
+    return toDoAddCount = toDoAddCount + 1;
+}
+
+module.exports.decrease_toDoAddCount = () => {
+    return toDoAddCount = 0;
 }

@@ -1,4 +1,4 @@
-const { increase_currentSiteCount, decrease_currentSiteCount } = require("../../../variables/variables");
+const { increase_currentSiteCount, decrease_currentSiteCount, decrease_toDoInteractionCount } = require("../../../variables/variables");
 const { editToDoList } = require("../editToDoList/editToDoList");
 const { addButtons } = require('../addButtonsToList');
 const { MessageActionRow } = require("discord.js");
@@ -9,7 +9,6 @@ module.exports.buttonInteraction = async (params) => {
     var projects = params.projects;
     var todo = params.todo;
     var currentCatId = params.currentCatId;
-    var toDoCountInteraction = params.toDoCountInteraction;
 
     let currentSiteCount;
 
@@ -37,6 +36,6 @@ module.exports.buttonInteraction = async (params) => {
         main_interaction.message.edit({
             components: [main_interaction.message.components[0]]
         });
-        toDoCountInteraction = 0;
+        decrease_toDoInteractionCount();
     }
 }

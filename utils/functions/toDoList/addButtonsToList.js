@@ -11,10 +11,10 @@ const addButtons = async (guild_id) => {
         emoji: '📝'
     });
 
-    const change_cat = new MessageButton({
+    const change_prod = new MessageButton({
         style: 'SECONDARY',
         label: lang.todo.buttons.change_project,
-        customId: 'change_cat',
+        customId: 'change_prod',
         emoji: '📋'
     });
 
@@ -39,7 +39,7 @@ const addButtons = async (guild_id) => {
         emoji: '⚙️'
     });
     
-    return [add_toDo, change_cat, set_todo_ready, delete_toDo, options]
+    return [add_toDo, change_prod, set_todo_ready, delete_toDo, options]
 }
 
 const addOptionButtons = async (guild_id, currentProjectId) => {

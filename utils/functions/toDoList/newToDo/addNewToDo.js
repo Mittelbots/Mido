@@ -3,7 +3,7 @@ const {
 } = require("discord.js");
 const database = require("../../../../bot/db/db");
 const {
-    toDoState_Active, getCurrentSiteCount
+    toDoState_Active, getCurrentSiteCount, increase_toDoAddCount, decrease_toDoAddCount, decrease_toDoInteractionCount
 } = require("../../../variables/variables");
 const {
     delay
@@ -24,9 +24,7 @@ const {
 const config = require('../../../assets/json/_config/config.json');
 const { errorhandler } = require("../../errorhandler/errorhandler");
 
-var interactionCount = 0;
-
-module.exports = async (toDoCountInteraction, todo_item_interaction, main_interaction, lang, currentCatId) => {
+module.exports = async (todo_item_interaction, main_interaction, lang, currentCatId) => {
     const buttons = newToDoButtons(false, lang)
     const task = await todo_item_interaction.channel.send({
         embeds: [newToDoEmbed()],
@@ -50,8 +48,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
     await newToDocollector.on('collect', async todo_interaction => {
         var todo_interaction_reply;
 
-        interactionCount++;
-        if (interactionCount > 1) {
+        if (increase_toDoAddCount() > 1) {
             interactionCount = 1;
             return;
         }
@@ -92,7 +89,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                         await delay(3000);
                         msg.delete();
                     });
-                    interactionCount = 0;
+                    decrease_toDoAddCount();
                 }
 
                 if (text == '' && canPass) {
@@ -103,7 +100,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                         await delay(3000);
                         msg.delete();
                     });
-                    interactionCount = 0;
+                    decrease_toDoAddCount()
                 }
 
                 if (canPass) {
@@ -115,8 +112,8 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                                 await delay(3000);
                                 msg.delete();
                                 task.delete();
-                                toDoCountInteraction = 0;
-                                interactionCount = 0;
+                                decrease_toDoInteractionCount();
+                                decrease_toDoAddCount()
 
                                 const refresh = await refreshProject_ToDo(main_interaction);
                                 const categories = refresh[0];
@@ -136,7 +133,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                                 await delay(3000);
                                 msg.delete();
                             });
-                            interactionCount = 0;
+                            decrease_toDoAddCount();
                         });
                 }
                 break;
@@ -147,13 +144,13 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                         components: [newToDoButtons(true, lang)[0], newToDoButtons(true, lang)[1], newToDoButtons(true, lang)[2]]
                     })]
                 });
-                interactionCount = 0;
+                decrease_toDoAddCount();
                 break;
 
             case 'cancel':
-                toDoCountInteraction = 0;
+                decrease_toDoInteractionCount();
+                decrease_toDoAddCount();
                 await todo_interaction.message.delete();
-                interactionCount = 0;
                 newToDocollector = null;
                 todo_interaction = null;
                 break;
@@ -164,7 +161,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                         components: [newToDoButtons(false, lang)[0], newToDoButtons(false, lang)[1], newToDoButtons(false, lang)[2], newToDoButtons(false, lang)[3], newToDoButtons(false, lang)[4]]
                     })]
                 });
-                interactionCount = 0;
+                decrease_toDoAddCount();
                 break;
         }
 
@@ -177,7 +174,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
             switch (todo_interaction.customId) {
                 case 'add_title':
                     if (reply.content.toLowerCase() === 'cancel' || reply.content.toLowerCase() === 'none') {
-                        interactionCount = 0;
+                        decrease_toDoAddCount();
                         reply.delete();
                         todo_interaction_reply.delete();
                         return;
@@ -201,12 +198,12 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                     }
                     reply.delete();
                     todo_interaction_reply.delete();
-                    interactionCount = 0;
+                    decrease_toDoAddCount();
                     break;
 
                 case 'add_text':
                     if (reply.content.toLowerCase() === 'cancel' || reply.content.toLowerCase() === 'none') {
-                        interactionCount = 0;
+                        decrease_toDoAddCount();
                         reply.delete();
                         todo_interaction_reply.delete();
                         return;
@@ -230,13 +227,13 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                     }
                     reply.delete();
                     todo_interaction_reply.delete();
-                    interactionCount = 0;
+                    decrease_toDoAddCount();
                     break;
 
                 case 'add_deadline':
 
                     if (reply.content.toLowerCase() === 'cancel' || reply.content.toLowerCase() === 'none') {
-                        interactionCount = 0;
+                        decrease_toDoAddCount();
                         reply.delete();
                         todo_interaction_reply.delete();
                         return;
@@ -272,7 +269,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                             reminder = reply.content;
 
                             if (reminder.toLowerCase() === 'none') {
-                                interactionCount = 0;
+                                decrease_toDoAddCount()
                                 reply.delete();
                                 return reminderMessage.delete();
                             }
@@ -299,7 +296,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                             } else {
                                 return reply.reply(lang.todo.newtodo.errors.reminder_wrong_date_format)
                             }
-                            interactionCount = 0;
+                            decrease_toDoAddCount();
                             reply.delete();
                             reminderMessage.delete();
                             task.edit({
@@ -325,7 +322,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
 
                 case 'add_other':
                     if (reply.content.toLowerCase() === 'cancel' || reply.content.toLowerCase() === 'none') {
-                        interactionCount = 0;
+                        decrease_toDoAddCount()
                         reply.delete();
                         todo_interaction_reply.delete();
                         return;
@@ -357,7 +354,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
                     });
                     reply.delete();
                     todo_interaction_reply.delete();
-                    interactionCount = 0;
+                    decrease_toDoAddCount();
                     break;
 
                 default:
@@ -385,7 +382,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
     //             await delay(3000);
     //             msg.delete();
     //         });
-    //         interactionCount = 0;
+    //         decrease_toDoAddCount()
     //         reply.delete();
     //         return;
     //     }
@@ -400,7 +397,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
     //             msg.delete();
     //         });
     //         reply.delete();
-    //         interactionCount = 0;
+    //         decrease_toDoAddCount()
     //         return;
     //     }
 
@@ -417,7 +414,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
     //             await delay(2000);
     //             msg.delete();
     //         });
-    //         interactionCount = 0;
+    //         decrease_toDoAddCount()
     //         return;
     //     }
     //     if (!text) {
@@ -427,7 +424,7 @@ module.exports = async (toDoCountInteraction, todo_item_interaction, main_intera
     //             await delay(2000);
     //             msg.delete();
     //         });
-    //         interactionCount = 0;
+    //         decrease_toDoAddCount()
     //         return;
     //     }
 

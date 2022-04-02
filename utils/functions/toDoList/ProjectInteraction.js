@@ -2,7 +2,9 @@ const {
     add_ProjectId,
     select_ProjectId,
     delete_Project,
-    getCurrentSiteCount
+    getCurrentSiteCount,
+    increase_todoListInteractionCount,
+    decrease_currentSiteCount
 } = require("../../variables/variables");
 const { getLang } = require("../getData/getLang");
 const {
@@ -21,17 +23,13 @@ const {
 const { buttonInteraction } = require('./buttonInteraction/buttonInteraction');
 
 
-module.exports.ProjectInteraction = async (main_interaction, params) => {
+module.exports.ProjectInteraction = async (main_interaction) => {
     //!CONST
     const guildid = main_interaction.message.guild.id;
     const lang = require(`../../assets/json/language/${await getLang(guildid)}.json`);
     const refresh = await refreshProject_ToDo(main_interaction);
 
     //!VARIABLES
-    var currentSiteCount = getCurrentSiteCount();
-    var toDoCountInteraction = params.toDoCountInteraction;
-    var todoListInteractionCount = params.todoListInteractionCount;
-    
     var projects = refresh[0];
     var todo = refresh[1];
 
@@ -39,7 +37,7 @@ module.exports.ProjectInteraction = async (main_interaction, params) => {
 
         if (main_interaction.values.indexOf(add_ProjectId) !== -1) { //? Menu zum hinzufügen der Projekte
 
-            return await addProject(main_interaction, toDoCountInteraction);
+            return await addProject(main_interaction);
 
         } else if (main_interaction.values.indexOf(delete_Project) !== -1) { //? Menu zum löschen der Projekte
 
@@ -57,13 +55,7 @@ module.exports.ProjectInteraction = async (main_interaction, params) => {
             });
 
             collector.on('collect', async todo_item_interaction => {
-                todoListInteractionCount++;
-                if (todoListInteractionCount > 1) {
-                    return;
-                }else {
-                    await toDoListOverview(todo_item_interaction, main_interaction, toDoCountInteraction, currentCatId, projects, todolist, guildid)
-                    todoListInteractionCount = 0;
-                }
+                await toDoListOverview(todo_item_interaction, main_interaction, currentCatId, projects, todolist, guildid);
             });
 
             collector.on('end', (collected, reason) => {
@@ -83,8 +75,7 @@ module.exports.ProjectInteraction = async (main_interaction, params) => {
             main_interaction,
             projects,
             todo,
-            currentCatId,
-            toDoCountInteraction
+            currentCatId
         }
         buttonInteraction(buttonParams);
     }
