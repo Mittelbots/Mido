@@ -15,14 +15,14 @@ const {
     removeMention
 } = require("../../removeCharacters/removeCharacters");
 const {
-    newToDoEmbed,
-    newToDoButtons
+    newToDoEmbed
 } = require("../toDoListOverview");
 const {
     viewToDoList
 } = require('../viewToDoList');
 const config = require('../../../assets/json/_config/config.json');
 const { errorhandler } = require("../../errorhandler/errorhandler");
+const { newToDoButtons } = require("../addButtonsToList");
 
 module.exports = async (todo_item_interaction, main_interaction, lang, currentCatId) => {
     const buttons = newToDoButtons(false, lang)

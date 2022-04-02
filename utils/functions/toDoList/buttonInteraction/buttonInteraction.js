@@ -12,14 +12,22 @@ module.exports.buttonInteraction = async (params) => {
 
     let currentSiteCount;
 
+    //=========================================================
+
     if(main_interaction.customId.indexOf('options_next') !== -1) {
         currentSiteCount = increase_currentSiteCount();
         await editToDoList(projects, todo, main_interaction, false);
     }
+
+    //=========================================================
+
     if(main_interaction.customId.indexOf('options_back') !== -1) {
         currentSiteCount = decrease_currentSiteCount();
         await editToDoList(projects, todo, main_interaction, false);
     }
+
+    //=========================================================
+
     if(main_interaction.customId.indexOf('options_backToMain') !== -1) {
         const buttons = await addButtons(main_interaction.message.guildId);
         main_interaction.message.edit({
@@ -28,6 +36,9 @@ module.exports.buttonInteraction = async (params) => {
             })]
         }).catch(err => {})
     }
+
+    //=========================================================
+
     if(main_interaction.customId.indexOf('end_int') !== -1) {
         var comp = main_interaction.message.components[0].components
         for (let i in comp) {
@@ -38,4 +49,7 @@ module.exports.buttonInteraction = async (params) => {
         });
         decrease_toDoInteractionCount();
     }
+
+    //=========================================================
+
 }

@@ -34,73 +34,17 @@ module.exports.newToDoEmbed = (title, text, deadline, other_user) => {
 }
 
 
-module.exports.newToDoButtons = (secondPage, lang) => {
-    const title_button = new MessageButton({
-        style: 'SUCCESS',
-        label: lang.todo.newtodo.buttons.add_title,
-        customId: 'add_title'
-    });
-
-    const text_button = new MessageButton({
-        style: 'SUCCESS',
-        label: lang.todo.newtodo.buttons.add_text,
-        customId: 'add_text'
-    });
-
-    const deadline_button = new MessageButton({
-        style: 'SECONDARY',
-        label: lang.todo.newtodo.buttons.add_deadline,
-        customId: 'add_deadline'
-    });
-
-    const other_button = new MessageButton({
-        style: 'SECONDARY',
-        label: lang.todo.newtodo.buttons.add_user,
-        customId: 'add_other'
-    });
-
-    const next_button = new MessageButton({
-        style: 'SECONDARY',
-        label: lang.todo.newtodo.buttons.next,
-        customId: 'next'
-    });
-
-    const save_button = new MessageButton({
-        style: 'SUCCESS',
-        label: lang.todo.newtodo.buttons.save,
-        customId: 'save'
-    });
-
-    const delete_button = new MessageButton({
-        style: 'DANGER',
-        label: lang.todo.newtodo.buttons.cancel,
-        customId: 'cancel'
-    });
-
-    const back_button = new MessageButton({
-        style: 'SECONDARY',
-        label: lang.todo.newtodo.buttons.back,
-        customId: 'back'
-    })
-
-    if (secondPage) {
-        return [back_button, save_button, delete_button]
-    } else {
-        return [title_button, text_button, deadline_button, other_button, next_button]
-    }
-}
-
 module.exports.toDoListOverview = async (todo_item_interaction, main_interaction, currentCatId, categories, todolist, guild_id) => {
     const lang = require(`../../assets/json/language/${await getLang(guild_id)}.json`)
 
     switch (todo_item_interaction.customId) {
-        case 'add_toDo':
+        case config.buttons.add_toDo.customId :
             if (increase_toDoInteractionCount() > 1) {
                 return;
             }
             await require('./newToDo/addNewToDo')(todo_item_interaction, main_interaction, lang, currentCatId)
             break;
-        case 'change_prod':
+        case config.buttons.change_prod.customId:
             if (increase_toDoInteractionCount() > 1) {
                 return;
             }
@@ -112,7 +56,7 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
             });
             return newSelectMenu = null;
 
-        case 'delete_toDo':
+        case config.buttons.delete_toDo.customId:
             if (increase_toDoInteractionCount() > 1) {
                 return;
             }
@@ -203,7 +147,7 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
                 }
             });
             break;
-        case 'set_todo_ready':
+        case config.buttons.set_todo_ready.customId:
             if (increase_toDoInteractionCount() > 1) {
                 return;
             }
@@ -304,7 +248,7 @@ module.exports.toDoListOverview = async (todo_item_interaction, main_interaction
             });
             break;
 
-        case 'options': 
+        case config.buttons.options.customId: 
             const optionsButtons = await addOptionButtons(guild_id, currentCatId);
             todolist.edit({
                 components: [new MessageActionRow({

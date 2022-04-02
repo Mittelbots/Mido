@@ -8,5 +8,32 @@
         "mido_perms": "mido_perms",
         "mido_projects": "mido_projects",
         "mido_todo": "mido_todo"
+    },
+    "buttons": {
+        "add_toDo": {
+            "style": "SUCCESS",
+            "customId": "add_toDo",
+            "emoji": "📝"
+        },
+        "change_prod": {
+            "style": "SECONDARY",
+            "customId": "change_prod",
+            "emoji": "📋"
+        },
+        "delete_toDo": {
+            "style": "DANGER",
+            "customId": "delete_toDo",
+            "emoji": "🗑️"
+        },
+        "set_todo_ready": {
+            "style": "SUCCESS",
+            "customId": "set_todo_ready",
+            "emoji": "✅"
+        },
+        "options": {
+            "style": "SECONDARY",
+            "customId": "options",
+            "emoji": "⚙️"
+        }
     }
 }
