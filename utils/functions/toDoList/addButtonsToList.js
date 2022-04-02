@@ -1,75 +1,79 @@
 const { MessageButton } = require('discord.js');
 const { getLang } = require('../getData/getLang');
-const addButtons = async (guild_id) => {
+const config = require('../../assets/json/_config/config.json');
+const { getCurrentProjectId } = require('../../variables/variables');
+
+module.exports.addButtons = async (guild_id) => {
 
     const lang = require(`../../assets/json/language/${await getLang(guild_id)}.json`)
 
     const add_toDo = new MessageButton({
-        style: 'SUCCESS',
+        style: config.buttons.add_toDo.style,
         label: lang.todo.buttons.add,
-        customId: 'add_toDo',
-        emoji: '📝'
+        customId: config.buttons.add_toDo.customId + '_' + getCurrentProjectId(),
+        emoji: config.buttons.add_toDo.emoji
     });
 
     const change_prod = new MessageButton({
-        style: 'SECONDARY',
+        style: config.buttons.change_prod.style, 
         label: lang.todo.buttons.change_project,
-        customId: 'change_prod',
-        emoji: '📋'
+        customId: config.buttons.change_prod.customId,
+        emoji: config.buttons.change_prod.emoji
     });
 
     const delete_toDo = new MessageButton({
-        style: 'DANGER',
+        style: config.buttons.delete_toDo.style,
         label: lang.todo.buttons.delete,
-        customId: 'delete_toDo',
-        emoji: '🗑️'
+        customId: config.buttons.delete_toDo.customId + '_' + getCurrentProjectId(),
+        emoji: config.buttons.delete_toDo.emoji
     });
     
     const set_todo_ready = new MessageButton({
-        style: 'SUCCESS',
+        style: config.buttons.set_todo_ready.style,
         label: lang.todo.buttons.set_todo_ready,
-        customId: 'set_todo_ready',
-        emoji: '✅'
+        customId: config.buttons.set_todo_ready.customId + '_' + getCurrentProjectId(),
+        emoji: config.buttons.set_todo_ready.emoji
     });
 
     const options = new MessageButton({
-        style: 'SECONDARY',
+        style: config.buttons.options.style,
         label: lang.todo.buttons.options,
-        customId: 'options',
-        emoji: '⚙️'
+        customId: config.buttons.options.customId + '_' + getCurrentProjectId(),
+        emoji: config.buttons.options.emoji
     });
     
     return [add_toDo, change_prod, set_todo_ready, delete_toDo, options]
 }
 
-const addOptionButtons = async (guild_id, currentProjectId) => {
+module.exports.addOptionButtons = async (guild_id) => {
     const lang = require(`../../assets/json/language/${await getLang(guild_id)}.json`)
+    const currentProjectId = getCurrentProjectId();
 
     const backToMain = new MessageButton({
         style: 'SUCCESS',
         label: lang.todo.buttons.options_backToMain,
-        customId: 'options_backToMain_' + currentProjectId,
+        customId: 'optionsbackToMain_' + currentProjectId,
         emoji: '🏠'
     });
 
     const options_next = new MessageButton({
         style: 'SECONDARY',
         label: lang.todo.buttons.options_next,
-        customId: 'options_next_' + currentProjectId,
+        customId: 'optionsnext_' + currentProjectId,
         emoji: '➡️'
     });
 
     const options_back = new MessageButton({
         style: 'SECONDARY',
         label: lang.todo.buttons.options_back,
-        customId: 'options_back_' + currentProjectId,
+        customId: 'optionsbackSite_' + currentProjectId,
         emoji: '⬅️'
     });
 
     const end_interaction = new MessageButton({
         style: 'DANGER',
         label: lang.todo.buttons.end_int,
-        customId: 'end_int_' + currentProjectId,
+        customId: 'endint_' + currentProjectId,
         emoji: '❌'
     });
 
@@ -77,4 +81,58 @@ const addOptionButtons = async (guild_id, currentProjectId) => {
     return [backToMain, options_back, options_next, end_interaction];
 }
 
-module.exports = {addButtons, addOptionButtons}
+module.exports.newToDoButtons = (secondPage, lang) => {
+    const title_button = new MessageButton({
+        style: 'SUCCESS',
+        label: lang.todo.newtodo.buttons.add_title,
+        customId: 'add_title'
+    });
+
+    const text_button = new MessageButton({
+        style: 'SUCCESS',
+        label: lang.todo.newtodo.buttons.add_text,
+        customId: 'add_text'
+    });
+
+    const deadline_button = new MessageButton({
+        style: 'SECONDARY',
+        label: lang.todo.newtodo.buttons.add_deadline,
+        customId: 'add_deadline'
+    });
+
+    const other_button = new MessageButton({
+        style: 'SECONDARY',
+        label: lang.todo.newtodo.buttons.add_user,
+        customId: 'add_other'
+    });
+
+    const next_button = new MessageButton({
+        style: 'SECONDARY',
+        label: lang.todo.newtodo.buttons.next,
+        customId: 'next'
+    });
+
+    const save_button = new MessageButton({
+        style: 'SUCCESS',
+        label: lang.todo.newtodo.buttons.save,
+        customId: 'save'
+    });
+
+    const delete_button = new MessageButton({
+        style: 'DANGER',
+        label: lang.todo.newtodo.buttons.cancel,
+        customId: 'cancel'
+    });
+
+    const back_button = new MessageButton({
+        style: 'SECONDARY',
+        label: lang.todo.newtodo.buttons.back,
+        customId: 'back'
+    })
+
+    if (secondPage) {
+        return [back_button, save_button, delete_button]
+    } else {
+        return [title_button, text_button, deadline_button, other_button, next_button]
+    }
+}
