@@ -15,6 +15,16 @@
 
 # **MIDO CHANGELOG**
 
+## **BETA VERSION 0.5.3**
+
+### Added things:
+    - /
+
+### Bug fixes:
+    - reworked interaction count system
+    
+<br><br>
+
 ## **BETA VERSION 0.5.2**
 
 ### Added things:
