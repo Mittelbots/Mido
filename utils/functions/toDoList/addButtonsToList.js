@@ -89,7 +89,7 @@ module.exports.newToDoButtons = (secondPage, lang) => {
     });
 
     const text_button = new MessageButton({
-        style: 'SUCCESS',
+        style: 'SECONDARY',
         label: lang.todo.newtodo.buttons.add_text,
         customId: 'add_text'
     });

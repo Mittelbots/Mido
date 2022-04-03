@@ -103,17 +103,6 @@ module.exports = async (main_interaction) => {
                     decrease_toDoAddCount();
                 }
 
-                if (text == '' && canPass) {
-                    canPass = false;
-                    todo_interaction.channel.send({
-                        content: lang.todo.newtodo.errors.text_missing
-                    }).then(async msg => {
-                        await delay(3000);
-                        msg.delete();
-                    });
-                    decrease_toDoAddCount()
-                }
-
                 if (canPass) {
                     await database.query(`INSERT INTO ${config.tables.mido_todo} (user_id, title, text, deadline, other_user, cat_id, guild_id, state, reminder) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, [main_interaction.user.id, title, text, deadline, user, getCurrentProjectId(), main_interaction.member.guild.id, toDoState_Active, reminder])
                         .then(async () => {
@@ -202,13 +191,12 @@ module.exports = async (main_interaction) => {
                             }).then(async msg => {
                                 await delay(4000);
                                 msg.delete();
+                                reply.delete();
+                                todo_interaction_reply.delete();
+                                decrease_toDoAddCount();
                             })
-                            await delay(4000);
                         }
                     }
-                    reply.delete();
-                    todo_interaction_reply.delete();
-                    decrease_toDoAddCount();
                     break;
 
                 case 'add_text':
@@ -231,13 +219,12 @@ module.exports = async (main_interaction) => {
                             }).then(async msg => {
                                 await delay(4000);
                                 msg.delete();
+                                reply.delete();
+                                todo_interaction_reply.delete();
+                                decrease_toDoAddCount();
                             })
-                            await delay(4000);
                         }
                     }
-                    reply.delete();
-                    todo_interaction_reply.delete();
-                    decrease_toDoAddCount();
                     break;
 
                 case 'add_deadline':
@@ -254,11 +241,8 @@ module.exports = async (main_interaction) => {
 
                     let day = deadline[0]
                     let month = deadline[1]
-                    let year = deadline[2];
+                    let year = (deadline[2] === ' ' || deadline[2] === undefined || deadline[2] === '') ? new Date().getFullYear().toString() : deadline[2];
 
-                    if (year === undefined) {
-                        year = new Date().getFullYear().toString();
-                    }
                     let date = new Date(JSON.stringify(`${year}-${month}-${day}`));
 
                     await delay(1000);
@@ -267,6 +251,9 @@ module.exports = async (main_interaction) => {
 
                         deadline = `${day}.${month}.${year}`;
                         dateFormatDC = ` <t:${Math.floor(date/1000)}:R>`
+
+                        reply.delete();
+                        todo_interaction_reply.delete();
 
                         const reminderMessage = await reply.channel.send(lang.todo.newtodo.interaction.add_reminder)
                         const collector = main_interaction.message.channel.createMessageCollector({
@@ -286,14 +273,26 @@ module.exports = async (main_interaction) => {
                             try {
                                 reminder = reminder.split(' ');
                             } catch (err) {
-                                return reply.reply(lang.todo.newtodo.errors.no_space_in_reminder)
+                                return reply.reply(lang.todo.newtodo.errors.no_space_in_reminder).then(async msg => {
+                                    await delay(3000);
+                                    reply.delete();
+                                    msg.delete();
+                                    reminderMessage.delete();
+                                    decrease_toDoAddCount();
+                                })
                             }
 
                             try {
                                 var date = reminder[0].split('.');
                                 var time = reminder[1].split(':');
                             } catch (err) {
-                                return reply.reply(lang.todo.newtodo.errors.no_point_comma_in_reminder);
+                                return reply.reply(lang.todo.newtodo.errors.no_point_comma_in_reminder).then(async msg => {
+                                    await delay(3000);
+                                    reply.delete();
+                                    msg.delete();
+                                    reminderMessage.delete();
+                                    decrease_toDoAddCount();
+                                })
                             }
 
                             if (!date[2]) date[2] = new Date().getFullYear().toString();
@@ -304,11 +303,15 @@ module.exports = async (main_interaction) => {
                                 reminder = `${date[2]}.${date[1]}.${date[0]} ${time[0]}:${time[1]}`;
                                 reminderFormatDC = ` <t:${Math.floor(checkDate/1000)}:R>`
                             } else {
-                                return reply.reply(lang.todo.newtodo.errors.reminder_wrong_date_format)
+                                return reply.reply(lang.todo.newtodo.errors.reminder_wrong_date_format).then(async msg => {
+                                    await delay(3000);
+                                    decrease_toDoAddCount();
+                                    reply.delete();
+                                    reminderMessage.delete();
+                                    msg.delete();
+                                })
                             }
-                            decrease_toDoAddCount();
-                            reply.delete();
-                            reminderMessage.delete();
+
                             task.edit({
                                 embeds: [newToDoEmbed(title, text, deadline + dateFormatDC + `\n🕐 **${lang.todo.reminder}:** ${reminder} ${reminderFormatDC}`, user)]
                             });
@@ -324,10 +327,12 @@ module.exports = async (main_interaction) => {
                         }).then(async msg => {
                             await delay(3000);
                             msg.delete();
+                            reply.delete();
+                            todo_interaction_reply.delete();
+                            decrease_toDoAddCount();
                         })
                     }
-                    reply.delete();
-                    todo_interaction_reply.delete();
+
                     break;
 
                 case 'add_other':
@@ -352,6 +357,7 @@ module.exports = async (main_interaction) => {
                             }).then(async msg => {
                                 await delay(3000);
                                 msg.delete();
+                                decrease_toDoAddCount();
                             })
                             i = other_user.length;
                             continue;
@@ -361,10 +367,11 @@ module.exports = async (main_interaction) => {
                     }
                     task.edit({
                         embeds: [newToDoEmbed(title, text, deadline + dateFormatDC, user)]
-                    });
-                    reply.delete();
-                    todo_interaction_reply.delete();
-                    decrease_toDoAddCount();
+                    }).then(async msg => {
+                        reply.delete();
+                        todo_interaction_reply.delete();
+                        decrease_toDoAddCount();
+                    })
                     break;
 
                 default:
