@@ -15,6 +15,27 @@
 
 # **MIDO CHANGELOG**
 
+## **BETA VERSION 0.6.2**
+
+### Added things:
+    - /
+
+### Bug fixes:
+    - fixed bug where users can't press a button after an errormessage
+    - fixed bug where users gets "21 years before" message in deadline when they add a "." after the months
+    
+<br><br>
+
+## **BETA VERSION 0.6.1**
+
+### Added things:
+    - text in add new task is now optional
+
+### Bug fixes:
+    - /
+    
+<br><br>
+
 ## **BETA VERSION 0.6.0**
 
 ### Added things:
