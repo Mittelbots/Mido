@@ -184,6 +184,7 @@ module.exports = async (main_interaction) => {
                         await task.edit({
                             embeds: [newToDoEmbed(title, text, deadline, user)]
                         });
+                        decrease_toDoAddCount();
                     } catch (err) {
                         if (err.code == '50035') { //String too long
                             reply.reply({
@@ -191,12 +192,12 @@ module.exports = async (main_interaction) => {
                             }).then(async msg => {
                                 await delay(4000);
                                 msg.delete();
-                                reply.delete();
-                                todo_interaction_reply.delete();
-                                decrease_toDoAddCount();
                             })
                         }
                     }
+                    reply.delete();
+                    todo_interaction_reply.delete();
+                    decrease_toDoAddCount();
                     break;
 
                 case 'add_text':
@@ -225,6 +226,9 @@ module.exports = async (main_interaction) => {
                             })
                         }
                     }
+                    reply.delete();
+                    todo_interaction_reply.delete();
+                    decrease_toDoAddCount();
                     break;
 
                 case 'add_deadline':
@@ -367,7 +371,7 @@ module.exports = async (main_interaction) => {
                     }
                     task.edit({
                         embeds: [newToDoEmbed(title, text, deadline + dateFormatDC, user)]
-                    }).then(async msg => {
+                    }).then(() => {
                         reply.delete();
                         todo_interaction_reply.delete();
                         decrease_toDoAddCount();
