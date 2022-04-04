@@ -15,6 +15,17 @@
 
 # **MIDO CHANGELOG**
 
+## **BETA VERSION 0.6.3**
+
+### Added things:
+    - /
+
+### Bug fixes:
+    - fixed bug where users cant interact after adding the title
+    - changed packagename to mido
+    
+<br><br>
+
 ## **BETA VERSION 0.6.2**
 
 ### Added things:
