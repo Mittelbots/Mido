@@ -76,10 +76,14 @@ module.exports.buttonInteraction = async (params) => {
         await require('../optionsButton/optionsButton')({main_interaction})
     }
 
+    if(main_interaction.customId.indexOf(config.buttons.edit_toDo.customId) !== -1) {
+        if(!getCurrentProjectId()) changeCurrentProjectId(main_interaction.customId.split('_')[1]);
+        await require('../editToDoItem/editToDoItem')({main_interaction});
+    }
+
     switch(main_interaction.customId) {
         case config.buttons.change_prod.customId:
             await require('../change_prod/change_prod')({main_interaction});
         break;
-
     }
 }

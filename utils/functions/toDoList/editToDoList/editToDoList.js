@@ -1,10 +1,9 @@
 const { MessageActionRow } = require("discord.js");
-const { getCurrentSiteCount, decrease_currentSiteCount, changeCurrentProjectId, getCurrentProjectId } = require("../../../variables/variables");
+const { decrease_currentSiteCount } = require("../../../variables/variables");
 const { addButtons, addOptionButtons } = require("../addButtonsToList");
 const { viewToDoList } = require("../viewToDoList");
 
 module.exports.editToDoList = async (projects, todo, main_interaction, isMain) => {
-    let currentSiteCount = getCurrentSiteCount();
     const currentToDoList = await viewToDoList(projects, todo, main_interaction);
     if(!currentToDoList) {
         return decrease_currentSiteCount();   

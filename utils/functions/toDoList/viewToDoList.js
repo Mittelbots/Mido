@@ -10,13 +10,13 @@ module.exports.viewToDoList = async (projects, todo, main_interaction) => {
     let count = 0;
 
     let pass = false;
-    
+
     await projects.map(async cat => {
         let isInProject;
         try {
-            isInProject = main_interaction.values.indexOf(select_ProjectId + cat.id) 
+            isInProject = main_interaction.values.indexOf(select_ProjectId + cat.id);
         }catch(err) {
-            isInProject = main_interaction.customId.search(cat.id) || main_interaction.customId.search(config.buttons.add_ToDo.customId);
+            isInProject = main_interaction.customId.search(cat.id) ?? main_interaction.customId.search(config.buttons.add_ToDo.customId);
         } 
         if (isInProject !== -1) {
             newMessageEmbed = new MessageEmbed()

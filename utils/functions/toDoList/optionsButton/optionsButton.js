@@ -7,7 +7,7 @@ module.exports = async (params) => {
     const optionsButtons = await addOptionButtons(main_interaction.message.guild.id);
     main_interaction.message.edit({
         components: [new MessageActionRow({
-            components: [optionsButtons[0], optionsButtons[1], optionsButtons[2], optionsButtons[3]]
+            components: [...optionsButtons]
         })]
     });
 }

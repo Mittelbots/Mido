@@ -15,6 +15,16 @@
 
 # **MIDO CHANGELOG**
 
+## **BETA VERSION 0.7.0**
+
+### Added things:
+    - added function to edit tasks
+
+### Bug fixes:
+    - code improvements; moved some code in one file
+    
+<br><br>
+
 ## **BETA VERSION 0.6.3**
 
 ### Added things:

@@ -51,6 +51,7 @@
         "buttons": {
             "add": "Aufgabe hinzufügen",
             "change_project": "Projekt wechseln",
+            "edit": "Aufgabe bearbeiten",
             "delete": "Aufgabe löschen",
             "set_todo_ready": "Aufgabe als fertig makieren",
             "end_int": "Interaktion beenden",
