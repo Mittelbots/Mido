@@ -21,11 +21,11 @@ module.exports.addButtons = async (guild_id) => {
         emoji: config.buttons.change_prod.emoji
     });
 
-    const delete_toDo = new MessageButton({
-        style: config.buttons.delete_toDo.style,
-        label: lang.todo.buttons.delete,
-        customId: config.buttons.delete_toDo.customId + '_' + getCurrentProjectId(),
-        emoji: config.buttons.delete_toDo.emoji
+    const edit_toDo = new MessageButton({
+        style: config.buttons.edit_toDo.style, 
+        label: lang.todo.buttons.edit,
+        customId: config.buttons.edit_toDo.customId + '_' + getCurrentProjectId(),
+        emoji: config.buttons.edit_toDo.emoji
     });
     
     const set_todo_ready = new MessageButton({
@@ -42,7 +42,7 @@ module.exports.addButtons = async (guild_id) => {
         emoji: config.buttons.options.emoji
     });
     
-    return [add_toDo, change_prod, set_todo_ready, delete_toDo, options]
+    return [add_toDo, edit_toDo, change_prod, set_todo_ready, options]
 }
 
 module.exports.addOptionButtons = async (guild_id) => {
@@ -70,6 +70,13 @@ module.exports.addOptionButtons = async (guild_id) => {
         emoji: '⬅️'
     });
 
+    const delete_toDo = new MessageButton({
+        style: config.buttons.delete_toDo.style,
+        label: lang.todo.buttons.delete,
+        customId: config.buttons.delete_toDo.customId + '_' + getCurrentProjectId(),
+        emoji: config.buttons.delete_toDo.emoji
+    });
+
     const end_interaction = new MessageButton({
         style: 'DANGER',
         label: lang.todo.buttons.end_int,
@@ -78,7 +85,7 @@ module.exports.addOptionButtons = async (guild_id) => {
     });
 
 
-    return [backToMain, options_back, options_next, end_interaction];
+    return [backToMain, options_back, options_next, delete_toDo, end_interaction];
 }
 
 module.exports.newToDoButtons = (secondPage, lang) => {

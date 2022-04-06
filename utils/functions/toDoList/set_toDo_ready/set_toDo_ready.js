@@ -55,7 +55,7 @@ module.exports = async (params) => {
                 set_todo_ready_Message.delete();
             })
         } else {
-            const task = await database.query(`SELECT id, state FROM ${config.tables.mido_todo} WHERE id = ?`, [reply.content])
+            const task = await database.query(`SELECT id, state FROM ${config.tables.mido_todo} WHERE id = ? AND guild_id = ?`, [reply.content, main_interaction.message.guild.id])
                 .then(res => {
                     return res[0]
                 })

@@ -19,6 +19,11 @@
             "customId": "addtoDo",
             "emoji": "📝"
         },
+        "edit_toDo": {
+            "style": "SECONDARY",
+            "customId": "edittoDo",
+            "emoji": "🖊️"
+        },
         "change_prod": {
             "style": "SECONDARY",
             "customId": "change_prod",
@@ -35,7 +40,7 @@
             "emoji": "✅"
         },
         "options": {
-            "style": "SECONDARY",
+            "style": "PRIMARY",
             "customId": "options",
             "emoji": "⚙️"
         }
