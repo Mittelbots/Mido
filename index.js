@@ -86,12 +86,13 @@ bot.once('ready', async () => {
 
     bot.on('debug', (debug) => {
         var Message = new MessageEmbed()
-            .setDescription(`**Debug info: ** \n ${debug}`);
+            .setDescription(`**Debug info: ** \n ${debug}`)
+			  .addField('tst', 'tet')
     
         try {
             if(!config.debug) {
                 bot.guilds.cache.get(config.debug_info.debug_server).channels.cache.get(config.debug_info.debug_channel).send({
-                    embed: Message
+                    embeds: [Message]
                 });
             }
         } catch (err) {}
