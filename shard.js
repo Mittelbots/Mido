@@ -11,10 +11,11 @@ let manager = new ShardingManager('./index.js', {
 });
 
 manager.on('shardCreate', shard => {
-    setTimeout(() => {
-        shard.kill();
-    }, 86400000); // 24h
     console.log(`[SHARDS]: Launched shards ${shard.id}`)
 });
 
-manager.spawn();
+manager.spawn().then(shard => {
+    setTimeout(() => {
+        shard.kill();
+    }, 86400000); // 24h
+})

@@ -15,6 +15,26 @@
 
 # **MIDO CHANGELOG**
 
+## **BETA VERSION 0.7.2**
+
+### Added things:
+    - /
+
+### Bug fixes:
+    - fixed shard restart
+    
+<br><br>
+
+## **BETA VERSION 0.7.1**
+
+### Added things:
+    - /
+
+### Bug fixes:
+    - fixed debug
+    
+<br><br>
+
 ## **BETA VERSION 0.7.0**
 
 ### Added things:
