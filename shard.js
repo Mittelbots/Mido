@@ -14,8 +14,4 @@ manager.on('shardCreate', shard => {
     console.log(`[SHARDS]: Launched shards ${shard.id}`)
 });
 
-manager.spawn().then(shard => {
-    setTimeout(() => {
-        shard.kill();
-    }, 86400000); // 24h
-})
+manager.spawn();
