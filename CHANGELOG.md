@@ -15,6 +15,18 @@
 
 # **MIDO CHANGELOG**
 
+
+## **BETA VERSION 0.7.3**
+
+### Added things:
+    - added dependedbot to repo
+
+### Bug fixes:
+    - fixed shard bug
+    - new dependencies version
+    
+<br><br>
+
 ## **BETA VERSION 0.7.2**
 
 ### Added things:
