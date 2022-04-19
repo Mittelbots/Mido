@@ -15,6 +15,15 @@
 
 # **MIDO CHANGELOG**
 
+## **BETA VERSION 0.7.4**
+
+### Added things:
+    - /
+
+### Bug fixes:
+    - fixed issue where user can't use the bot at the same time
+    
+<br><br>
 
 ## **BETA VERSION 0.7.3**
 

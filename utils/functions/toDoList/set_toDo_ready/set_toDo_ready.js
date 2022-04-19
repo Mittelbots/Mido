@@ -7,11 +7,9 @@ const { refreshProject_ToDo } = require("../../getData/refreshProject_ToDo");
 const { editToDoList } = require("../editToDoList/editToDoList");
 const config = require('../../../assets/json/_config/config.json');
 
-module.exports = async (params) => {
+module.exports = async ({main_interaction}) => {
 
-    var main_interaction = params.main_interaction;
-
-    if (increase_toDoInteractionCount() > 1) {
+    if (increase_toDoInteractionCount(main_interaction.user.id) > 1) {
         return;
     }
 
@@ -37,7 +35,7 @@ module.exports = async (params) => {
             }).then(async msg => {
                 await delay(3000);
                 msg.delete();
-                decrease_toDoInteractionCount();
+                decrease_toDoInteractionCount(main_interaction.user.id);
                 reply.delete();
                 set_todo_ready_Message.delete();
             });
@@ -50,7 +48,7 @@ module.exports = async (params) => {
             }).then(async msg => {
                 await delay(3000);
                 msg.delete();
-                decrease_toDoInteractionCount();
+                decrease_toDoInteractionCount(main_interaction.user.id);
                 reply.delete();
                 set_todo_ready_Message.delete();
             })
@@ -63,10 +61,10 @@ module.exports = async (params) => {
 
             if (task) {
                 if(task.id === reply.content) {
-                    decrease_toDoInteractionCount();
+                    decrease_toDoInteractionCount(main_interaction.user.id);
                     return reply.reply(lang.errors.task_already_ready).then(async msg => {
                         await delay(2000);
-                        decrease_toDoInteractionCount();
+                        decrease_toDoInteractionCount(main_interaction.user.id);
                         msg.delete();
                         reply.delete();
                         set_todo_ready_Message.delete();
@@ -84,7 +82,7 @@ module.exports = async (params) => {
                             let todo = refresh[1];
                             await editToDoList(projects, todo, main_interaction, true);
 
-                            decrease_toDoInteractionCount();
+                            decrease_toDoInteractionCount(main_interaction.user.id);
                             msg.delete();
                             reply.delete();
                             set_todo_ready_Message.delete();
@@ -97,7 +95,7 @@ module.exports = async (params) => {
                         }).then(async msg => {
                             await delay(3000);
                             msg.delete();
-                            decrease_toDoInteractionCount();
+                            decrease_toDoInteractionCount(main_interaction.user.id);
                             reply.delete();
                             set_todo_ready_Message.delete();
                         })
@@ -108,7 +106,7 @@ module.exports = async (params) => {
                 }).then(async msg => {
                     await delay(50000);
                     msg.delete();
-                    decrease_toDoInteractionCount();
+                    decrease_toDoInteractionCount(main_interaction.user.id);
                     reply.delete();
                     set_todo_ready_Message.delete();
                 })

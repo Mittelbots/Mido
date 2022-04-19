@@ -1,12 +1,10 @@
 const { MessageActionRow } = require("discord.js");
-const { increase_toDoInteractionCount, decrease_toDoInteractionCount } = require("../../../variables/variables");
+const { increase_toDoInteractionCount, decrease_toDoInteractionCount, getCurrentInteractionCount } = require("../../../variables/variables");
 const { getProject } = require("../../getData/getProject");
 const { addSelectMenu } = require("../addSelectMenu");
 
-module.exports = async (params) => {
-    var main_interaction = params.main_interaction;
-    
-    if (increase_toDoInteractionCount() > 1) {
+module.exports = async ({main_interaction}) => {
+    if (increase_toDoInteractionCount(main_interaction.user.id) > 1) {
         return;
     }
 
@@ -18,6 +16,6 @@ module.exports = async (params) => {
         })]
     });
 
-    decrease_toDoInteractionCount();
+    decrease_toDoInteractionCount(main_interaction.user.id);
     newSelectMenu = null;
 }

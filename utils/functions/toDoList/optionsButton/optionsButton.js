@@ -1,9 +1,7 @@
 const { MessageActionRow } = require("discord.js");
 const { addOptionButtons } = require("../addButtonsToList");
 
-module.exports = async (params) => {
-    var main_interaction = params.main_interaction;
-
+module.exports = async ({main_interaction}) => {
     const optionsButtons = await addOptionButtons(main_interaction.message.guild.id);
     main_interaction.message.edit({
         components: [new MessageActionRow({

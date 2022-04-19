@@ -4,13 +4,8 @@ const { addButtons } = require('../addButtonsToList');
 const { MessageActionRow } = require("discord.js");
 const config = require("../../../assets/json/_config/config.json");
 
-module.exports.buttonInteraction = async (params) => {
-
-    var main_interaction = params.main_interaction;
-    var projects = params.projects;
-    var todo = params.todo;
-
-    
+module.exports.buttonInteraction = async ({main_interaction, projects, todo}) => {
+   
 
     let currentSiteCount;
     
@@ -54,7 +49,7 @@ module.exports.buttonInteraction = async (params) => {
         main_interaction.message.edit({
             components: [main_interaction.message.components[0]]
         });
-        decrease_toDoInteractionCount();
+        decrease_toDoInteractionCount(main_interaction.user.id);
         return;
     }
 
