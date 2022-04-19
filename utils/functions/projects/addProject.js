@@ -27,7 +27,7 @@ module.exports.addProject = async (main_interaction) => {
             }).then(async msg => {
                 await delay(1500);
                 msg.delete();
-                decrease_toDoInteractionCount();
+                decrease_toDoInteractionCount(main_interaction.user.id);
                 reply.delete();
                 giveNameMessage.delete();
                 giveNameMessage = null;

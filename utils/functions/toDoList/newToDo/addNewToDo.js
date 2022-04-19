@@ -4,7 +4,7 @@ const {increase_toDoInteractionCount, getCurrentProjectId, changeCurrentProjectI
 
 module.exports = async (main_interaction) => {
 
-    if (increase_toDoInteractionCount() > 1) {
+    if (increase_toDoInteractionCount(main_interaction.user.id) > 1) {
         return;
     }
 
@@ -32,7 +32,7 @@ module.exports = async (main_interaction) => {
     //             await delay(3000);
     //             msg.delete();
     //         });
-    //         decrease_toDoAddCount()
+    //         decrease_toDoAddCount(main_interaction.user.id)
     //         reply.delete();
     //         return;
     //     }
@@ -47,7 +47,7 @@ module.exports = async (main_interaction) => {
     //             msg.delete();
     //         });
     //         reply.delete();
-    //         decrease_toDoAddCount()
+    //         decrease_toDoAddCount(main_interaction.user.id)
     //         return;
     //     }
 
@@ -64,7 +64,7 @@ module.exports = async (main_interaction) => {
     //             await delay(2000);
     //             msg.delete();
     //         });
-    //         decrease_toDoAddCount()
+    //         decrease_toDoAddCount(main_interaction.user.id)
     //         return;
     //     }
     //     if (!text) {
@@ -74,7 +74,7 @@ module.exports = async (main_interaction) => {
     //             await delay(2000);
     //             msg.delete();
     //         });
-    //         decrease_toDoAddCount()
+    //         decrease_toDoAddCount(main_interaction.user.id)
     //         return;
     //     }
 

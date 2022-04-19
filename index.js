@@ -63,7 +63,7 @@ bot.on('guildMemberAdd', async member => {
     return await welcome_message(member);
 });
 
-bot.once('ready', async () => {
+bot.once('ready', async function () {
     watchToDoList(bot);
 
     bot.on('interactionCreate', async (main_interaction) => {
@@ -103,7 +103,6 @@ bot.once('ready', async () => {
 });
 
 bot.login(token.BOT_TOKEN);
-
 
 //! ERROR --
 process.on('unhandledRejection', err => {

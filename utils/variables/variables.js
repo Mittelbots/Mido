@@ -41,36 +41,92 @@ module.exports.decrease_todoListInteractionCount = () => {
 
 //==========================================================
 
+function increase(array, user_id) {
+    let passed = false;
+    for(let i in array) {
+        if(array[i].user_id === user_id) {
+            array[i].count = array[i].count + 1;
+            passed = true;
+            return array[i].count;
+        }
+    }
+
+    if(!passed) {
+        const obj = {
+            user_id: user_id,
+            count: 1
+        }
+        array.push(obj);
+        return obj.count;
+    }
+}
+
+function decrease(array, user_id) {
+    let passed = false;
+    for(let i in array) {
+        if(array[i].user_id === user_id) {
+            array[i].count = 0;
+            return passed = true;
+        }
+    }
+
+    if(!passed) {
+        const obj = {
+            user_id: user_id,
+            count: 0
+        }
+        array.push(obj);
+    }
+}
+
+
+function getCurrentCount(array, user_id) {
+    let passed = false;
+    let result;
+    for(let i in array) {
+        if(array[i].user_id === user_id) {
+            result = array[i];
+            passed = true;
+            return result.count;
+        }
+    }
+
+    if(!passed) {
+        const obj = {
+            user_id: user_id,
+            count: 0
+        }
+        array.push(obj);
+        return obj.count
+    }
+}
+
 //? TO-DO INTERACTION COUNT
-let toDoInteractionCount = 0;
+let toDoInteractionCount = [];
 
-module.exports.increase_toDoInteractionCount = () => {
-    if(toDoInteractionCount < 1) toDoInteractionCount = 0;
-
-    return toDoInteractionCount = toDoInteractionCount + 1;
+module.exports.increase_toDoInteractionCount = (user_id) => {
+    return increase(toDoInteractionCount, user_id);
 }
 
-module.exports.decrease_toDoInteractionCount = () => {
-    return toDoInteractionCount = 0;
+module.exports.decrease_toDoInteractionCount = (user_id) => {
+    return decrease(toDoInteractionCount, user_id);
 }
 
-module.exports.getCurrentInteractionCount = () => {
-    return toDoInteractionCount;
+module.exports.getCurrentInteractionCount = (user_id) => {
+    return getCurrentCount(toDoInteractionCount, user_id);
 }
 
 //==========================================================
 
 //? TO-DO ADD COUNT
-let toDoAddCount = 0;
+let toDoAddCount = [];
 
-module.exports.increase_toDoAddCount = () => {
-    if(toDoAddCount < 1) toDoAddCount = 0;
-    
-    return toDoAddCount = toDoAddCount + 1;
+module.exports.increase_toDoAddCount = (user_id) => {
+    return increase(toDoAddCount, user_id);
 }
 
-module.exports.decrease_toDoAddCount = () => {
-    return toDoAddCount = 0;
+module.exports.decrease_toDoAddCount = (user_id) => {
+    return decrease(toDoAddCount, user_id);
 }
 
 //==========================================================

@@ -8,11 +8,8 @@ const { editToDoList } = require("../editToDoList/editToDoList");
 const config = require("../../../assets/json/_config/config.json");
 const database = require("../../../../bot/db/db");
 
-module.exports = async (params) => {
-
-    var main_interaction = params.main_interaction;
-
-    if (increase_toDoInteractionCount() > 1) {
+module.exports = async ({main_interaction}) => {
+    if (increase_toDoInteractionCount(main_interaction.user.id) > 1) {
         return;
     }
 
@@ -36,7 +33,7 @@ module.exports = async (params) => {
                 content: lang.errors.canceled
             }).then(async msg => {
                 await delay(3000);
-                decrease_toDoInteractionCount();
+                decrease_toDoInteractionCount(main_interaction.user.id);
                 reply.delete();
                 del_todoMessage.delete();
                 msg.delete();
@@ -49,7 +46,7 @@ module.exports = async (params) => {
                 content: lang.errors.only_numbers
             }).then(async msg => {
                 await delay(3000);
-                decrease_toDoInteractionCount();
+                decrease_toDoInteractionCount(main_interaction.user.id);
                 reply.delete();
                 msg.delete();
                 del_todoMessage.delete();
@@ -75,7 +72,7 @@ module.exports = async (params) => {
 
                             await editToDoList(projects, todo, main_interaction, true);
 
-                            decrease_toDoInteractionCount();
+                            decrease_toDoInteractionCount(main_interaction.user.id);
                             reply.delete();
                             msg.delete();
                             del_todoMessage.delete();
@@ -87,7 +84,7 @@ module.exports = async (params) => {
                             content: lang.todo.delete_todo.errors.delete_todo_error
                         }).then(async msg => {
                             await delay(3000);
-                            decrease_toDoInteractionCount();
+                            decrease_toDoInteractionCount(main_interaction.user.id);
                             reply.delete();
                             msg.delete();
                             del_todoMessage.delete();
@@ -98,7 +95,7 @@ module.exports = async (params) => {
                     content: lang.todo.delete_todo.errors.item_notfound_withId
                 }).then(async msg => {
                     await delay(3000);
-                    decrease_toDoInteractionCount();
+                    decrease_toDoInteractionCount(main_interaction.user.id);
                     reply.delete();
                     msg.delete();
                     del_todoMessage.delete();

@@ -4,11 +4,9 @@ const { getLang } = require("../../getData/getLang");
 const { manageToDoItem } = require("../manageToDoItem/manageToDoitem");
 
 
-module.exports = async (params) => {
+module.exports = async ({main_interaction}) => {
 
-    const main_interaction = params.main_interaction;
-
-    if (increase_toDoInteractionCount() > 1) {
+    if (increase_toDoInteractionCount(main_interaction.user.id) > 1) {
         return;
     }
 
@@ -32,7 +30,7 @@ module.exports = async (params) => {
                 msg.delete();
                 reply.delete();
                 sentMessage.delete();
-                decrease_toDoInteractionCount();
+                decrease_toDoInteractionCount(main_interaction.user.id);
             });
             return;
         }
@@ -45,7 +43,7 @@ module.exports = async (params) => {
                 msg.delete();
                 reply.delete();
                 sentMessage.delete();
-                decrease_toDoInteractionCount();
+                decrease_toDoInteractionCount(main_interaction.user.id);
             })
         }
         else {
