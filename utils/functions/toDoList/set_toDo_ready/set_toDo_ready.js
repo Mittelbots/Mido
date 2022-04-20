@@ -14,7 +14,7 @@ module.exports = async ({main_interaction}) => {
         return;
     }
 
-    if(!getCurrentProjectId()) changeCurrentProjectId(main_interaction.customId.split('_')[1])
+    if(!getCurrentProjectId(main_interaction.user.id)) changeCurrentProjectId(main_interaction.customId.split('_')[1], main_interaction.user.id)
 
     const lang = require(`../../../assets/json/language/${await getLang(main_interaction.message.guild.id)}.json`)
 

@@ -3,14 +3,14 @@ const { getLang } = require('../getData/getLang');
 const config = require('../../assets/json/_config/config.json');
 const { getCurrentProjectId } = require('../../variables/variables');
 
-module.exports.addButtons = async (guild_id) => {
+module.exports.addButtons = async ({main_interaction}) => {
 
-    const lang = require(`../../assets/json/language/${await getLang(guild_id)}.json`)
+    const lang = require(`../../assets/json/language/${await getLang(main_interaction.guild.id)}.json`)
 
     const add_toDo = new MessageButton({
         style: config.buttons.add_toDo.style,
         label: lang.todo.buttons.add,
-        customId: config.buttons.add_toDo.customId + '_' + getCurrentProjectId(),
+        customId: config.buttons.add_toDo.customId + '_' + getCurrentProjectId(main_interaction.user.id),
         emoji: config.buttons.add_toDo.emoji
     });
 
@@ -24,30 +24,30 @@ module.exports.addButtons = async (guild_id) => {
     const edit_toDo = new MessageButton({
         style: config.buttons.edit_toDo.style, 
         label: lang.todo.buttons.edit,
-        customId: config.buttons.edit_toDo.customId + '_' + getCurrentProjectId(),
+        customId: config.buttons.edit_toDo.customId + '_' + getCurrentProjectId(main_interaction.user.id),
         emoji: config.buttons.edit_toDo.emoji
     });
     
     const set_todo_ready = new MessageButton({
         style: config.buttons.set_todo_ready.style,
         label: lang.todo.buttons.set_todo_ready,
-        customId: config.buttons.set_todo_ready.customId + '_' + getCurrentProjectId(),
+        customId: config.buttons.set_todo_ready.customId + '_' + getCurrentProjectId(main_interaction.user.id),
         emoji: config.buttons.set_todo_ready.emoji
     });
 
     const options = new MessageButton({
         style: config.buttons.options.style,
         label: lang.todo.buttons.options,
-        customId: config.buttons.options.customId + '_' + getCurrentProjectId(),
+        customId: config.buttons.options.customId + '_' + getCurrentProjectId(main_interaction.user.id),
         emoji: config.buttons.options.emoji
     });
     
     return [add_toDo, edit_toDo, change_prod, set_todo_ready, options]
 }
 
-module.exports.addOptionButtons = async (guild_id) => {
-    const lang = require(`../../assets/json/language/${await getLang(guild_id)}.json`)
-    const currentProjectId = getCurrentProjectId();
+module.exports.addOptionButtons = async ({main_interaction}) => {
+    const lang = require(`../../assets/json/language/${await getLang(main_interaction.guild.id)}.json`)
+    const currentProjectId = getCurrentProjectId(main_interaction.user.id);
 
     const backToMain = new MessageButton({
         style: 'SUCCESS',
@@ -73,7 +73,7 @@ module.exports.addOptionButtons = async (guild_id) => {
     const delete_toDo = new MessageButton({
         style: config.buttons.delete_toDo.style,
         label: lang.todo.buttons.delete,
-        customId: config.buttons.delete_toDo.customId + '_' + getCurrentProjectId(),
+        customId: config.buttons.delete_toDo.customId + '_' + getCurrentProjectId(main_interaction.user.id),
         emoji: config.buttons.delete_toDo.emoji
     });
 

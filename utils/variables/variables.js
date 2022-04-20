@@ -10,42 +10,14 @@ module.exports.toDoState_Inactive = 0;
 module.exports.toDoState_Deleted = 2;
 module.exports.toDoState_Ready = 3;
 
-//==========================================================
-//? SITE COUNT
-let currentSiteCountLocal = 0;
-module.exports.increase_currentSiteCount = () => {
-    return currentSiteCountLocal = currentSiteCountLocal + 10;
-}
-module.exports.decrease_currentSiteCount = () => {
-    currentSiteCountLocal = currentSiteCountLocal - 10;
-    if(currentSiteCountLocal < 0) currentSiteCountLocal = 0;
-    return currentSiteCountLocal;
-}
-
-module.exports.getCurrentSiteCount = () => {
-    return currentSiteCountLocal;
-}
-
-//==========================================================
-//? TO-DO LIST COUNT
-let todoListInteractionCount = 0;
-
-module.exports.increase_todoListInteractionCount = () => {
-    return todoListInteractionCount = todoListInteractionCount + 1;
-}
-
-module.exports.decrease_todoListInteractionCount = () => {
-    return todoListInteractionCount = 0;
-}
-
 
 //==========================================================
 
-function increase(array, user_id) {
+function increase(array, user_id, count) {
     let passed = false;
     for(let i in array) {
         if(array[i].user_id === user_id) {
-            array[i].count = array[i].count + 1;
+            array[i].count = array[i].count + count;
             passed = true;
             return array[i].count;
         }
@@ -54,19 +26,25 @@ function increase(array, user_id) {
     if(!passed) {
         const obj = {
             user_id: user_id,
-            count: 1
+            count: count
         }
         array.push(obj);
         return obj.count;
     }
 }
 
-function decrease(array, user_id) {
+function decrease(array, user_id, isSiteCount, siteCount) {
+
     let passed = false;
     for(let i in array) {
         if(array[i].user_id === user_id) {
-            array[i].count = 0;
-            return passed = true;
+            if(isSiteCount) {
+                array[i].count = array[i].count - siteCount;
+            }else {
+                array[i].count = 0;
+            }
+            passed = true;
+            return array[i].count;
         }
     }
 
@@ -76,6 +54,7 @@ function decrease(array, user_id) {
             count: 0
         }
         array.push(obj);
+        return obj.count;
     }
 }
 
@@ -101,15 +80,45 @@ function getCurrentCount(array, user_id) {
     }
 }
 
+//==========================================================
+
+
+//? SITE COUNT
+let currentSiteCountLocal = [];
+
+module.exports.increase_currentSiteCount = (user_id) => {
+    return increase(currentSiteCountLocal, user_id, 10);
+}
+module.exports.decrease_currentSiteCount = (user_id) => {
+    return decrease(currentSiteCountLocal, user_id, true, 10);
+}
+
+module.exports.getCurrentSiteCount = (user_id) => {
+    return getCurrentCount(currentSiteCountLocal, user_id);
+}
+
+//==========================================================
+//? TO-DO LIST COUNT
+let todoListInteractionCount = 0;
+
+module.exports.increase_todoListInteractionCount = () => {
+    return todoListInteractionCount = todoListInteractionCount + 1;
+}
+
+module.exports.decrease_todoListInteractionCount = () => {
+    return todoListInteractionCount = 0;
+}
+
+
 //? TO-DO INTERACTION COUNT
 let toDoInteractionCount = [];
 
 module.exports.increase_toDoInteractionCount = (user_id) => {
-    return increase(toDoInteractionCount, user_id);
+    return increase(toDoInteractionCount, user_id, 1);
 }
 
 module.exports.decrease_toDoInteractionCount = (user_id) => {
-    return decrease(toDoInteractionCount, user_id);
+    return decrease(toDoInteractionCount, user_id, false, null);
 }
 
 module.exports.getCurrentInteractionCount = (user_id) => {
@@ -122,22 +131,46 @@ module.exports.getCurrentInteractionCount = (user_id) => {
 let toDoAddCount = [];
 
 module.exports.increase_toDoAddCount = (user_id) => {
-    return increase(toDoAddCount, user_id);
+    return increase(toDoAddCount, user_id, 1);
 }
 
 module.exports.decrease_toDoAddCount = (user_id) => {
-    return decrease(toDoAddCount, user_id);
+    return decrease(toDoAddCount, user_id, false, null);
 }
 
 //==========================================================
 
 //? CURRENT PROJECT ID
-let currentProjectId;
+let currentProjectId = [];
 
-module.exports.changeCurrentProjectId = (projectId) => {
-    currentProjectId = projectId;
+module.exports.changeCurrentProjectId = (projectId, user_id) => {
+
+    let passed = false;
+    for(let i in currentProjectId) {
+        if(currentProjectId[i].user_id === user_id) {
+            currentProjectId[i].projectId = projectId;
+            passed = true;
+        }
+    }
+
+    if(!passed) {
+        const obj = {
+            projectId: projectId,
+            user_id: user_id
+        }
+        currentProjectId.push(obj);
+    }
+    return;
 }
 
-module.exports.getCurrentProjectId = () => {
-    return currentProjectId;
+module.exports.getCurrentProjectId = (user_id) => {
+    let passed = false;
+    for(let i in currentProjectId) {
+        if(currentProjectId[i].user_id === user_id) {
+            passed = true;
+            return currentProjectId[i].projectId;
+        }
+    }
+
+    if(!passed) return false;
 }
