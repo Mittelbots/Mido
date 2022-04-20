@@ -15,6 +15,16 @@
 
 # **MIDO CHANGELOG**
 
+## **BETA VERSION 0.8.1**
+
+### Added things:
+    - added multi interaction to current project id & current site count
+
+### Bug fixes:
+    - /
+    
+<br><br>
+
 ## **BETA VERSION 0.8.0**
 
 ### Added things:
