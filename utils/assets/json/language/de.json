@@ -15,7 +15,8 @@
         "task_already_ready": "Diese Aufgabe wurde schon als fertig makiert!"
     },
     "tips": {
-        "cancel": "(Tipp: \"cancel\" bricht diesen Vorgang ab!)"
+        "cancel": "(Tipp: \"cancel\" bricht diesen Vorgang ab!)",
+        "log_change": "Tipp: Du kannst den log channel ganz einfach ändern. Einfach \"!settings\" log eingeben."
     },
     "projects": {
         "project": "Projekt",
@@ -117,5 +118,17 @@
                 "last": "hat heute die Deadline! Noch nicht fertig? Dann mach dich mal an die Arbeit!"
             }
         }
+    },
+    "logs": {
+        "logs": "Logs von ",
+        "x_todo_create": " hat eine neue Aufgabe erstellt",
+        "x_todo_updated": " hat eine Aufgabe bearbeitet",
+        "x_todo_deleted": " hat eine Aufgabe gelöscht",
+        "x_todo_completed": " hat eine Aufgabe als fertig makiert",
+        "x_project_create": " hat ein neues Projekt erstellt",
+        "x_project_deleted": " hat ein Projekt gelöscht",
+        "project_name": "Projektname",
+        "todo_name": "Aufgabenname",
+        "todo_content": "Aufgabeninhalt"
     }
 }

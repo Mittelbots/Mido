@@ -8,6 +8,7 @@ const { addSelectMenu } = require("../toDoList/addSelectMenu");
 const randomColor = require('randomcolor');
 const config = require('../../assets/json/_config/config.json');
 const { decrease_toDoInteractionCount } = require("../../variables/variables");
+const { createLog } = require("../log/mido_log");
 
 module.exports.addProject = async (main_interaction) => {
     const lang = require(`../../assets/json/language/${await getLang(main_interaction.message.guild.id)}.json`);
@@ -36,6 +37,16 @@ module.exports.addProject = async (main_interaction) => {
         }
         return await database.query(`INSERT INTO ${config.tables.mido_projects} (name, color, guild_id) VALUES (?, ?, ?)`, [reply.content, randomColor(), reply.guildId])
             .then(async () => {
+
+                createLog({
+                    type: 4,
+                    data: {
+                        name: reply.content,
+                    },
+                    user: main_interaction.user,
+                    guild: main_interaction.guild
+                })
+
                 const refresh = await refreshProject_ToDo(main_interaction);
                 categories = refresh[0];
 

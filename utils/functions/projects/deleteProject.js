@@ -20,6 +20,7 @@ const {
     addSelectMenu, addConfirmMenu
 } = require("../toDoList/addSelectMenu");
 const config = require('../../assets/json/_config/config.json');
+const { createLog } = require("../log/mido_log");
 
 module.exports.deleteProject = async (main_interaction, categories, isDelete) => {
 
@@ -90,8 +91,20 @@ module.exports.deleteProject = async (main_interaction, categories, isDelete) =>
                 return;
             }else {
                 const id = main_interaction.values[0].slice(4, main_interaction.values[0].length);
+                const name = main_interaction.values[0].slice(0, 3);
                 return await database.query(`DELETE FROM ${config.tables.mido_projects} WHERE id = ?; UPDATE mido_todo SET state = ? WHERE cat_id = ?;`, [Number(id), toDoState_Deleted, Number(id)])
                     .then(async () => {
+
+                        createLog({
+                            type: 5,
+                            data: {
+                                name: name,
+                                id: id
+                            },
+                            user: main_interaction.user,
+                            guild: main_interaction.guild
+                        })
+
                         await main_interaction.channel.send({
                             content: `${lang.success.deleted}!`
                         }).then(async msg => {

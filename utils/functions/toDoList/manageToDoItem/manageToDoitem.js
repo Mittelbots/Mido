@@ -24,6 +24,7 @@ const { getLang } = require("../../getData/getLang");
 const { newToDoButtons } = require("../addButtonsToList");
 const { getToDo } = require("../../getData/getToDo");
 const { editToItemEmbed } = require("../editToDoItem/editToDoItemEmbed");
+const { createLog } = require("../../log/mido_log");
 
 
 module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) => {
@@ -56,6 +57,12 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
         deadline = toDoItem.deadline;
         reminder = toDoItem.reminder;
         user = toDoItem.other_user;
+
+        var old_title = toDoItem.title;
+        var old_text = toDoItem.text;
+        var old_deadline = toDoItem.deadline;
+        var old_reminder = toDoItem.reminder;
+        var old_user = toDoItem.other_user;
 
         const buttons = newToDoButtons(false, lang);
 
@@ -128,6 +135,19 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
 
                     await database.query(sqlQuery, (isNewTask) ? [main_interaction.user.id, title, text, deadline, user, getCurrentProjectId(), main_interaction.member.guild.id, toDoState_Active, reminder] : [title, text, deadline, user, reminder, toDoId])
                         .then(async () => {
+                            createLog({
+                                type: (isNewTask) ? 0 : 1,
+                                data: {
+                                    title: (isNewTask) ? title : (old_title !== title) ? old_title + ' ➡️ ' + title : title,
+                                    text:  (isNewTask) ? text : (old_text !== text) ? old_text + ' ➡️ ' + text : text,
+                                    deadline:  (isNewTask) ? deadline : (old_deadline !== deadline) ? old_deadline + ' ➡️ ' + deadline : deadline,
+                                    reminder:  (isNewTask) ? reminder : (old_reminder !== reminder) ? old_reminder + ' ➡️ ' + reminder : reminder,
+                                    other_user:  (isNewTask) ? user : (old_user !== user)  ? old_user + ' ➡️ ' + user : user,
+                                    id: (isNewTask) ? undefined : toDoId
+                                },
+                                user: main_interaction.user,
+                                guild: main_interaction.guild
+                            })
                             await todo_interaction.channel.send({
                                 content: lang.todo.newtodo.success.saved
                             }).then(async msg => {
