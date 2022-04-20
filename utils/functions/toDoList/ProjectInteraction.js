@@ -1,8 +1,7 @@
 const {
     add_ProjectId,
     select_ProjectId,
-    delete_Project,
-    changeCurrentProjectId
+    delete_Project
 } = require("../../variables/variables");
 const {
     refreshProject_ToDo

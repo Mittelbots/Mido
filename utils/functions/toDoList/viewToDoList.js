@@ -43,7 +43,7 @@ module.exports.viewToDoList = async (projects, todo, main_interaction) => {
             }else {
                 pass = true;
             }
-            changeCurrentProjectId(cat.id);
+            changeCurrentProjectId(cat.id, main_interaction.user.id);
         }
     });
     if(!pass) return pass;

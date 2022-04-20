@@ -4,7 +4,7 @@ const {
     MessageActionRow
 } = require("discord.js");
 const {
-    toDoState_Active, increase_toDoAddCount, decrease_toDoAddCount, decrease_toDoInteractionCount, increase_toDoInteractionCount, getCurrentProjectId, changeCurrentProjectId
+    toDoState_Active, increase_toDoAddCount, decrease_toDoAddCount, decrease_toDoInteractionCount, getCurrentProjectId
 } = require("../../../variables/variables");
 const {
     delay
@@ -133,7 +133,7 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
                         sqlQuery = `UPDATE ${config.tables.mido_todo} SET title = ?, text = ?, deadline = ?, other_user = ?, reminder = ? WHERE id = ?`;
                     }
 
-                    await database.query(sqlQuery, (isNewTask) ? [main_interaction.user.id, title, text, deadline, user, getCurrentProjectId(), main_interaction.member.guild.id, toDoState_Active, reminder] : [title, text, deadline, user, reminder, toDoId])
+                    await database.query(sqlQuery, (isNewTask) ? [main_interaction.user.id, title, text, deadline, user, getCurrentProjectId(main_interaction.user.id), main_interaction.member.guild.id, toDoState_Active, reminder] : [title, text, deadline, user, reminder, toDoId])
                         .then(async () => {
                             createLog({
                                 type: (isNewTask) ? 0 : 1,

@@ -11,9 +11,9 @@ module.exports.editToDoList = async (projects, todo, main_interaction, isMain) =
 
     let buttons;
     if(isMain) {
-        buttons = await addButtons(main_interaction.message.guild.id);
+        buttons = await addButtons({main_interaction});
     }else {
-        buttons = await addOptionButtons(main_interaction.message.guild.id);
+        buttons = await addOptionButtons({main_interaction});
     }
     let message = await main_interaction.message.edit({
         embeds: [currentToDoList],
