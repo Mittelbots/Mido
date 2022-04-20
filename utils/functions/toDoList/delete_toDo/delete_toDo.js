@@ -7,6 +7,7 @@ const { editToDoList } = require("../editToDoList/editToDoList");
 
 const config = require("../../../assets/json/_config/config.json");
 const database = require("../../../../bot/db/db");
+const { createLog } = require("../../log/mido_log");
 
 module.exports = async ({main_interaction}) => {
     if (increase_toDoInteractionCount(main_interaction.user.id) > 1) {
@@ -52,7 +53,7 @@ module.exports = async ({main_interaction}) => {
                 del_todoMessage.delete();
             })
         } else {
-            const task = await database.query(`SELECT id FROM ${config.tables.mido_todo} WHERE id = ?`, [reply.content])
+            const task = await database.query(`SELECT * FROM ${config.tables.mido_todo} WHERE id = ?`, [reply.content])
                 .then(res => {
                     return res[0]
                 })
@@ -61,6 +62,21 @@ module.exports = async ({main_interaction}) => {
             if (task) {
                 return await database.query(`UPDATE ${config.tables.mido_todo} SET state = ? WHERE id = ?`, [toDoState_Deleted, reply.content])
                     .then(async () => {
+
+                        createLog({
+                            type: 2,
+                            data: {
+                                title: task.title,
+                                text: task.text,
+                                deadline: task.deadline,
+                                reminder: task.reminder,
+                                other_user: task.other_user,
+                                id: task.id,
+                            },
+                            user: main_interaction.user,
+                            guild: main_interaction.guild
+                        })
+
                         return reply.reply({
                             content: lang.success.deleted
                         }).then(async msg => {

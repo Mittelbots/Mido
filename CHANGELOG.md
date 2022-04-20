@@ -15,6 +15,17 @@
 
 # **MIDO CHANGELOG**
 
+## **BETA VERSION 0.8.0**
+
+### Added things:
+    - added log to bot
+    - - get notifications when a user create, update, delete a task or project.
+
+### Bug fixes:
+    - getToDo sql bug fixed where deleted tasks still are shown.
+    
+<br><br>
+
 ## **BETA VERSION 0.7.4**
 
 ### Added things:
