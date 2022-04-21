@@ -76,13 +76,11 @@ bot.once('ready', async function () {
         } catch (err) {}
     });
     getLinesOfCode((cb) => {
-        setTimeout(() => {
-            var codeLines = ` | Lines of Code: ${cb}` || '';
-            bot.user.setActivity({
-                name: activity.playing.name + ' v' + version + codeLines,
-                type: activity.playing.type
-            });
-        }, 10000);
+        var codeLines = ` | Lines of Code: ${cb}` || '';
+        bot.user.setActivity({
+            name: activity.playing.name + ' v' + version + codeLines,
+            type: activity.playing.type
+        });
     });
 
     console.info(`****Ready! Logged in as ${bot.user.tag}! I'm on ${bot.guilds.cache.size} Server****`, new Date());
