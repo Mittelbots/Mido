@@ -8,7 +8,7 @@
     "prod": "pm2 start shard.js --name Mido --max-memory-restart 500M && pm2 monit",
     "restart": "pm2 stop Mido && pm2 start shard.js --name Mido --max-memory-restart 500M && pm2 monit",
     "kill": "pm2 stop Mido && pm2 delete Mido",
-    "install": "mkdir _logs && npm i"
+    "mido_install": "mkdir _logs && npm i"
   },
   "repository": {
     "type": "git",
