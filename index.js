@@ -53,9 +53,6 @@ bot.commands = new Discord.Collection();
 deployCommands(bot);
 
 bot.on("messageCreate", message => {
-
-
-
     return messageCreate(message, bot);
 });
 
