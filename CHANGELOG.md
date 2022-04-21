@@ -15,6 +15,28 @@
 
 # **MIDO CHANGELOG**
 
+## **BETA VERSION 0.8.3**
+
+### Added things:
+    - added permissions system (view, edit delete, ...)
+
+### Bug fixes:
+    - /
+    
+<br><br>
+
+
+## **BETA VERSION 0.8.2**
+
+### Added things:
+    - added bot restart after crash
+    - changed sloc module & code
+
+### Bug fixes:
+    - fixed high security issue in dependencies
+    
+<br><br>
+
 ## **BETA VERSION 0.8.1**
 
 ### Added things:
