@@ -6,13 +6,11 @@ const config = require("../../../assets/json/_config/config.json");
 
 module.exports.buttonInteraction = async ({main_interaction, projects, todo}) => {
    
-
-    let currentSiteCount;
     
     //=========================================================
 
     if(main_interaction.customId.indexOf('optionsnext') !== -1) {
-        currentSiteCount = increase_currentSiteCount();
+        increase_currentSiteCount();
         await editToDoList(projects, todo, main_interaction, false);
         return;
     }
@@ -20,7 +18,7 @@ module.exports.buttonInteraction = async ({main_interaction, projects, todo}) =>
     //=========================================================
 
     if(main_interaction.customId.indexOf('optionsbackSite') !== -1) {
-        currentSiteCount = decrease_currentSiteCount();
+        decrease_currentSiteCount();
         await editToDoList(projects, todo, main_interaction, false);
         return;
     }
