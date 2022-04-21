@@ -1,16 +1,33 @@
 const { increase_toDoInteractionCount, decrease_toDoInteractionCount } = require("../../../variables/variables");
 const { delay } = require("../../delay/delay");
 const { getLang } = require("../../getData/getLang");
+const { hasPermissions } = require("../../hasPermissions/hasPermissions");
 const { manageToDoItem } = require("../manageToDoItem/manageToDoitem");
 
 
 module.exports = async ({main_interaction}) => {
 
+    const lang = require(`../../../assets/json/language/${await getLang(main_interaction.guild.id)}.json`);
+
+    const hasPerms = await hasPermissions({
+        user: main_interaction.member,
+        needed_permission: {
+            view_tasks: 1,
+            edit_tasks: 1,
+        }
+    });
+
+    if(!hasPerms) {
+        return main_interaction.message.reply(lang.errors.noperms)
+            .then(async msg => {
+                await delay(2000);
+                await msg.delete().catch(err => {});
+            })
+    }
+
     if (increase_toDoInteractionCount(main_interaction.user.id) > 1) {
         return;
     }
-
-    const lang = require(`../../../assets/json/language/${await getLang(main_interaction.message.guild.id)}.json`)
 
     const sentMessage = await main_interaction.message.channel.send({
         content: 'Welche Aufgabe willst Du ändern? (Tippe die ID ein)',

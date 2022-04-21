@@ -8,15 +8,33 @@ const { editToDoList } = require("../editToDoList/editToDoList");
 const config = require("../../../assets/json/_config/config.json");
 const database = require("../../../../bot/db/db");
 const { createLog } = require("../../log/mido_log");
+const { hasPermissions } = require("../../hasPermissions/hasPermissions");
 
 module.exports = async ({main_interaction}) => {
+
+    const lang = require(`../../../assets/json/language/${await getLang(main_interaction.guild.id)}.json`);
+
+    const hasPerms = await hasPermissions({
+        user: main_interaction.member,
+        needed_permission: {
+            view_tasks: 1,
+            edit_tasks: 1,
+        }
+    });
+
+    if(!hasPerms) {
+        return main_interaction.message.reply(lang.errors.noperms)
+            .then(async msg => {
+                await delay(2000);
+                await msg.delete().catch(err => {});
+            })
+    }
+
     if (increase_toDoInteractionCount(main_interaction.user.id) > 1) {
         return;
     }
 
     if(!getCurrentProjectId(main_interaction.user.id)) changeCurrentProjectId(main_interaction.customId.split('_')[1], main_interaction.user.id)
-
-    const lang = require(`../../../assets/json/language/${await getLang(main_interaction.message.guild.id)}.json`)
 
     var del_todoMessage = await main_interaction.channel.send({
         content: `${lang.todo.delete_todo.interaction.insert_id} ${lang.tips.cancel}`

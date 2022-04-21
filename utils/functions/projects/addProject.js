@@ -9,9 +9,25 @@ const randomColor = require('randomcolor');
 const config = require('../../assets/json/_config/config.json');
 const { decrease_toDoInteractionCount } = require("../../variables/variables");
 const { createLog } = require("../log/mido_log");
+const { hasPermissions } = require("../hasPermissions/hasPermissions");
 
 module.exports.addProject = async (main_interaction) => {
     const lang = require(`../../assets/json/language/${await getLang(main_interaction.message.guild.id)}.json`);
+
+    const hasPerms = await hasPermissions({
+        user: main_interaction.member,
+        needed_permission: {
+            add_projects: 1,
+        }
+    });
+
+    if(!hasPerms) {
+        return main_interaction.message.reply(lang.errors.noperms)
+            .then(async msg => {
+                await delay(2000);
+                await msg.delete().catch(err => {});
+            })
+    }
 
     var giveNameMessage = await main_interaction.message.channel.send('Bitte gebe einen Namen ein!');
 

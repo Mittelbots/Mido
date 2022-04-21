@@ -21,10 +21,26 @@ const {
 } = require("../toDoList/addSelectMenu");
 const config = require('../../assets/json/_config/config.json');
 const { createLog } = require("../log/mido_log");
+const { hasPermissions } = require("../hasPermissions/hasPermissions");
 
 module.exports.deleteProject = async (main_interaction, categories, isDelete) => {
 
     const lang = require(`../../assets/json/language/${await getLang(main_interaction.message.guild.id)}.json`);
+
+    const hasPerms = await hasPermissions({
+        user: main_interaction.member,
+        needed_permission: {
+            delete_projects: 1,
+        }
+    });
+
+    if(!hasPerms) {
+        return main_interaction.message.reply(lang.errors.noperms)
+            .then(async msg => {
+                await delay(2000);
+                await msg.delete().catch(err => {});
+            })
+    }
 
     if (!isDelete) {
         var newMessageEmbed = new MessageEmbed()
