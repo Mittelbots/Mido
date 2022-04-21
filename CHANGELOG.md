@@ -15,7 +15,7 @@
 
 # **MIDO CHANGELOG**
 
-## **BETA VERSION 0.8.3**
+## **BETA VERSION 0.9.0**
 
 ### Added things:
     - added permissions system (view, edit delete, ...)
