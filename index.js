@@ -25,10 +25,7 @@ const {
     watchToDoList
 } = require("./utils/functions/watchToDoList/watchToDoList");
 const {
-    getLang
-} = require("./utils/functions/getData/getLang");
-const {
-    exec
+    spawn
 } = require('child_process');
 
 //? JSON --
@@ -88,10 +85,10 @@ bot.once('ready', async function () {
     bot.on('debug', (debug) => {
         var Message = new MessageEmbed()
             .setDescription(`**Debug info: ** \n ${debug}`)
-			  .addField('tst', 'tet')
-    
+            .addField('tst', 'tet')
+
         try {
-            if(!config.debug) {
+            if (!config.debug) {
                 bot.guilds.cache.get(config.debug_info.debug_server).channels.cache.get(config.debug_info.debug_channel).send({
                     embeds: [Message]
                 });
@@ -107,13 +104,25 @@ bot.login(token.BOT_TOKEN);
 
 //! ERROR --
 process.on('unhandledRejection', err => {
-    exec('npm run restart');
     if (config.debug) console.log(err);
     else return errorhandler(err, null, null)
+
+    errorhandler(`---- BOT RESTARTED..., ${new Date()}`, null, null);
+    spawn(process.argv[1], process.argv.slice(2), {
+        detached: true,
+        stdio: ['ignore', null, null]
+    }).unref()
+    process.exit()
 });
 
 process.on('uncaughtException', err => {
-    exec('npm run restart');
     if (config.debug) console.log(err);
     else return errorhandler(err, null, null)
+
+    errorhandler(`---- BOT RESTARTED..., ${new Date()}`, null, null);
+    spawn(process.argv[1], process.argv.slice(2), {
+        detached: true,
+        stdio: ['ignore', null, null]
+    }).unref()
+    process.exit()
 });
