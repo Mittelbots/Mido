@@ -15,6 +15,18 @@
 
 # **MIDO CHANGELOG**
 
+## **BETA VERSION 0.9.1**
+
+### Added things:
+    - updated archiv command (beta)
+    - added slash command handler
+    - moved ping command to slash command
+
+### Bug fixes:
+    - /
+    
+<br><br>
+
 ## **BETA VERSION 0.9.0**
 
 ### Added things:
