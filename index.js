@@ -27,16 +27,17 @@ const {
 const {
     spawn
 } = require('child_process');
-
-//? JSON --
-const token = require('./_secret/token.json');
-const config = require('./utils/assets/json/_config/config.json');
-const activity = require('./utils/assets/json/activity/activity.json');
 const {
     MessageEmbed
 } = require("discord.js");
 const { createSlashCommands } = require("./utils/functions/createSlashCommands/createSlashCommands");
 const { handleSlashCommands } = require("./src/slash_commands");
+
+//? JSON --
+const token = require('./_secret/token.json');
+const secret_config = require('./_secret/secret_config/secret_config.json');
+const config = require('./utils/assets/json/_config/config.json');
+const activity = require('./utils/assets/json/activity/activity.json');
 const version = require('./package.json').version;
 
 const bot = new Discord.Client({
@@ -98,7 +99,7 @@ bot.once('ready', async function () {
             .addField('tst', 'tet')
 
         try {
-            if (!config.debug) {
+            if (!secret_config.debug) {
                 bot.guilds.cache.get(config.debug_info.debug_server).channels.cache.get(config.debug_info.debug_channel).send({
                     embeds: [Message]
                 });
@@ -107,14 +108,14 @@ bot.once('ready', async function () {
     });
 
 
-    if (!config.debug) log.info('------------BOT SUCCESSFULLY STARTED------------', new Date());
+    if (!secret_config.debug) log.info('------------BOT SUCCESSFULLY STARTED------------', new Date());
 });
 
 bot.login(token.BOT_TOKEN);
 
 //! ERROR --
 process.on('unhandledRejection', err => {
-    if (config.debug) console.log(err);
+    if (secret_config.debug) console.log(err);
     else return errorhandler(err, null, null)
 
     errorhandler(`---- BOT RESTARTED..., ${new Date()}`, null, null);
@@ -126,7 +127,7 @@ process.on('unhandledRejection', err => {
 });
 
 process.on('uncaughtException', err => {
-    if (config.debug) console.log(err);
+    if (secret_config.debug) console.log(err);
     else return errorhandler(err, null, null)
 
     errorhandler(`---- BOT RESTARTED..., ${new Date()}`, null, null);

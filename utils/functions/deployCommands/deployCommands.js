@@ -1,6 +1,6 @@
 const fs = require('fs');
 const { log } = require('../../../logs');
-const config = require('../../assets/json/_config/config.json');
+const secret_config = require('../../../_secret/secret_config/secret_config.json');
 
 async function deployCommands({bot}) {
     let modules = fs.readdirSync('./src/commands/');
@@ -11,7 +11,7 @@ async function deployCommands({bot}) {
                 if(err.path === './src/slash_commands/index.js') {return}
                 else {
                     log.warn('Missing folder!', err)
-                    if (config.debug) console.log(`Mission Folder!!`, err);
+                    if (secret_config.debug) console.log(`Mission Folder!!`, err);
                 }
             }
             files.forEach((file) => {

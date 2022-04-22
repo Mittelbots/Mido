@@ -1,6 +1,7 @@
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 const config = require('../../assets/json/_config/config.json');
+const secret_config = require('../../../_secret/secret_config/secret_config.json');
 const token = require('../../../_secret/token.json');
 const fs = require('node:fs');
 
@@ -10,7 +11,7 @@ module.exports.createSlashCommands = async () => {
     const modules = fs.readdirSync('./src/slash_commands').filter(file => file !== 'index.js');
     
     // Place your client and guild ids here
-    const clientId = config.application_id;
+    const clientId = secret_config.application_id;
     const guildId = config.debug_info.debug_server;
 
     for (const cmd_folder of modules) {
