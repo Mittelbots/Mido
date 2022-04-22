@@ -35,10 +35,12 @@ const activity = require('./utils/assets/json/activity/activity.json');
 const {
     MessageEmbed
 } = require("discord.js");
+const { createSlashCommands } = require("./utils/functions/createSlashCommands/createSlashCommands");
+const { handleSlashCommands } = require("./src/slash_commands");
 const version = require('./package.json').version;
 
 const bot = new Discord.Client({
-    intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS", "GUILD_VOICE_STATES"],
+    intents: 32767, // ALL INTENTS
     makeCache: Discord.Options.cacheWithLimits({
         MessageManager: 10,
         PresenceManager: 0,
@@ -50,7 +52,10 @@ const bot = new Discord.Client({
 bot.setMaxListeners(5);
 
 bot.commands = new Discord.Collection();
-deployCommands(bot);
+deployCommands({
+    bot: bot,
+});
+createSlashCommands();
 
 bot.on("messageCreate", message => {
     return messageCreate(message, bot);
@@ -61,13 +66,21 @@ bot.on('guildMemberAdd', async member => {
 });
 
 bot.once('ready', async function () {
+
     watchToDoList(bot);
 
     bot.on('interactionCreate', async (main_interaction) => {
-        await main_interaction.deferUpdate();
-        try {
-            ProjectInteraction(main_interaction)
-        } catch (err) {}
+        if(main_interaction.isCommand()) {
+            handleSlashCommands({
+                main_interaction: main_interaction,
+                bot: bot
+            })
+        }else {
+            await main_interaction.deferUpdate();
+            try {
+                ProjectInteraction(main_interaction)
+            } catch (err) {}
+        }
     });
     getLinesOfCode((cb) => {
         var codeLines = ` | Lines of Code: ${cb}` || '';

@@ -47,6 +47,7 @@
         "other_user": "Andere Nutzer",
         "no_other_user": "Niemand ausgewählt",
         "no_deadline": "Keine Deadline gesetzt",
+        "no_reminder": "Keinen Reminder gesetzt",
         "all_open_task_from": "Alle offenen Aufgaben von",
         "no_active_todo": "Dieser Nutzer hat keine aktiven Aufgaben!",
         "buttons": {
@@ -118,6 +119,9 @@
                 "last": "hat heute die Deadline! Noch nicht fertig? Dann mach dich mal an die Arbeit!"
             }
         }
+    },
+    "archiv": {
+        "title": "Aufgaben im Archiv / Gelöschte Aufgaben"
     },
     "logs": {
         "logs": "Logs von ",
