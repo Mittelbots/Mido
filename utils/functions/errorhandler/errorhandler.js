@@ -1,8 +1,8 @@
 const { log } = require("../../../logs");
-const config = require('../../assets/json/_config/config.json');
+const secret_config = require('../../../_secret/secret_config/secret_config.json');
 
 function errorhandler(err, message, channel) {
-    if(config.debug) console.log(err, new Date());
+    if(secret_config.debug) console.log(err, new Date());
     else log.fatal(err, new Date());
 
     if(channel && message) return channel.send(message); 
