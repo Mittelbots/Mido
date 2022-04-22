@@ -30,10 +30,17 @@ module.exports.createSlashCommands = async () => {
         try {
             console.log('🕐 Started refreshing application (/) commands.');
     
+            if(secret_config.debug) {
             await rest.put(
-                Routes.applicationGuildCommands(clientId, (secret_config.debug) ? guildId : null),
+                Routes.applicationGuildCommands(clientId, guildId),
                 { body: commands },
             );
+        }else {
+            await rest.put(
+                Routes.applicationCommands(clientId),
+                { body: commands },
+            );
+        }
 
     
             console.log('✅ Successfully reloaded application (/) commands.');
