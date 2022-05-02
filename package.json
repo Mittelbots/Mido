@@ -27,7 +27,7 @@
     "discord.js": "^13.6.0",
     "mysql": "^2.18.1",
     "node-sloc": "^0.2.1",
-    "nodemon": "^2.0.15",
+    "nodemon": "^2.0.16",
     "pm2": "^5.2.0",
     "randomcolor": "^0.6.2",
     "simple-node-logger": "^21.8.12",
