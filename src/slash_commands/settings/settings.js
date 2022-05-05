@@ -22,12 +22,14 @@ module.exports.run = async ({
                 main_interaction: main_interaction,
                 language: main_interaction.options.getString('language')
             })
+            break;
 
         case 'setlogchannel': 
             response = await setLogChannel({
                 main_interaction: main_interaction,
                 newLogChannel: main_interaction.options.getChannel('logchannel')
             })
+            break;
 
         case 'removelogchannel': 
             response = await setLogChannel({
@@ -38,6 +40,7 @@ module.exports.run = async ({
             if(!response.error) {
                 response.message = lang.settings.logChannel.removed
             }
+            break;
     }
 
 
