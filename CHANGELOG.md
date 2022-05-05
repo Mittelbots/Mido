@@ -15,6 +15,16 @@
 
 # **MIDO CHANGELOG**
 
+## **BETA VERSION 0.10.1**
+
+### Added things:
+    - /
+
+### Bug fixes:
+    - fixed bug from previous version
+    
+<br><br>
+
 ## **BETA VERSION 0.10.0**
 
 ### Added things:
