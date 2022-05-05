@@ -12,6 +12,7 @@
         "mido_projects": "mido_projects",
         "mido_todo": "mido_todo"
     },
+    "supported_languages": ["de"],
     "buttons": {
         "add_toDo": {
             "style": "SUCCESS",
