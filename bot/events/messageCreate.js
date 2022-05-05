@@ -3,8 +3,6 @@ const { errorhandler } = require('../../utils/functions/errorhandler/errorhandle
 const { getLang } = require('../../utils/functions/getData/getLang');
 const database = require('../db/db');
 
-var language;
-
 async function messageCreate(message, bot) {
     if (message.author.bot) return;
     if (message.channel.type === "dm") return;
@@ -32,8 +30,6 @@ async function messageCreate(message, bot) {
     if(!prefix) return;
 
     if (cmd.startsWith(prefix)) {
-
-        language = await getLang(message.guild.id);
         let commandfile = bot.commands.get(cmd.slice(prefix.length));
 
         if (commandfile) { //&& blacklist(0, message)
@@ -44,6 +40,5 @@ async function messageCreate(message, bot) {
 }
 
 module.exports = {
-    messageCreate,
-    language
+    messageCreate
 }

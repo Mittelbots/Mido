@@ -12,7 +12,8 @@
         "user_notfount": "Der Spieler wurde nicht gefunden",
         "only_numbers": "Es sind nur Nummern erlaubt! Versuche es erneut.",
         "int_unexpected_end": "Die Interaktion wurde beendet wegen:",
-        "task_already_ready": "Diese Aufgabe wurde schon als fertig makiert!"
+        "task_already_ready": "Diese Aufgabe wurde schon als fertig makiert!",
+        "fetching_config": "Es ist ein Fehler beim Laden der Konfiguration aufgetreten. Versuche es erneut oder kontaktiere einen Bot Supporter"
     },
     "tips": {
         "cancel": "(Tipp: \"cancel\" bricht diesen Vorgang ab!)",
@@ -134,5 +135,18 @@
         "project_name": "Projektname",
         "todo_name": "Aufgabenname",
         "todo_content": "Aufgabeninhalt"
+    },
+    "settings": {
+        "lang": {
+            "already_exists": "Diese Sprache existiert bereits!",
+            "updated": "Die Sprache wurde erfolgreich geändert!",
+            "error": "Irgendetwas ist schief gelaufen! Die Sprache konnte nicht geändert werden."
+        },
+        "logChannel": {
+            "already_exists": "Dieser Channel existiert bereits!",
+            "updated": "Der Log Channel wurde erfolgreich gesetzt!",
+            "error": "Irgendetwas ist schief gelaufen! Der Log Channel konnte nicht geändert werden.",
+            "removed": "Der Log Channel wurde erfolgreich entfernt!"
+        }
     }
 }

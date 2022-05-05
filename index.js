@@ -38,6 +38,7 @@ const token = require('./_secret/token.json');
 const secret_config = require('./_secret/secret_config/secret_config.json');
 const config = require('./utils/assets/json/_config/config.json');
 const activity = require('./utils/assets/json/activity/activity.json');
+const { guildCreate } = require("./bot/events/guildCreate");
 const version = require('./package.json').version;
 
 const bot = new Discord.Client({
@@ -57,6 +58,10 @@ deployCommands({
     bot: bot,
 });
 createSlashCommands();
+
+bot.on('guildCreate', async (guild) => {
+    return await guildCreate({guild: guild, bot: bot})
+});
 
 bot.on("messageCreate", message => {
     return messageCreate(message, bot);
