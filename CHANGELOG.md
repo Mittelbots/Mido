@@ -15,6 +15,18 @@
 
 # **MIDO CHANGELOG**
 
+## **BETA VERSION 0.10.0**
+
+### Added things:
+    - added slashcommands
+    - - settings [change guild language, set & remove guild log channel]
+    - bot dont react on webhooks anymore
+
+### Bug fixes:
+    - /
+    
+<br><br>
+
 ## **BETA VERSION 0.9.1**
 
 ### Added things:
