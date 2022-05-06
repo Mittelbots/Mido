@@ -1,22 +1,36 @@
 const {
     SlashCommandBuilder
 } = require('@discordjs/builders');
-const { getLang } = require('../../../utils/functions/getData/getLang');
+const {
+    getLang
+} = require('../../../utils/functions/getData/getLang');
 
 
-const { changeLang } = require('../../../utils/functions/settings/changelang');
-const { setLogChannel } = require('../../../utils/functions/settings/setLogChannel');
+const {
+    changeLang
+} = require('../../../utils/functions/settings/changelang');
+const {
+    setLogChannel
+} = require('../../../utils/functions/settings/setLogChannel');
+const { setPermissions } = require('../../../utils/functions/settings/setPermissions');
 
 module.exports.run = async ({
     main_interaction,
     bot
 }) => {
-
     const lang = require(`../../../utils/assets/json/language/${await getLang(main_interaction.guild.id)}.json`);
+
+    const hasPermission = await main_interaction.member.permissions.has('ADMINISTRATOR');
+    if(!hasPermission) {
+        return main_interaction.reply({
+            content: lang.errors.noperms,
+            ephemeral: true
+        })
+    }
 
     let response;
 
-    switch(main_interaction.options.getSubcommand()) {
+    switch (main_interaction.options.getSubcommand()) {
         case 'changelang':
             response = await changeLang({
                 main_interaction: main_interaction,
@@ -24,32 +38,47 @@ module.exports.run = async ({
             })
             break;
 
-        case 'setlogchannel': 
+        case 'setlogchannel':
             response = await setLogChannel({
                 main_interaction: main_interaction,
                 newLogChannel: main_interaction.options.getChannel('logchannel')
             })
             break;
 
-        case 'removelogchannel': 
+        case 'removelogchannel':
             response = await setLogChannel({
                 main_interaction: main_interaction,
                 newLogChannel: null
             })
 
-            if(!response.error) {
+            if (!response.error) {
                 response.message = lang.settings.logChannel.removed
             }
+            break;
+
+            case 'permissions':
+                response = await setPermissions({
+                    main_interaction: main_interaction,
+                    permissions: {
+                        role: main_interaction.options.getRole('role'),
+                        viewtask: main_interaction.options.getBoolean('viewtask'),
+                        addtask: main_interaction.options.getBoolean('addtask'),
+                        edittask: main_interaction.options.getBoolean('edittask'),
+                        addproject: main_interaction.options.getBoolean('addproject'),
+                        deleteProject: main_interaction.options.getBoolean('deleteproject'),
+                        viewarchive: main_interaction.options.getBoolean('viewarchive'),
+                    }
+                });
             break;
     }
 
 
-    if(response.error) {
+    if (response.error) {
         main_interaction.reply({
             content: response.message,
             ephemeral: true
         })
-    }else {
+    } else {
         main_interaction.reply({
             content: response.message,
             ephemeral: true
@@ -66,17 +95,17 @@ module.exports.data = new SlashCommandBuilder()
         .setDescription('change the language of the bot')
         .addStringOption(option =>
             option.setName('language')
-                .setDescription('Grab your preffered language')
-                .setRequired(true)
-                .addChoices({
-                    name: 'German',
-                    value: 'DE'
-                })
-                // .addChoices({
-                //     name: 'English',
-                //     value: 'EN'
-                // })
-            )
+            .setDescription('Grab your preffered language')
+            .setRequired(true)
+            .addChoices({
+                name: 'German',
+                value: 'DE'
+            })
+            // .addChoices({
+            //     name: 'English',
+            //     value: 'EN'
+            // })
+        )
     )
     .addSubcommand(subcommand =>
         subcommand
@@ -84,13 +113,53 @@ module.exports.data = new SlashCommandBuilder()
         .setDescription('Set your Log Channel.')
         .addChannelOption(option =>
             option.setName('logchannel')
-                .setDescription('Mention your preffered channel')
-                .setRequired(true)
-            )
+            .setDescription('Mention your preffered channel')
+            .setRequired(true)
+        )
     )
     .addSubcommand(subcommand =>
         subcommand
         .setName('removelogchannel')
         .setDescription('Remove your Log Channel.')
     )
-                
+    .addSubcommand(subcommand =>
+        subcommand
+        .setName('permissions')
+        .setDescription('Set all permissions as you want it.')
+        .addRoleOption(option =>
+            option.setName('role')
+            .setDescription('Mention a role you want to give permissions to')
+            .setRequired(true)
+        )
+
+        .addBooleanOption(option =>
+            option.setName('viewtask')
+            .setDescription('Does your role have the permission to view tasks?')
+            .setRequired(true)
+        )
+        .addBooleanOption(option =>
+            option.setName('addtask')
+            .setDescription('Does your role have the permission to add tasks?')
+            .setRequired(true)
+        )
+        .addBooleanOption(option =>
+            option.setName('edittask')
+            .setDescription('Does your role have the permission to edit tasks?')
+            .setRequired(true)
+        )
+        .addBooleanOption(option =>
+            option.setName('addproject')
+            .setDescription('Does your role have the permission to add Projects?')
+            .setRequired(true)
+        )
+        .addBooleanOption(option =>
+            option.setName('deleteproject')
+            .setDescription('Does your role have the permission to delete Projects?')
+            .setRequired(true)
+        )
+        .addBooleanOption(option =>
+            option.setName('viewarchiv')
+            .setDescription('Does your role have the permission to view the Archive')
+            .setRequired(false)
+        )
+    )
