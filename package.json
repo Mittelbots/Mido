@@ -1,6 +1,6 @@
 {
   "name": "mido",
-  "version": "0.10.1",
+  "version": "0.11.0",
   "description": "Mido. Manage your tasks like a pro",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
   "dependencies": {
     "@discordjs/builders": "^0.13.0",
     "@discordjs/rest": "^0.4.1",
-    "discord-api-types": "^0.32.0",
+    "discord-api-types": "^0.32.1",
     "discord.js": "^13.6.0",
     "mysql": "^2.18.1",
     "node-sloc": "^0.2.1",

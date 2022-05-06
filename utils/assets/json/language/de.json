@@ -147,6 +147,10 @@
             "updated": "Der Log Channel wurde erfolgreich gesetzt!",
             "error": "Irgendetwas ist schief gelaufen! Der Log Channel konnte nicht geändert werden.",
             "removed": "Der Log Channel wurde erfolgreich entfernt!"
+        },
+        "permissions": {
+            "error": "Irgendetwas ist schief gelaufen! Die Permission konnte nicht geändert werden.",
+            "updated": "Die Permissions wurden erfolgreich geändert!"
         }
     }
 }

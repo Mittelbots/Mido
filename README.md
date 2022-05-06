@@ -22,7 +22,7 @@ Just send one command and then navigate easily through everything with buttons a
 <br>
 
 ## <b>🧑‍💻 Development</b>
-This masterpice was created by @Mittelblut9 with Node.js & Discord.js version 3
+This masterpice was created by @Mittelblut9 with Node.js & Discord.js version 13
 
 <br>
 <br>
