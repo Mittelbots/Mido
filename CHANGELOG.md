@@ -15,6 +15,17 @@
 
 # **MIDO CHANGELOG**
 
+## **BETA VERSION 0.11.0**
+
+### Added things:
+    - added permission command to slash command collection
+    - added permission check to all slash commands
+
+### Bug fixes:
+    - /
+    
+<br><br>
+
 ## **BETA VERSION 0.10.1**
 
 ### Added things:
