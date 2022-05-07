@@ -32,13 +32,14 @@ const {
 } = require("discord.js");
 const { createSlashCommands } = require("./utils/functions/createSlashCommands/createSlashCommands");
 const { handleSlashCommands } = require("./src/slash_commands");
+const { guildCreate } = require("./bot/events/guildCreate");
+const { db_backup } = require("./bot/db/db_backup");
 
 //? JSON --
 const token = require('./_secret/token.json');
 const secret_config = require('./_secret/secret_config/secret_config.json');
 const config = require('./utils/assets/json/_config/config.json');
 const activity = require('./utils/assets/json/activity/activity.json');
-const { guildCreate } = require("./bot/events/guildCreate");
 const version = require('./package.json').version;
 
 const bot = new Discord.Client({
@@ -73,6 +74,12 @@ bot.on('guildMemberAdd', async member => {
 
 bot.once('ready', async function () {
 
+    if(secret_config.debug) {
+        setTimeout(() => {
+            db_backup();
+        }, 86400000); // 24h
+    }
+
     watchToDoList(bot);
 
     bot.on('interactionCreate', async (main_interaction) => {
@@ -101,7 +108,6 @@ bot.once('ready', async function () {
     bot.on('debug', (debug) => {
         var Message = new MessageEmbed()
             .setDescription(`**Debug info: ** \n ${debug}`)
-            .addField('tst', 'tet')
 
         try {
             if (!secret_config.debug) {
