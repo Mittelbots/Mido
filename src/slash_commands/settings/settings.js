@@ -66,7 +66,9 @@ module.exports.run = async ({
                         edittask: main_interaction.options.getBoolean('edittask'),
                         addproject: main_interaction.options.getBoolean('addproject'),
                         deleteProject: main_interaction.options.getBoolean('deleteproject'),
-                        viewarchive: main_interaction.options.getBoolean('viewarchive'),
+                        view_user_archive: main_interaction.options.getBoolean('viewuserarchiv'),
+                        view_guild_archive: main_interaction.options.getBoolean('viewguildarchiv'),
+                        edit_guild_archive: main_interaction.options.getBoolean('editguildarchiv'),
                     }
                 });
             break;
@@ -158,8 +160,18 @@ module.exports.data = new SlashCommandBuilder()
             .setRequired(true)
         )
         .addBooleanOption(option =>
-            option.setName('viewarchiv')
-            .setDescription('Does your role have the permission to view the Archive')
-            .setRequired(false)
+            option.setName('viewuserarchiv')
+            .setDescription('Does your role have the permission to view the personal Archive')
+            .setRequired(true)
+        )
+        .addBooleanOption(option =>
+            option.setName('viewguildarchiv')
+            .setDescription('Does your role have the permission to view the Guild Archive')
+            .setRequired(true)
+        )
+        .addBooleanOption(option =>
+            option.setName('editguildarchiv')
+            .setDescription('Does your role have the permission to edit the Guild Archive')
+            .setRequired(true)
         )
     )

@@ -19,12 +19,12 @@ module.exports.setPermissions = async ({main_interaction, permissions}) => {
     if(roleAlreadySet.error) {
         return roleAlreadySet;
     }else if(roleAlreadySet.hasRole) {
-        sqlQuery = `UPDATE ${config.tables.mido_perms} SET role_id = ?, view_tasks = ?, add_tasks = ?, edit_tasks = ?, add_projects = ?, delete_projects = ?, view_archiv = ? WHERE guild_id = ? AND role_id = ?`;
+        sqlQuery = `UPDATE ${config.tables.mido_perms} SET role_id = ?, view_tasks = ?, add_tasks = ?, edit_tasks = ?, add_projects = ?, delete_projects = ?, view_user_archive = ?, view_guild_archive = ?, edit_guild_archive = ? WHERE guild_id = ? AND role_id = ?`;
     }else {
-        sqlQuery = `INSERT INTO ${config.tables.mido_perms} (role_id, view_tasks, add_tasks, edit_tasks, add_projects, delete_projects, view_archiv, guild_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+        sqlQuery = `INSERT INTO ${config.tables.mido_perms} (role_id, view_tasks, add_tasks, edit_tasks, add_projects, delete_projects, view_user_archive, view_guild_archive, edit_guild_archive, guild_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
     }
 
-    return await database.query(sqlQuery, [roleId, permissions.viewtask, permissions.addtask, permissions.edittask, permissions.addproject, permissions.deleteProject ,permissions.viewarchiv || 0, main_interaction.guild.id, roleId])
+    return await database.query(sqlQuery, [roleId, permissions.viewtask, permissions.addtask, permissions.edittask, permissions.addproject, permissions.deleteProject, permissions.view_user_archive, permissions.view_guild_archive, permissions.edit_guild_archive , main_interaction.guild.id, roleId])
         .then(() => {
             return {
                 error: false,
