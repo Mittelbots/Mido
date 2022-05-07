@@ -15,6 +15,16 @@
 
 # **MIDO CHANGELOG**
 
+## **BETA VERSION 0.12.0**
+
+### Added things:
+    - added archive slash command to slash command collection
+
+### Bug fixes:
+    - /
+    
+<br><br>
+
 ## **BETA VERSION 0.11.0**
 
 ### Added things:
