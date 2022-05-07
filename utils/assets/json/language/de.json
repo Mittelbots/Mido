@@ -122,7 +122,9 @@
         }
     },
     "archiv": {
-        "title": "Aufgaben im Archiv / Gelöschte Aufgaben"
+        "title": "Aufgaben im Archiv",
+        "personal": "User Archiv",
+        "guild": "Guild Archiv"
     },
     "logs": {
         "logs": "Logs von ",

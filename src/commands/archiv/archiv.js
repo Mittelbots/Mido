@@ -21,36 +21,7 @@ module.exports.run = async (bot, message, args) => {
         return message.reply(lang.errors.noperms);
     }
 
-	const archive = await getArchive({
-		channel: message.channel
-	});
 	
-	if(!archive) return message.reply({
-		content: 'Keine Aufgaben im Archiv'	
-	}).then(async msg => {
-		await delay(3000);
-		msg.delete();
-	})
-
-
-	
-	const archiveEmbed = new MessageEmbed()
-		.setTitle(lang.archiv.title)
-		.setColor(randomColor())
-		
-	archive.map(task => {
-		archiveEmbed.addField(`${task.title} ||ID: ${task.id}||`, `
-			${'\n '+task.text || lang.todo.no_text}
-			\n ${lang.todo.deadline}: ${task.deadline || '**'+lang.todo.no_deadline+'**'}
-			${lang.todo.reminder}: ${task.reminder ||  '**'+lang.todo.no_reminder+'**'}
-			${lang.todo.other_user}: ${task.reminder ||  '**'+lang.todo.no_other_user+'**'}
-			~~**------------------------------**~~
-		`);
-	});
-	
-	return await message.reply({
-		embeds: [archiveEmbed]
-	});
 
 	
 }
