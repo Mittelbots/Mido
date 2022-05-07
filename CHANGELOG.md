@@ -15,6 +15,16 @@
 
 # **MIDO CHANGELOG**
 
+## **BETA VERSION 0.12.1**
+
+### Added things:
+    - added missing permissions to the permission slash command
+
+### Bug fixes:
+    - /
+    
+<br><br>
+
 ## **BETA VERSION 0.12.0**
 
 ### Added things:
