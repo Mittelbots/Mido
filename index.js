@@ -74,7 +74,7 @@ bot.on('guildMemberAdd', async member => {
 
 bot.once('ready', async function () {
 
-    if(secret_config.debug) {
+    if(!secret_config.debug) {
         db_backup();
         setTimeout(() => {
             db_backup();
