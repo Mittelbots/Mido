@@ -5,6 +5,10 @@
         "password": "",
         "database": ""
     },
+    "backup": {
+        "user": "",
+        "password": ""
+    },
     "tables": {
         "mido_config": {
             "id": {
