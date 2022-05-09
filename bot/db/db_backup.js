@@ -3,14 +3,14 @@ const exec = require('child_process').exec;
 
 
 module.exports.db_backup = () => {
-  exec(` mysqldump -u ${dbconfig.backup.user} -p '${dbconfig.backup.password}' ${dbconfig.connection.database} > mido-db-backup/${new Date().getDay()+'_'+new Date().getMonth()+'_'+new Date().getFullYear()}.backup.sql`, (error, stdout, stderr) => {
+  exec(` mysqldump -u ${dbconfig.backup.user} --password='${dbconfig.backup.password}' ${dbconfig.connection.database} --no-tablespaces > mido-db-backup/${new Date().getDay()+'_'+new Date().getMonth()+'_'+new Date().getFullYear()}.backup.sql`, (error, stdout, stderr) => {
     console.log(stdout);
     console.log(stderr);
     if (error !== null) {
         console.log(`Mysql exec error: ${error}`);
     }
   });
-  exec(` cd mido-db-backup && git add . && git commit -m "mido-db-backup" && git push`, (error, stdout, stderr) => {
+  exec(` cd ${dbconfig.backup.backup_repo} && git pull && git add . && git commit -m "${dbconfig.backup.backup_repo}" && git push`, (error, stdout, stderr) => {
     console.log(stdout);
     console.log(stderr);
     if (error !== null) {
