@@ -98,17 +98,6 @@ module.exports.getCurrentSiteCount = (user_id) => {
 }
 
 //==========================================================
-//? TO-DO LIST COUNT
-let todoListInteractionCount = 0;
-
-module.exports.increase_todoListInteractionCount = () => {
-    return todoListInteractionCount = todoListInteractionCount + 1;
-}
-
-module.exports.decrease_todoListInteractionCount = () => {
-    return todoListInteractionCount = 0;
-}
-
 
 //? TO-DO INTERACTION COUNT
 let toDoInteractionCount = [];
