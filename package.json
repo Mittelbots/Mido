@@ -1,6 +1,6 @@
 {
   "name": "mido",
-  "version": "0.12.0",
+  "version": "0.12.1",
   "description": "Mido. Manage your tasks like a pro",
   "main": "index.js",
   "scripts": {
