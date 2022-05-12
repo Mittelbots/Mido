@@ -18,6 +18,8 @@
 ## **BETA VERSION 0.12.1**
 
 ### Added things:
+    - added resetCound slash command to reset own interaction count
+    - removed archive command from normal command folder
     - added missing permissions to the permission slash command
 
 ### Bug fixes:

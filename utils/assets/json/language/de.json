@@ -154,5 +154,8 @@
             "error": "Irgendetwas ist schief gelaufen! Die Permission konnte nicht geändert werden.",
             "updated": "Die Permissions wurden erfolgreich geändert!"
         }
+    },
+    "resetCount": {
+        "success": "Dein Count wurde erfolgreich zurückgesetzt!"
     }
 }
