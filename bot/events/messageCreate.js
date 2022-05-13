@@ -1,12 +1,14 @@
 const config = require('../../utils/assets/json/_config/config.json');
 const { errorhandler } = require('../../utils/functions/errorhandler/errorhandler');
 const { getLang } = require('../../utils/functions/getData/getLang');
+const { isUserPremium } = require('../../utils/functions/premium/premium');
 const database = require('../db/db');
 
 async function messageCreate(message, bot) {
     if (message.author.bot) return;
     if (message.channel.type === "dm") return;
     if (message.author.system) return;
+
 
     var messageArray = message.content.split(" ");
     
@@ -33,7 +35,16 @@ async function messageCreate(message, bot) {
         let commandfile = bot.commands.get(cmd.slice(prefix.length));
 
         if (commandfile) { //&& blacklist(0, message)
-            return commandfile.run(bot, message, args);
+            
+            const isPremium = isUserPremium({
+                user_id: message.author.id
+            });
+
+            if(isPremium.error) return message.reply({
+                content: isPremium.message
+            });
+
+            return commandfile.run(bot, message, args, isPremium.premium, isPremium.platin);
         } else return;
 
     }

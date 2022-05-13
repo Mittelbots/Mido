@@ -10,7 +10,8 @@
         "mido_config": "mido_config",
         "mido_perms": "mido_perms",
         "mido_projects": "mido_projects",
-        "mido_todo": "mido_todo"
+        "mido_todo": "mido_todo",
+        "mido_premium": "mido_premium"
     },
     "supported_languages": ["de"],
     "buttons": {

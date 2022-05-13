@@ -157,5 +157,12 @@
     },
     "resetCount": {
         "success": "Dein Count wurde erfolgreich zurückgesetzt!"
+    },
+    "premium": {
+        "addPremium": {
+            "no_bot": "Du kannst keine Bots hinzufügen!",
+            "succes": "Erfolgreich hinzugefügt!",
+            "error": "Irgendetwas ist schief gelaufen! Der User konnte nicht als Premium hinzugefügt werden."
+        }
     }
 }

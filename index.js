@@ -34,6 +34,7 @@ const { createSlashCommands } = require("./utils/functions/createSlashCommands/c
 const { handleSlashCommands } = require("./src/slash_commands");
 const { guildCreate } = require("./bot/events/guildCreate");
 const { db_backup } = require("./bot/db/db_backup");
+const { isUserPremium } = require("./utils/functions/premium/premium");
 
 //? JSON --
 const token = require('./_secret/token.json');
@@ -85,9 +86,18 @@ bot.once('ready', async function () {
 
     bot.on('interactionCreate', async (main_interaction) => {
         if(main_interaction.isCommand()) {
+            const isPremium = await isUserPremium({user_id: main_interaction.user_id});
+
+            if(isPremium.error) return main_interaction.reply({
+                content: isPremium.message,
+                ephemeral: true
+            });
+
             handleSlashCommands({
                 main_interaction: main_interaction,
-                bot: bot
+                bot: bot,
+                isPremium: isPremium.premium,
+                isPlatin: isPremium.platin
             })
         }else {
             await main_interaction.deferUpdate();
