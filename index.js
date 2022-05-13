@@ -41,6 +41,7 @@ const token = require('./_secret/token.json');
 const secret_config = require('./_secret/secret_config/secret_config.json');
 const config = require('./utils/assets/json/_config/config.json');
 const activity = require('./utils/assets/json/activity/activity.json');
+const { startUpCache } = require("./utils/functions/cache/startUpCache");
 const version = require('./package.json').version;
 
 const bot = new Discord.Client({
@@ -74,6 +75,8 @@ bot.on('guildMemberAdd', async member => {
 });
 
 bot.once('ready', async function () {
+
+    await startUpCache();
 
     if(!secret_config.debug) {
         db_backup();

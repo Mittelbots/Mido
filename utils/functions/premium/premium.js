@@ -102,3 +102,15 @@ module.exports.removeUserPremium = async ({user_id}) => {
             };
         })
 }
+
+module.exports.getAllPremium = async () => {
+    return await database.query(`SELECT * FROM ${config.tables.mido_premium}`)
+        .then(res => {
+            if(res.length === 0) return false;
+            return res;
+        })
+        .catch(err => {
+            console.log(err);
+            return false;
+        });
+}
