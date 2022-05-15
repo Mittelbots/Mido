@@ -13,7 +13,8 @@
         "only_numbers": "Es sind nur Nummern erlaubt! Versuche es erneut.",
         "int_unexpected_end": "Die Interaktion wurde beendet wegen:",
         "task_already_ready": "Diese Aufgabe wurde schon als fertig makiert!",
-        "fetching_config": "Es ist ein Fehler beim Laden der Konfiguration aufgetreten. Versuche es erneut oder kontaktiere einen Bot Supporter"
+        "fetching_config": "Es ist ein Fehler beim Laden der Konfiguration aufgetreten. Versuche es erneut oder kontaktiere einen Bot Supporter",
+        "ignoreModeOn": "Der Bot läuft gerade im IgnoreMode. Währenddessen kannst du keine Interaktion mit dem Bot starten."
     },
     "tips": {
         "cancel": "(Tipp: \"cancel\" bricht diesen Vorgang ab!)",

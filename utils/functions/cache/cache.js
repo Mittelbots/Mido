@@ -1,13 +1,14 @@
 module.exports.premium = new Set();
 module.exports.permissions = new Set();
 module.exports.config = new Set();
+module.exports.global = new Set();
 
 /**
  * 
  * @param {Object} values - Object containing the values to be inserted
  * @returns {Boolean}
  */
-module.exports.addToCache = ({value}) => {
+module.exports.addToCache = async ({value}) => {
     if(!value) return false;
   
     this[value.name].add({
@@ -15,30 +16,32 @@ module.exports.addToCache = ({value}) => {
     });
 }
 
-module.exports.getFromCache = ({cacheName, param_id}) => {
+module.exports.getFromCache = async ({cacheName, param_id}) => {
     if(!cacheName || !param_id) return false;
     
-    let response;
+    let response = [];
     this[cacheName].forEach(cacheValue => {
         if(cacheValue.id === param_id) {
-            return response = cacheValue;
+            response.push(cacheValue)
         }
     })
-    return response;
+
+    return (response.length > 0) ? response : false;
 }
 
 
-module.exports.updateCache = ({cacheName, param_id, value}) => {
-    if(!cacheName || !param_id || !value) return false;
-
+module.exports.updateCache = async ({cacheName, param_id, updateVal}) => {
+    if(!cacheName || !param_id || !updateVal) return false;
     this[cacheName].forEach(cacheValue => {
         if(cacheValue.id === param_id) {
-            cacheValue = value;
+            for (const [index, [key, value]] of Object.entries(Object.entries(updateVal))) {
+                cacheValue[key] = value;
+            }
         }
     });
 }
 
-module.exports.deleteFromCache = ({cacheName, param_id}) => {
+module.exports.deleteFromCache = async ({cacheName, param_id}) => {
     if(!cacheName || !param_id) return false;
 
     this[cacheName].forEach(cacheValue => {

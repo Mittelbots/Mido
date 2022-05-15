@@ -119,7 +119,7 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
                         content: lang.todo.newtodo.errors.title_missing
                     }).then(async msg => {
                         await delay(3000);
-                        msg.delete();
+                        msg.delete().catch(err => {});
                     });
                     decrease_toDoAddCount(main_interaction.user.id);
                 }
@@ -152,8 +152,8 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
                                 content: lang.todo.newtodo.success.saved
                             }).then(async msg => {
                                 await delay(3000);
-                                msg.delete();
-                                manageTask.delete();
+                                msg.delete().catch(err => {});
+                                manageTask.delete().catch(err => {});
                                 decrease_toDoInteractionCount(main_interaction.user.id);
                                 decrease_toDoAddCount(main_interaction.user.id)
 
@@ -172,7 +172,7 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
                                 content: lang.todo.newtodo.errors.save_error
                             }).then(async msg => {
                                 await delay(3000);
-                                msg.delete();
+                                msg.delete().catch(err => {});
                             });
                             decrease_toDoAddCount(main_interaction.user.id);
                         });
@@ -191,7 +191,7 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
             case 'cancel':
                 decrease_toDoInteractionCount(main_interaction.user.id);
                 decrease_toDoAddCount(main_interaction.user.id);
-                await todo_interaction.message.delete();
+                await todo_interaction.message.delete().catch(err => {});
                 newToDocollector = null;
                 todo_interaction = null;
                 break;
@@ -222,8 +222,8 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
                 case 'add_title':
                     if (reply.content.toLowerCase() === 'cancel' || reply.content.toLowerCase() === 'none') {
                         decrease_toDoAddCount(main_interaction.user.id);
-                        reply.delete();
-                        todo_interaction_reply.delete();
+                        reply.delete().catch(err => {});
+                        todo_interaction_reply.delete().catch(err => {});
                         return;
                     }
 
@@ -239,20 +239,20 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
                                 content: lang.todo.newtodo.errors.title_tolong
                             }).then(async msg => {
                                 await delay(4000);
-                                msg.delete();
+                                msg.delete().catch(err => {});
                             })
                         }
                     }
-                    reply.delete();
-                    todo_interaction_reply.delete();
+                    reply.delete().catch(err => {});
+                    todo_interaction_reply.delete().catch(err => {});
                     decrease_toDoAddCount(main_interaction.user.id);
                     break;
 
                 case 'add_text':
                     if (reply.content.toLowerCase() === 'cancel' || reply.content.toLowerCase() === 'none') {
                         decrease_toDoAddCount(main_interaction.user.id);
-                        reply.delete();
-                        todo_interaction_reply.delete();
+                        reply.delete().catch(err => {});
+                        todo_interaction_reply.delete().catch(err => {});
                         return;
                     }
 
@@ -267,15 +267,15 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
                                 content: lang.todo.newtodo.errors.text_tolong
                             }).then(async msg => {
                                 await delay(4000);
-                                msg.delete();
-                                reply.delete();
-                                todo_interaction_reply.delete();
+                                msg.delete().catch(err => {});
+                                reply.delete().catch(err => {});
+                                todo_interaction_reply.delete().catch(err => {});
                                 decrease_toDoAddCount(main_interaction.user.id);
                             })
                         }
                     }
-                    reply.delete();
-                    todo_interaction_reply.delete();
+                    reply.delete().catch(err => {});
+                    todo_interaction_reply.delete().catch(err => {});
                     decrease_toDoAddCount(main_interaction.user.id);
                     break;
 
@@ -283,8 +283,8 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
 
                     if (reply.content.toLowerCase() === 'cancel' || reply.content.toLowerCase() === 'none') {
                         decrease_toDoAddCount(main_interaction.user.id);
-                        reply.delete();
-                        todo_interaction_reply.delete();
+                        reply.delete().catch(err => {});
+                        todo_interaction_reply.delete().catch(err => {});
                         return;
                     }
 
@@ -304,8 +304,8 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
                         deadline = `${day}.${month}.${year}`;
                         dateFormatDC = ` <t:${Math.floor(date/1000)}:R>`
 
-                        reply.delete();
-                        todo_interaction_reply.delete();
+                        reply.delete().catch(err => {});
+                        todo_interaction_reply.delete().catch(err => {});
 
                         const reminderMessage = await reply.channel.send(lang.todo.newtodo.interaction.add_reminder)
                         const collector = main_interaction.message.channel.createMessageCollector({
@@ -319,17 +319,17 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
 
                             if (reminder.toLowerCase() === 'none') {
                                 decrease_toDoAddCount(main_interaction.user.id)
-                                reply.delete();
-                                return reminderMessage.delete();
+                                reply.delete().catch(err => {});
+                                return reminderMessage.delete().catch(err => {});
                             }
                             try {
                                 reminder = reminder.split(' ');
                             } catch (err) {
                                 return reply.reply(lang.todo.newtodo.errors.no_space_in_reminder).then(async msg => {
                                     await delay(3000);
-                                    reply.delete();
-                                    msg.delete();
-                                    reminderMessage.delete();
+                                    reply.delete().catch(err => {});
+                                    msg.delete().catch(err => {});
+                                    reminderMessage.delete().catch(err => {});
                                     decrease_toDoAddCount(main_interaction.user.id);
                                 })
                             }
@@ -340,9 +340,9 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
                             } catch (err) {
                                 return reply.reply(lang.todo.newtodo.errors.no_point_comma_in_reminder).then(async msg => {
                                     await delay(3000);
-                                    reply.delete();
-                                    msg.delete();
-                                    reminderMessage.delete();
+                                    reply.delete().catch(err => {});
+                                    msg.delete().catch(err => {});
+                                    reminderMessage.delete().catch(err => {});
                                     decrease_toDoAddCount(main_interaction.user.id);
                                 })
                             }
@@ -358,9 +358,9 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
                                 return reply.reply(lang.todo.newtodo.errors.reminder_wrong_date_format).then(async msg => {
                                     await delay(3000);
                                     decrease_toDoAddCount(main_interaction.user.id);
-                                    reply.delete();
-                                    reminderMessage.delete();
-                                    msg.delete();
+                                    reply.delete().catch(err => {});
+                                    reminderMessage.delete().catch(err => {});
+                                    msg.delete().catch(err => {});
                                 })
                             }
 
@@ -378,9 +378,9 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
                             content: lang.todo.newtodo.errors.reminder_wrong_date_format
                         }).then(async msg => {
                             await delay(3000);
-                            msg.delete();
-                            reply.delete();
-                            todo_interaction_reply.delete();
+                            msg.delete().catch(err => {});
+                            reply.delete().catch(err => {});
+                            todo_interaction_reply.delete().catch(err => {});
                             decrease_toDoAddCount(main_interaction.user.id);
                         })
                     }
@@ -390,8 +390,8 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
                 case 'add_other':
                     if (reply.content.toLowerCase() === 'cancel' || reply.content.toLowerCase() === 'none') {
                         decrease_toDoAddCount(main_interaction.user.id)
-                        reply.delete();
-                        todo_interaction_reply.delete();
+                        reply.delete().catch(err => {});
+                        todo_interaction_reply.delete().catch(err => {});
                         return;
                     }
 
@@ -408,7 +408,7 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
                                 content: lang.errors.user_notfound
                             }).then(async msg => {
                                 await delay(3000);
-                                msg.delete();
+                                msg.delete().catch(err => {});
                                 decrease_toDoAddCount(main_interaction.user.id);
                             })
                             i = other_user.length;
@@ -420,8 +420,8 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
                     manageTask.edit({
                         embeds: [newToDoEmbed(title, text, deadline + dateFormatDC, user)]
                     }).then(() => {
-                        reply.delete();
-                        todo_interaction_reply.delete();
+                        reply.delete().catch(err => {});
+                        todo_interaction_reply.delete().catch(err => {});
                         decrease_toDoAddCount(main_interaction.user.id);
                     })
                     break;

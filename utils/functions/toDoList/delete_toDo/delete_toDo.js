@@ -26,7 +26,7 @@ module.exports = async ({main_interaction}) => {
         return main_interaction.message.reply(lang.errors.noperms)
             .then(async msg => {
                 await delay(2000);
-                await msg.delete().catch(err => {});
+                await msg.delete().catch(err => {})
             })
     }
 
@@ -53,9 +53,9 @@ module.exports = async ({main_interaction}) => {
             }).then(async msg => {
                 await delay(3000);
                 decrease_toDoInteractionCount(main_interaction.user.id);
-                reply.delete();
-                del_todoMessage.delete();
-                msg.delete();
+                reply.delete().catch(err => {})
+                del_todoMessage.delete().catch(err => {})
+                msg.delete().catch(err => {})
             });
 
             return;
@@ -66,9 +66,9 @@ module.exports = async ({main_interaction}) => {
             }).then(async msg => {
                 await delay(3000);
                 decrease_toDoInteractionCount(main_interaction.user.id);
-                reply.delete();
-                msg.delete();
-                del_todoMessage.delete();
+                reply.delete().catch(err => {})
+                msg.delete().catch(err => {})
+                del_todoMessage.delete().catch(err => {})
             })
         } else {
             const task = await database.query(`SELECT * FROM ${config.tables.mido_todo} WHERE id = ?`, [reply.content])
@@ -107,9 +107,9 @@ module.exports = async ({main_interaction}) => {
                             await editToDoList(projects, todo, main_interaction, true);
 
                             decrease_toDoInteractionCount(main_interaction.user.id);
-                            reply.delete();
-                            msg.delete();
-                            del_todoMessage.delete();
+                            reply.delete().catch(err => {})
+                            msg.delete().catch(err => {})
+                            del_todoMessage.delete().catch(err => {})
                         })
                     })
                     .catch(err => {
@@ -119,9 +119,9 @@ module.exports = async ({main_interaction}) => {
                         }).then(async msg => {
                             await delay(3000);
                             decrease_toDoInteractionCount(main_interaction.user.id);
-                            reply.delete();
-                            msg.delete();
-                            del_todoMessage.delete();
+                            reply.delete().catch(err => {})
+                            msg.delete().catch(err => {})
+                            del_todoMessage.delete().catch(err => {})
                         })
                     })
             } else {
@@ -130,9 +130,9 @@ module.exports = async ({main_interaction}) => {
                 }).then(async msg => {
                     await delay(3000);
                     decrease_toDoInteractionCount(main_interaction.user.id);
-                    reply.delete();
-                    msg.delete();
-                    del_todoMessage.delete();
+                    reply.delete().catch(err => {});
+                    msg.delete().catch(err => {});
+                    del_todoMessage.delete().catch(err => {});
                 })
             }
         }

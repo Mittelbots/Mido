@@ -38,7 +38,7 @@ module.exports.deleteProject = async (main_interaction, categories, isDelete) =>
         return main_interaction.message.reply(lang.errors.noperms)
             .then(async msg => {
                 await delay(2000);
-                await msg.delete().catch(err => {});
+                await msg.delete().catch(err => {})
             })
     }
 
@@ -89,8 +89,8 @@ module.exports.deleteProject = async (main_interaction, categories, isDelete) =>
             if (confirm_interaction.values[0] === 'no') {
                 confirm_interaction.message.channel.send(`${lang.errors.canceled}`).then(async msg => {
                     await delay(2000);
-                    msg.delete();
-                    confirm_interaction.message.delete();
+                    msg.delete().catch(err => {})
+                    confirm_interaction.message.delete().catch(err => {})
 
                     var newMessageEmbed = new MessageEmbed()
                         .setTitle(lang.projects.choose_new_project)
@@ -125,8 +125,8 @@ module.exports.deleteProject = async (main_interaction, categories, isDelete) =>
                             content: `${lang.success.deleted}!`
                         }).then(async msg => {
                             await delay(3000);
-                            msg.delete();
-                            confirm_interaction.message.delete();
+                            msg.delete().catch(err => {})
+                            confirm_interaction.message.delete().catch(err => {})
                         });
         
                         const refresh = await refreshProject_ToDo(main_interaction);

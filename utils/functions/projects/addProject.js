@@ -25,7 +25,7 @@ module.exports.addProject = async (main_interaction) => {
         return main_interaction.message.reply(lang.errors.noperms)
             .then(async msg => {
                 await delay(2000);
-                await msg.delete().catch(err => {});
+                await msg.delete().catch(err => {})
             })
     }
 
@@ -43,10 +43,10 @@ module.exports.addProject = async (main_interaction) => {
                 content: `${lang.errors.canceled}!`
             }).then(async msg => {
                 await delay(1500);
-                msg.delete();
+                msg.delete().catch(err => {})
                 decrease_toDoInteractionCount(main_interaction.user.id);
-                reply.delete();
-                giveNameMessage.delete();
+                reply.delete().catch(err => {})
+                giveNameMessage.delete().catch(err => {})
                 giveNameMessage = null;
             });
             return; 
@@ -79,9 +79,9 @@ module.exports.addProject = async (main_interaction) => {
                 }).then(async msg => {
                     await delay(2000);
                     messageCollector = null;
-                    reply.delete().catch(err => null)
-                    msg.delete().catch(err => null)
-                    giveNameMessage.delete().catch(err => null)
+                    reply.delete().catch(err => {}).catch(err => null)
+                    msg.delete().catch(err => {}).catch(err => null)
+                    giveNameMessage.delete().catch(err => {}).catch(err => null)
                 })
             })
             .catch(err => {
@@ -90,7 +90,7 @@ module.exports.addProject = async (main_interaction) => {
     });
 
     messageCollector.on('end', async (collected, reason) => {
-        giveNameMessage.delete().catch(err => null)
+        giveNameMessage.delete().catch(err => {}).catch(err => null)
         if(reason === 'time') {
             try {
                 main_interaction.message.edit({
@@ -101,7 +101,7 @@ module.exports.addProject = async (main_interaction) => {
                     content: `**${lang.errors.time_limit_reached}**`
                 }).then(async msg => {
                     await delay(3000);
-                    msg.delete();
+                    msg.delete().catch(err => {})
                 });
 
 
@@ -109,17 +109,19 @@ module.exports.addProject = async (main_interaction) => {
                 return errorhandler(err);
             }
         }else {
-            
+
             main_interaction.message.edit({
                 components: [main_interaction.message.components[0]]
             });
 
-            main_interaction.message.channel.send({
-                content: `**${lang.errors.int_unexpected_end} ${reason}**`
-            }).then(async msg => {
-                await delay(3000);
-                msg.delete();
-            });
+            if(reason !== 'limit') {
+                main_interaction.message.channel.send({
+                    content: `**${lang.errors.int_unexpected_end} ${reason}**`
+                }).then(async msg => {
+                    await delay(3000);
+                    msg.delete().catch(err => {})
+                });
+            }
         }
     })
 }

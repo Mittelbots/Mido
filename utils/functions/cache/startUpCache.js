@@ -19,21 +19,23 @@ module.exports.startUpCache = async () => {
     console.log('🕐Adding to cache...');
 
     for(let i in guildConfigs) {
-        addToCache({
+        await addToCache({
             value: {
                 name: "config",
                 id: guildConfigs[i].guild_id,
                 prefix: guildConfigs[i].prefix,
+                lang: guildConfigs[i].lang,
                 log_channel: guildConfigs[i].log_channel,
             }
         });
     }
 
     for(let i in guildPermissions) {
-        addToCache({
+        await addToCache({
             value: {
                 name: "permissions",
                 id: guildPermissions[i].guild_id,
+                role_id: guildPermissions[i].role_id,
                 view_tasks: guildPermissions[i].view_tasks,
                 add_tasks: guildPermissions[i].add_tasks,
                 edit_tasks: guildPermissions[i].edit_tasks,
@@ -47,7 +49,7 @@ module.exports.startUpCache = async () => {
     }
 
     for(let i in guildPremium) {
-        addToCache({
+        await addToCache({
             value: {
                 name: "premium",
                 id: guildPremium[i].user_id,

@@ -7,14 +7,14 @@ const { getLang } = require("./getLang");
 module.exports.getConfig = async ({guild_id}) => {
     const lang = require(`../../assets/json/language/${await getLang(guild_id)}.json`);
 
-    const configCache = getFromCache({
+    const configCache = await getFromCache({
         cacheName: "config",
         param_id: guild_id
     });
 
     if(configCache) return {
         error: false,
-        data: configCache
+        data: configCache[0]
     }
 
     return await database.query(`SELECT * FROM ${config.tables.mido_config} WHERE guild_id = ?`, [guild_id])

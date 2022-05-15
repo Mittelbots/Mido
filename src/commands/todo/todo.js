@@ -28,7 +28,6 @@ module.exports.run = async (bot, message, args) => {
 
     const lang = require(`../../../utils/assets/json/language/${await getLang(message.guild.id)}.json`);
 
-
     const hasPerms = await hasPermissions({
         user: message.member,
         needed_permission: {
@@ -50,7 +49,7 @@ module.exports.run = async (bot, message, args) => {
                 content: lang.errors.user_notfound
             }).then(async msg => {
                 await delay(2000);
-                msg.delete();
+                msg.delete().catch(err => {})
             })
 
         }
@@ -61,8 +60,8 @@ module.exports.run = async (bot, message, args) => {
                 content: lang.todo.no_active_todo
             }).then(async msg => {
                 await delay(3000);
-                msg.delete();
-                message.delete();
+                msg.delete().catch(err => {})
+                message.delete().catch(err => {})
             })
         } else {
             return message.reply({

@@ -3,6 +3,7 @@ const database = require('../../../bot/db/db');
 const { getLang } = require("../getData/getLang");
 const { errorhandler } = require("../errorhandler/errorhandler");
 const config = require('../../assets/json/_config/config.json');
+const { updateCache } = require("../cache/cache");
 
 module.exports.setPermissions = async ({main_interaction, permissions}) => {
     const lang = require(`../../assets/json/language/${await getLang(main_interaction.guild.id)}.json`);
@@ -26,6 +27,20 @@ module.exports.setPermissions = async ({main_interaction, permissions}) => {
 
     return await database.query(sqlQuery, [roleId, permissions.viewtask, permissions.addtask, permissions.edittask, permissions.addproject, permissions.deleteProject, permissions.view_user_archive, permissions.view_guild_archive, permissions.edit_guild_archive , main_interaction.guild.id, roleId])
         .then(() => {
+            updateCache({
+                cacheName: "permissions",
+                param_id: main_interaction.guild.id,
+                value: {
+                    view_tasks: permissions.view_tasks,
+                    add_tasks: permissions.add_tasks,
+                    edit_tasks: permissions.edit_tasks,
+                    add_projects: permissions.add_projects,
+                    delete_projects: permissions.delete_projects,
+                    view_guild_archive: permissions.view_guild_archive,
+                    view_user_archive: permissions.view_user_archive,
+                    edit_guild_archive: permissions.edit_guild_archive,
+                }
+            });
             return {
                 error: false,
                 message: lang.settings.permissions.updated

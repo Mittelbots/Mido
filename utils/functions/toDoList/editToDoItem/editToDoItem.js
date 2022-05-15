@@ -21,7 +21,7 @@ module.exports = async ({main_interaction}) => {
         return main_interaction.message.reply(lang.errors.noperms)
             .then(async msg => {
                 await delay(2000);
-                await msg.delete().catch(err => {});
+                await msg.delete().catch(err => {})
             })
     }
 
@@ -44,9 +44,9 @@ module.exports = async ({main_interaction}) => {
                 content: lang.errors.canceled
             }).then(async msg => {
                 await delay(3000);
-                msg.delete();
-                reply.delete();
-                sentMessage.delete();
+                msg.delete().catch(err => {});
+                reply.delete().catch(err => {});
+                sentMessage.delete().catch(err => {});
                 decrease_toDoInteractionCount(main_interaction.user.id);
             });
             return;
@@ -57,9 +57,9 @@ module.exports = async ({main_interaction}) => {
                 content: lang.errors.only_numbers
             }).then(async msg => {
                 await delay(3000);
-                msg.delete();
-                reply.delete();
-                sentMessage.delete();
+                msg.delete().catch(err => {});
+                reply.delete().catch(err => {});
+                sentMessage.delete().catch(err => {});
                 decrease_toDoInteractionCount(main_interaction.user.id);
             })
         }
@@ -67,8 +67,8 @@ module.exports = async ({main_interaction}) => {
             await manageToDoItem({main_interaction, isNewTask: false, toDoId: reply.content});
             
             await delay(2000);
-            reply.delete();
-            sentMessage.delete();
+            reply.delete().catch(err => {});
+            sentMessage.delete().catch(err => {});
         }
     });
 }

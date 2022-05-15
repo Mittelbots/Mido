@@ -13,7 +13,7 @@ module.exports.run = async ({main_interaction, bot}) => {
             ephemeral: true
         })
     }
-	console.log(main_interaction.options.getUser('user'))
+
 	let response;
 
 	switch (main_interaction.options.getSubcommand()) {

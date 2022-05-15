@@ -42,6 +42,7 @@ const secret_config = require('./_secret/secret_config/secret_config.json');
 const config = require('./utils/assets/json/_config/config.json');
 const activity = require('./utils/assets/json/activity/activity.json');
 const { startUpCache } = require("./utils/functions/cache/startUpCache");
+const { getFromCache, updateCache } = require("./utils/functions/cache/cache");
 const version = require('./package.json').version;
 
 const bot = new Discord.Client({
@@ -89,7 +90,7 @@ bot.once('ready', async function () {
 
     bot.on('interactionCreate', async (main_interaction) => {
         if(main_interaction.isCommand()) {
-            const isPremium = await isUserPremium({user_id: main_interaction.user_id});
+            const isPremium = await isUserPremium({user_id: main_interaction.user.id});
 
             if(isPremium.error) return main_interaction.reply({
                 content: isPremium.message,
