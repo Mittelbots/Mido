@@ -15,14 +15,39 @@
 
 # **MIDO CHANGELOG**
 
+## **BETA VERSION 0.13.0**
+
+### Added things:
+    - added working cache
+    - moved prefix select to another file
+    - added catch to every message.delete()
+    - 
+
+### Bug fixes:
+    - /
+
+<br><br>
+
+## **BETA VERSION 0.12.3**
+
+### Added things:
+    - added ignoreMode
+
+### Bug fixes:
+    - /
+
+<br><br>
+
 ## **BETA VERSION 0.12.2**
 
 ### Added things:
     - added first premium integration
-    - added owner slash command to add/remove premium
+    - added owner slash command to add/remove premium/platin
 
 ### Bug fixes:
     - /
+
+<br><br>
 
 ## **BETA VERSION 0.12.1**
 
