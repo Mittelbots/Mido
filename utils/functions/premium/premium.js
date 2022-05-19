@@ -84,11 +84,11 @@ module.exports.updateUserPremium = async ({user_id, premium, platin}) => {
     }
 
     return await database.query(`UPDATE ${config.tables.mido_premium} SET premium = ?, platin = ? WHERE user_id = ?`, [premium, platin, user_id])
-        .then(() => {
-            updateCache({
+        .then(async () => {
+            await updateCache({
                 cacheName: "premium",
                 param_id: guild_id,
-                value: {
+                updateVal: {
                     platin: platin,
                     premium: premium
                 }

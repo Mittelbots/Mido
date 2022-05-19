@@ -1,5 +1,6 @@
 const config = require('../../assets/json/_config/config.json');
 const { getFromCache } = require('../cache/cache');
+const database = require('../../../bot/db/db');
 
 module.exports.getPrefix = async function({guild_id}) {
 

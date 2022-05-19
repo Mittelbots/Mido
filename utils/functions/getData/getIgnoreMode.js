@@ -14,12 +14,11 @@ module.exports.getIgnoreMode = async () => {
     }
 
     return await database.query(`SELECT ignoreMode FROM ${config.tables.mido_global} WHERE id = 1`)
-        .then(res => {
-
-            updateCache({
+        .then(async res => {
+            await updateCache({
                 cacheName: "global",
                 param_id: "ignoreMode",
-                value: {
+                updateVal: {
                     ignoreMode: (res.length === 0 || !res[0].ignoreMode) ? false : true
                 }
             })

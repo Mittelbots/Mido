@@ -9,11 +9,11 @@ module.exports.updateLogChannel = async ({guild_id, newLogChannel}) => {
     const lang = require(`../../assets/json/language/${await getLang(guild_id)}.json`);
 
     return await database.query(`UPDATE ${config.tables.mido_config} SET log_channel = ? WHERE guild_id = ?`, [newLogChannel, guild_id])
-    .then(() => {
-        updateCache({
+    .then(async () => {
+        await updateCache({
             cacheName: "config",
             param_id: guild_id,
-            value: {
+            updateVal: {
                 log_channel: newLogChannel
             }
         });

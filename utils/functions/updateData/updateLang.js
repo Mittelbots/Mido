@@ -9,11 +9,11 @@ module.exports.updateLang = async ({guild_id, language}) => {
     const lang = require(`../../assets/json/language/${await getLang(guild_id)}.json`);
 
     return await database.query(`UPDATE ${config.tables.mido_config} SET lang = ? WHERE guild_id = ?`, [language, guild_id])
-        .then(() => {
-            updateCache({
+        .then(async () => {
+            await updateCache({
                 cacheName: "config",
                 param_id: guild_id,
-                value: {
+                updateVal: {
                     lang: language
                 }
             });
