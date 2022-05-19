@@ -21,7 +21,7 @@ module.exports = async (main_interaction) => {
         return main_interaction.message.reply(lang.errors.noperms)
             .then(async msg => {
                 await delay(2000);
-                await msg.delete().catch(err => {});
+                await msg.delete().catch(err => {})
             })
     }
 
@@ -51,10 +51,10 @@ module.exports = async (main_interaction) => {
     //             content: lang.errors.canceled
     //         }).then(async msg => {
     //             await delay(3000);
-    //             msg.delete();
+    //             msg.delete().catch(err => {});
     //         });
     //         decrease_toDoAddCount(main_interaction.user.id)
-    //         reply.delete();
+    //         reply.delete().catch(err => {});
     //         return;
     //     }
 
@@ -65,9 +65,9 @@ module.exports = async (main_interaction) => {
     //             content: lang.todo.newtodo.errors.no_comma_in_shorthand
     //         }).then(async msg => {
     //             await delay(3000);
-    //             msg.delete();
+    //             msg.delete().catch(err => {});
     //         });
-    //         reply.delete();
+    //         reply.delete().catch(err => {});
     //         decrease_toDoAddCount(main_interaction.user.id)
     //         return;
     //     }
@@ -83,7 +83,7 @@ module.exports = async (main_interaction) => {
     //             content: lang.todo.newtodo.errors.title_missing
     //         }).then(async msg => {
     //             await delay(2000);
-    //             msg.delete();
+    //             msg.delete().catch(err => {});
     //         });
     //         decrease_toDoAddCount(main_interaction.user.id)
     //         return;
@@ -93,7 +93,7 @@ module.exports = async (main_interaction) => {
     //             content: lang.todo.newtodo.errors.text_missing
     //         }).then(async msg => {
     //             await delay(2000);
-    //             msg.delete();
+    //             msg.delete().catch(err => {});
     //         });
     //         decrease_toDoAddCount(main_interaction.user.id)
     //         return;

@@ -15,6 +15,15 @@
 
 # **MIDO CHANGELOG**
 
+## **BETA VERSION 0.12.2**
+
+### Added things:
+    - added first premium integration
+    - added owner slash command to add/remove premium
+
+### Bug fixes:
+    - /
+
 ## **BETA VERSION 0.12.1**
 
 ### Added things:

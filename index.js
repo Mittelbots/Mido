@@ -34,12 +34,15 @@ const { createSlashCommands } = require("./utils/functions/createSlashCommands/c
 const { handleSlashCommands } = require("./src/slash_commands");
 const { guildCreate } = require("./bot/events/guildCreate");
 const { db_backup } = require("./bot/db/db_backup");
+const { isUserPremium } = require("./utils/functions/premium/premium");
 
 //? JSON --
 const token = require('./_secret/token.json');
 const secret_config = require('./_secret/secret_config/secret_config.json');
 const config = require('./utils/assets/json/_config/config.json');
 const activity = require('./utils/assets/json/activity/activity.json');
+const { startUpCache } = require("./utils/functions/cache/startUpCache");
+const { getFromCache, updateCache } = require("./utils/functions/cache/cache");
 const version = require('./package.json').version;
 
 const bot = new Discord.Client({
@@ -74,6 +77,8 @@ bot.on('guildMemberAdd', async member => {
 
 bot.once('ready', async function () {
 
+    await startUpCache();
+
     if(!secret_config.debug) {
         db_backup();
         setTimeout(() => {
@@ -85,9 +90,18 @@ bot.once('ready', async function () {
 
     bot.on('interactionCreate', async (main_interaction) => {
         if(main_interaction.isCommand()) {
+            const isPremium = await isUserPremium({user_id: main_interaction.user.id});
+
+            if(isPremium.error) return main_interaction.reply({
+                content: isPremium.message,
+                ephemeral: true
+            });
+
             handleSlashCommands({
                 main_interaction: main_interaction,
-                bot: bot
+                bot: bot,
+                isPremium: isPremium.premium,
+                isPlatin: isPremium.platin
             })
         }else {
             await main_interaction.deferUpdate();

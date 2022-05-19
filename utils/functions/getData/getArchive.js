@@ -5,7 +5,6 @@ const config = require('../../assets/json/_config/config.json');
 
 module.exports.getArchive = async ({channel, isGuildArchive, user_id}) => {
     const lang = require(`../../assets/json/language/${await getLang(channel.guild.id)}.json`);
-	console.log(`SELECT * FROM ${config.tables.mido_todo} WHERE guild_id = ? AND state = ? ${(!isGuildArchive) ? 'AND user_id = ?' : ''}`)
     return await database.query(`SELECT * FROM ${config.tables.mido_todo} WHERE guild_id = ? AND state = ? ${(!isGuildArchive) ? 'AND user_id = ?' : ''}`, [channel.guild.id, toDoState_Deleted, (!isGuildArchive) ? user_id : ''])
 		.then(async res => {
 			res = await res;

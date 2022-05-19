@@ -86,10 +86,10 @@ module.exports.createLog = async ({
     }
     if(isToDo) {
         log_embed.addField(lang.logs.todo_name, data.title)
-        log_embed.addField(lang.logs.todo_content, data.text)
-        log_embed.addField(lang.todo.deadline, data.deadline)
-        log_embed.addField(lang.todo.reminder, data.reminder)
-        log_embed.addField(lang.todo.other_user, data.other_user)
+        log_embed.addField(lang.logs.todo_content, data.text || '')
+        log_embed.addField(lang.todo.deadline, data.deadline || '')
+        log_embed.addField(lang.todo.reminder, data.reminder || '')
+        log_embed.addField(lang.todo.other_user, data.other_user|| '')
 
         if(type !== lang.logs.x_todo_create) log_embed.addField('ID:', data.id.toString())
         console.log(log_embed);
