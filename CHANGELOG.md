@@ -15,6 +15,27 @@
 
 # **MIDO CHANGELOG**
 
+## **BETA VERSION 0.13.2**
+
+### Added things:
+    - added debug log
+
+### Bug fixes:
+    - /
+
+<br><br>
+
+## **BETA VERSION 0.13.1**
+
+### Added things:
+    - changed errorhanlder function
+    - added uptime function
+
+### Bug fixes:
+    - /
+
+<br><br>
+
 ## **BETA VERSION 0.13.0**
 
 ### Added things:

@@ -77,13 +77,13 @@ module.exports.run = async ({
 
 
     if (response.error) {
-        errorhandler({err: response.error, message: `Error while LogChannelChange UserID: ${message.author.id}`, fatal: false})
+        errorhandler({err: response.error, message: `Error while LogChannelChange UserID: ${main_interaction.user.id}`, fatal: false})
         main_interaction.reply({
             content: response.message,
             ephemeral: true
         }).catch(err => {})
     } else {
-        errorhandler({err: '', message: `${response.message} UserID ${message.author.id} | GuildID: ${message.guild.id}`, fatal: false});
+        errorhandler({err: '', message: `${response.message} UserID ${main_interaction.user.id} | GuildID: ${main_interaction.guild.id}`, fatal: false});
         main_interaction.reply({
             content: response.message,
             ephemeral: true
