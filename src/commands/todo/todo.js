@@ -23,6 +23,7 @@ const {
 const {
     viewUserToDo
 } = require('../../../utils/functions/toDoList/viewUserToDo');
+const { errorhandler } = require('../../../utils/functions/errorhandler/errorhandler');
 
 module.exports.run = async (bot, message, args) => {
 
@@ -76,6 +77,7 @@ module.exports.run = async (bot, message, args) => {
         .setTimestamp()
 
     var newMessageEmbedInteraction = await addSelectMenu(categories, false, message.guild.id);
+    
     return await message.reply({
         embeds: [newMessageEmbed],
         components: [new MessageActionRow({

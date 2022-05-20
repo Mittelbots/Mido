@@ -135,6 +135,7 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
 
                     await database.query(sqlQuery, (isNewTask) ? [main_interaction.user.id, title, text, deadline, user, getCurrentProjectId(main_interaction.user.id), main_interaction.member.guild.id, toDoState_Active, reminder] : [title, text, deadline, user, reminder, toDoId])
                         .then(async () => {
+                            errorhandler({err: '', message: `ToDo ${(isNewTask) ? 'added': 'updated'} UserID ${main_interaction.user.id} | GuildID: ${main_interaction.guild.id}`, fatal: false});
                             createLog({
                                 type: (isNewTask) ? 0 : 1,
                                 data: {
@@ -167,7 +168,7 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
                             });
                         })
                         .catch(async err => {
-                            errorhandler(err, null, null);
+                            errorhandler({err, fatal: true});
                             await todo_interaction.channel.send({
                                 content: lang.todo.newtodo.errors.save_error
                             }).then(async msg => {

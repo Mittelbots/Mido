@@ -29,10 +29,8 @@ module.exports.run = async ({
         return main_interaction.reply({
             content: lang.errors.noperms,
             ephemeral: true
-        })
+        }).catch(err => {})
     }
-
-    
 
     const archive = await getArchive({
 		channel: main_interaction.channel,
@@ -43,7 +41,7 @@ module.exports.run = async ({
 	if(!archive) return main_interaction.reply({
 		content: 'Keine Aufgaben im Archiv',
         ephemeral: true
-	})
+	}).catch(err => {})
 
 	const archiveEmbed = new MessageEmbed()
 		.setTitle(`${(isGuildArchive) ? lang.archiv.guild : lang.archiv.personal} - ${lang.archiv.title}`)
@@ -62,7 +60,7 @@ module.exports.run = async ({
 	return await main_interaction.reply({
 		embeds: [archiveEmbed],
         ephemeral: (isGuildArchive) ? false : true
-	});
+	}).catch(err => {})
 
 }
 

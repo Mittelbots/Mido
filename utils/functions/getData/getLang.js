@@ -21,7 +21,7 @@ module.exports.getLangFromDatabase = async (guild_id) => {
                 return lang;
             }
         }).catch(err => {
-            errorhandler(err);
+            errorhandler({err, fatal: true});
             return false;
         })
 }

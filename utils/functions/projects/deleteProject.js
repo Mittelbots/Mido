@@ -110,7 +110,7 @@ module.exports.deleteProject = async (main_interaction, categories, isDelete) =>
                 const name = main_interaction.values[0].slice(0, 3);
                 return await database.query(`DELETE FROM ${config.tables.mido_projects} WHERE id = ?; UPDATE mido_todo SET state = ? WHERE cat_id = ?;`, [Number(id), toDoState_Deleted, Number(id)])
                     .then(async () => {
-
+                        errorhandler({err: '', message: `Project removed UserID ${main_interaction.user.id} | GuildID: ${main_interaction.guild.id}`, fatal: false});
                         createLog({
                             type: 5,
                             data: {
@@ -145,7 +145,7 @@ module.exports.deleteProject = async (main_interaction, categories, isDelete) =>
                         });
                     })
                     .catch(err => {
-                        return errorhandler(err, lang.projects.errors.error_at_delete, main_interaction.message.channel);
+                        return errorhandler({err, message: lang.projects.errors.error_at_delete, channel: main_interaction.message.channel});
                     });
             }
         })

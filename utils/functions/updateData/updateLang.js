@@ -23,7 +23,7 @@ module.exports.updateLang = async ({guild_id, language}) => {
             }
         })
         .catch(err => {
-            errorhandler(err, null, null);
+            errorhandler({err, fatal: true});
             return {
                 error: true,
                 message: lang.settings.lang.error

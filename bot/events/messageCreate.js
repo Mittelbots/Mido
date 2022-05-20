@@ -24,7 +24,7 @@ async function messageCreate(message, bot) {
         const isIgnoreMode = await getIgnoreMode();
 
         if(isIgnoreMode.error) {
-            errorhandler(isIgnoreMode.message);
+            errorhandler({err: isIgnoreMode.message, fatal: true});
             const lang = require(`../../utils/assets/json/language/${await getLang(message.guild.id)}.json`)
             message.reply({
                 content: lang.errors.general

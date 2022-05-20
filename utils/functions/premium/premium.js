@@ -27,7 +27,7 @@ module.exports.isUserPremium = async ({user_id}) => {
             }
         })
         .catch(err => {
-            errorhandler(err);
+            errorhandler({err, fatal: true});
             return {
                 error: true,
                 message: "Error while fetching user premium status"
@@ -59,13 +59,14 @@ module.exports.addUserPremium = async ({user_id, premium, platin}) => {
 
     return await database.query(`INSERT INTO ${config.tables.mido_premium} (user_id, premium, platin) VALUES (?, ?, ?)`, [user_id, premium, platin])
         .then(() => {
+            errorhandler({err: '', message: `User premium status added UserId: ${user_id}`, fatal: false});
             return {
                 error: false,
                 message: "User premium status added"
             }
         })
         .catch(err => {
-            errorhandler(err);
+            errorhandler({err, fatal: true});
             return {
                 error: true,
                 message: "Error while adding user premium status"
@@ -93,13 +94,14 @@ module.exports.updateUserPremium = async ({user_id, premium, platin}) => {
                     premium: premium
                 }
             });
+            errorhandler({err: '', message: `User premium status added UserId: ${user_id}`, fatal: false});
             return {
                 error: false,
                 message: "User premium status updated"
             }
         })
         .catch(err => {
-            errorhandler(err);
+            errorhandler({err, fatal: true});
             return {
                 error: true,
                 message: "Error while updating user premium status"
@@ -110,13 +112,14 @@ module.exports.updateUserPremium = async ({user_id, premium, platin}) => {
 module.exports.removeUserPremium = async ({user_id}) => {
     return await database.query(`DELETE FROM ${config.tables.mido_premium} WHERE user_id = ?`, [user_id])
         .then(res => {
+            errorhandler({err: '', message: `User premium status removed UserId: ${user_id}`, fatal: false});
             return {
                 error: false,
                 message: "User premium status removed"
             }
         })
         .catch(err => {
-            errorhandler(err);
+            errorhandler({err, fatal: true});
             return {
                 error: true,
                 message: "Error while removing user premium status"
@@ -131,7 +134,7 @@ module.exports.getAllPremium = async () => {
             return res;
         })
         .catch(err => {
-            console.log(err);
+            errorhandler({err, fatal: true});
             return false;
         });
 }

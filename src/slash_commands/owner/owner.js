@@ -11,7 +11,7 @@ module.exports.run = async ({main_interaction, bot}) => {
         return main_interaction.reply({
             content: lang.errors.noperms,
             ephemeral: true
-        })
+        }).catch(err => {})
     }
 
 	let response;
@@ -38,13 +38,14 @@ module.exports.run = async ({main_interaction, bot}) => {
         main_interaction.reply({
             content: response.message,
             ephemeral: true
-        })
+        }).catch(err => {})
     } else {
         main_interaction.reply({
             content: response.message,
             ephemeral: true
-        });
+        }).catch(err => {});
     }
+
 }
 
 module.exports.data = new SlashCommandBuilder()

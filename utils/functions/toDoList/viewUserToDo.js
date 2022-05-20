@@ -30,7 +30,7 @@ module.exports.viewUserToDo = async (user_id, guild_id, channel) => {
             }
         })
         .catch(err => {
-            errorhandler(err, lang.errors.general, channel);
+            errorhandler({err, mesage: lang.errors.general, channel, fatal: true});
             return false;
         })
 }

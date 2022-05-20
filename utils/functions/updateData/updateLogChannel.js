@@ -23,7 +23,7 @@ module.exports.updateLogChannel = async ({guild_id, newLogChannel}) => {
         }
     })
     .catch(err => {
-        errorhandler(err);
+        errorhandler({err, fatal: true});
         return {
             error: true,
             message: lang.settings.logChannel.error

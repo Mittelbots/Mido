@@ -16,7 +16,7 @@ module.exports.run = async ({main_interaction, bot}) => {
     return main_interaction.reply({
         content: lang.resetCount.success,
         ephemeral: true
-    });
+    }).catch(err => {});
 }
 
 module.exports.data = new SlashCommandBuilder()

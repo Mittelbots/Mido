@@ -16,8 +16,7 @@ module.exports.getArchive = async ({channel, isGuildArchive, user_id}) => {
 			
 		})
 		.catch(err => {
-			//errorhandler(err, null, channel);
-			console.log(err);
+			errorhandler({err, channel, fatal: true});
 			return false;
 		})
 }

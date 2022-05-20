@@ -64,7 +64,7 @@ module.exports.watchToDoList = (bot) => {
 
                             await database.query(`UPDATE ${config.tables.mido_todo} SET state = ? WHERE id = ?`, [toDoState_Inactive, taskid])
                                 .catch(err => {
-                                    return errorhandler(err)
+                                    return errorhandler({err, fatal: true})
                                 });
 
                             count++;
@@ -72,9 +72,10 @@ module.exports.watchToDoList = (bot) => {
                     }
                 })
             }).catch(err => {
-                return errorhandler(err)
+                return errorhandler({err, fatal: true})
             });
 
         console.info(`${count} tasks successfully passed the deadline & ${dmCount} DM's successfully sent. [I coudn't sent a DM to ${failedCount} users.]`)
+        errorhandler({err: `${count} tasks successfully passed the deadline & ${dmCount} DM's successfully sent. [I coudn't sent a DM to ${failedCount} users.]`, fatal: false})
     }, 600000); // 10 MIN |  600000
 }

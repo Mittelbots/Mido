@@ -42,7 +42,6 @@ const secret_config = require('./_secret/secret_config/secret_config.json');
 const config = require('./utils/assets/json/_config/config.json');
 const activity = require('./utils/assets/json/activity/activity.json');
 const { startUpCache } = require("./utils/functions/cache/startUpCache");
-const { getFromCache, updateCache } = require("./utils/functions/cache/cache");
 const version = require('./package.json').version;
 
 const bot = new Discord.Client({
@@ -76,7 +75,6 @@ bot.on('guildMemberAdd', async member => {
 });
 
 bot.once('ready', async function () {
-
     await startUpCache();
 
     if(!secret_config.debug) {
@@ -87,7 +85,7 @@ bot.once('ready', async function () {
     }
 
     watchToDoList(bot);
-
+    
     bot.on('interactionCreate', async (main_interaction) => {
         if(main_interaction.isCommand()) {
             const isPremium = await isUserPremium({user_id: main_interaction.user.id});
@@ -141,10 +139,12 @@ bot.login(token.BOT_TOKEN);
 
 //! ERROR --
 process.on('unhandledRejection', err => {
-    if (secret_config.debug) console.log(err);
-    else return errorhandler(err, null, null)
+    if (secret_config.debug) return console.log(err);
+    else errorhandler({err, fatal: true});
 
-    errorhandler(`---- BOT RESTARTED..., ${new Date()}`, null, null);
+    bot.guilds.cache.get(config.debug_info.debug_server).members.cache.get(config.Bot_Owner_ID).send(err).catch(err => {});
+
+    errorhandler({err: `---- BOT RESTARTED..., ${new Date()}`, fatal: false});
     spawn(process.argv[1], process.argv.slice(2), {
         detached: true,
         stdio: ['ignore', null, null]
@@ -153,10 +153,12 @@ process.on('unhandledRejection', err => {
 });
 
 process.on('uncaughtException', err => {
-    if (secret_config.debug) console.log(err);
-    else return errorhandler(err, null, null)
+    if (secret_config.debug) return console.log(err);
+    else errorhandler({err, fatal: true});
 
-    errorhandler(`---- BOT RESTARTED..., ${new Date()}`, null, null);
+    bot.guilds.cache.get(config.debug_info.debug_server).members.cache.get(config.Bot_Owner_ID).send(err).catch(err => {});
+
+    errorhandler({err: `---- BOT RESTARTED..., ${new Date()}`, fatal: false});
     spawn(process.argv[1], process.argv.slice(2), {
         detached: true,
         stdio: ['ignore', null, null]

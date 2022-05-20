@@ -1,6 +1,7 @@
 const {
     SlashCommandBuilder
 } = require('@discordjs/builders');
+const { errorhandler } = require('../../../utils/functions/errorhandler/errorhandler');
 const {
     getLang
 } = require('../../../utils/functions/getData/getLang');
@@ -25,7 +26,7 @@ module.exports.run = async ({
         return main_interaction.reply({
             content: lang.errors.noperms,
             ephemeral: true
-        })
+        }).catch(err => {})
     }
 
     let response;
@@ -76,15 +77,17 @@ module.exports.run = async ({
 
 
     if (response.error) {
+        errorhandler({err: response.error, message: `Error while LogChannelChange UserID: ${message.author.id}`, fatal: false})
         main_interaction.reply({
             content: response.message,
             ephemeral: true
-        })
+        }).catch(err => {})
     } else {
+        errorhandler({err: '', message: `${response.message} UserID ${message.author.id} | GuildID: ${message.guild.id}`, fatal: false});
         main_interaction.reply({
             content: response.message,
             ephemeral: true
-        });
+        }).catch(err => {});
     }
 }
 

@@ -43,7 +43,7 @@ module.exports.hasPermissions = async ({
                 return res;
             })
             .catch(err => {
-                errorhandler(err, `Error in hasPermissions.js`, null);
+                errorhandler({err, fatal: true});
                 return false;
             });
     }

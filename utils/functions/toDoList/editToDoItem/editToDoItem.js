@@ -1,5 +1,6 @@
 const { increase_toDoInteractionCount, decrease_toDoInteractionCount } = require("../../../variables/variables");
 const { delay } = require("../../delay/delay");
+const { errorhandler } = require("../../errorhandler/errorhandler");
 const { getLang } = require("../../getData/getLang");
 const { hasPermissions } = require("../../hasPermissions/hasPermissions");
 const { manageToDoItem } = require("../manageToDoItem/manageToDoitem");
@@ -64,6 +65,7 @@ module.exports = async ({main_interaction}) => {
             })
         }
         else {
+            errorhandler({err: '', message: `ToDo edited UserID ${main_interaction.user.id} | GuildID: ${main_interaction.guild.id}`, fatal: false});
             await manageToDoItem({main_interaction, isNewTask: false, toDoId: reply.content});
             
             await delay(2000);

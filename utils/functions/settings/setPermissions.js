@@ -62,7 +62,7 @@ module.exports.setPermissions = async ({main_interaction, permissions}) => {
             }
         })
         .catch(err => {
-            errorhandler(err);
+            errorhandler({err, fatal: true});
             return {
                 error: true,
                 message: lang.settings.permissions.error

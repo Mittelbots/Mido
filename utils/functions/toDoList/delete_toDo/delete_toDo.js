@@ -9,6 +9,7 @@ const config = require("../../../assets/json/_config/config.json");
 const database = require("../../../../bot/db/db");
 const { createLog } = require("../../log/mido_log");
 const { hasPermissions } = require("../../hasPermissions/hasPermissions");
+const { errorhandler } = require("../../errorhandler/errorhandler");
 
 module.exports = async ({main_interaction}) => {
 
@@ -80,7 +81,7 @@ module.exports = async ({main_interaction}) => {
             if (task) {
                 return await database.query(`UPDATE ${config.tables.mido_todo} SET state = ? WHERE id = ?`, [toDoState_Deleted, reply.content])
                     .then(async () => {
-
+                        errorhandler({err: '', message: `Todo archived UserID ${main_interaction.user.id} | GuildID: ${main_interaction.guild.id}`, fatal: false});
                         createLog({
                             type: 2,
                             data: {
@@ -113,7 +114,7 @@ module.exports = async ({main_interaction}) => {
                         })
                     })
                     .catch(err => {
-                        errorhandler(err);
+                        errorhandler({err, fatal: true});
                         return reply.reply({
                             content: lang.todo.delete_todo.errors.delete_todo_error
                         }).then(async msg => {

@@ -13,7 +13,7 @@ async function getProject(channel) {
             return res;
         })
         .catch(err => {
-            errorhandler(err, lang.errors.general, channel);
+            errorhandler({err, message: lang.errors.general, channel, fatal: true});
             return false;
         });
 }

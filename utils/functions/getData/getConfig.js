@@ -25,7 +25,7 @@ module.exports.getConfig = async ({guild_id}) => {
             }
         })
         .catch(err => {
-            errorhandler(err)
+            errorhandler({err, fatal: true})
             return {
                 error: true,
                 message: lang.errors.fetching_config
@@ -42,7 +42,7 @@ module.exports.getAllConfig = async () => {
             return res;
         })
         .catch(err => {
-            console.log(err);
+            errorhandler({err, fatal: true})
             return false;
         })
 }
