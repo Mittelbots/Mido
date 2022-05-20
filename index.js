@@ -75,7 +75,6 @@ bot.on('guildMemberAdd', async member => {
 });
 
 bot.once('ready', async function () {
-    bot.guilds.cache.get(config.debug_info.debug_server).members.cache.get(config.Bot_Owner_ID).send(err);
     await startUpCache();
 
     if(!secret_config.debug) {
@@ -140,7 +139,7 @@ bot.login(token.BOT_TOKEN);
 
 //! ERROR --
 process.on('unhandledRejection', err => {
-    if (secret_config.debug) console.log(err);
+    if (secret_config.debug) return console.log(err);
     else errorhandler({err, fatal: true});
 
     bot.guilds.cache.get(config.debug_info.debug_server).members.cache.get(config.Bot_Owner_ID).send(err).catch(err => {});
@@ -154,7 +153,7 @@ process.on('unhandledRejection', err => {
 });
 
 process.on('uncaughtException', err => {
-    if (secret_config.debug) console.log(err);
+    if (secret_config.debug) return console.log(err);
     else errorhandler({err, fatal: true});
 
     bot.guilds.cache.get(config.debug_info.debug_server).members.cache.get(config.Bot_Owner_ID).send(err).catch(err => {});

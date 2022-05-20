@@ -59,6 +59,7 @@ module.exports.addUserPremium = async ({user_id, premium, platin}) => {
 
     return await database.query(`INSERT INTO ${config.tables.mido_premium} (user_id, premium, platin) VALUES (?, ?, ?)`, [user_id, premium, platin])
         .then(() => {
+            errorhandler({err: '', message: `User premium status added UserId: ${user_id}`, fatal: false});
             return {
                 error: false,
                 message: "User premium status added"
@@ -93,6 +94,7 @@ module.exports.updateUserPremium = async ({user_id, premium, platin}) => {
                     premium: premium
                 }
             });
+            errorhandler({err: '', message: `User premium status added UserId: ${user_id}`, fatal: false});
             return {
                 error: false,
                 message: "User premium status updated"
@@ -110,6 +112,7 @@ module.exports.updateUserPremium = async ({user_id, premium, platin}) => {
 module.exports.removeUserPremium = async ({user_id}) => {
     return await database.query(`DELETE FROM ${config.tables.mido_premium} WHERE user_id = ?`, [user_id])
         .then(res => {
+            errorhandler({err: '', message: `User premium status removed UserId: ${user_id}`, fatal: false});
             return {
                 error: false,
                 message: "User premium status removed"

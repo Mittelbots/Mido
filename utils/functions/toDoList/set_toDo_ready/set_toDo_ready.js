@@ -90,7 +90,7 @@ module.exports = async ({main_interaction}) => {
                 }
                 return await database.query(`UPDATE ${config.tables.mido_todo} SET state = ? WHERE id = ?`, [toDoState_Ready, reply.content])
                     .then(async () => {
-
+                        errorhandler({err: '', message: `ToDo set to ready UserID ${main_interaction.user.id} | GuildID: ${main_interaction.guild.id}`, fatal: false});
                         createLog({
                             type: 3,
                             data: {

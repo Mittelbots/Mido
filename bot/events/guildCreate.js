@@ -4,6 +4,9 @@ const { errorhandler } = require("../../utils/functions/errorhandler/errorhandle
 
 module.exports.guildCreate = async ({guild, bot}) => {
     database.query(`INSERT INTO ${config.tables.mido_config} (guild_id) VALUES (?)`, [guild.id])
+        .then(() => {
+            errorhandler({err: '', message: `Joined Guild ${guild.id} - ${guild.name}`, fatal: false})
+        })
         .catch(err => {
             errorhandler({err, fatal: true})
         })

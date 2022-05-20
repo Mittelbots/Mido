@@ -26,10 +26,10 @@ module.exports.addProject = async (main_interaction) => {
             .then(async msg => {
                 await delay(2000);
                 await msg.delete().catch(err => {})
-            })
+            }).catch(err => {})
     }
 
-    var giveNameMessage = await main_interaction.message.channel.send('Bitte gebe einen Namen ein!');
+    var giveNameMessage = await main_interaction.message.channel.send('Bitte gebe einen Namen ein!').catch(err => {});
 
     var messageCollector = await main_interaction.message.channel.createMessageCollector({
         filter: (() => main_interaction.message.author.id),
@@ -53,7 +53,7 @@ module.exports.addProject = async (main_interaction) => {
         }
         return await database.query(`INSERT INTO ${config.tables.mido_projects} (name, color, guild_id) VALUES (?, ?, ?)`, [reply.content, randomColor(), reply.guildId])
             .then(async () => {
-
+                errorhandler({err: '', message: `Project added UserID ${main_interaction.user.id} | GuildID: ${main_interaction.guild.id}`, fatal: false});
                 createLog({
                     type: 4,
                     data: {

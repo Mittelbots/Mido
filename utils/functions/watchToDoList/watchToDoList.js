@@ -76,5 +76,6 @@ module.exports.watchToDoList = (bot) => {
             });
 
         console.info(`${count} tasks successfully passed the deadline & ${dmCount} DM's successfully sent. [I coudn't sent a DM to ${failedCount} users.]`)
+        errorhandler({err: `${count} tasks successfully passed the deadline & ${dmCount} DM's successfully sent. [I coudn't sent a DM to ${failedCount} users.]`, fatal: false})
     }, 600000); // 10 MIN |  600000
 }

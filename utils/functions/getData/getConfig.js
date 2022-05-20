@@ -42,7 +42,7 @@ module.exports.getAllConfig = async () => {
             return res;
         })
         .catch(err => {
-            console.log(err);
+            errorhandler({err, fatal: true})
             return false;
         })
 }
