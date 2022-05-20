@@ -167,7 +167,7 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
                             });
                         })
                         .catch(async err => {
-                            errorhandler(err, null, null);
+                            errorhandler({err, fatal: true});
                             await todo_interaction.channel.send({
                                 content: lang.todo.newtodo.errors.save_error
                             }).then(async msg => {

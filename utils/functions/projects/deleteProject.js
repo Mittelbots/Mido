@@ -145,7 +145,7 @@ module.exports.deleteProject = async (main_interaction, categories, isDelete) =>
                         });
                     })
                     .catch(err => {
-                        return errorhandler(err, lang.projects.errors.error_at_delete, main_interaction.message.channel);
+                        return errorhandler({err, message: lang.projects.errors.error_at_delete, channel: main_interaction.message.channel});
                     });
             }
         })

@@ -21,7 +21,7 @@ module.exports.getPrefix = async function({guild_id}) {
     }).catch(async err => {
         const lang = require(`../../assets/json/language/${await getLang(guild_id)}.json`)
 
-        errorhandler(err, lang.errors.general, message.channel);
+        errorhandler({err, channel: lang.errors.general, message: message.channel, fatal: true});
         return false;
     });
 }

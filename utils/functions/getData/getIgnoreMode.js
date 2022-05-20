@@ -30,7 +30,7 @@ module.exports.getIgnoreMode = async () => {
 
         })
         .catch(err => {
-            errorhandler(err);
+            errorhandler({err, fatal: true});
             return {
                 error: true,
                 message: "Error while fetching ignore mode"

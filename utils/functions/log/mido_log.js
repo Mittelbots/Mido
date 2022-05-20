@@ -112,7 +112,7 @@ async function getLogFromGuild(guild_id) {
             else return res[0].log_channel;
         })
         .catch(err => {
-            errorhandler(err, null, null);
+            errorhandler({err, fatal: true});
             return false;
         });
 }

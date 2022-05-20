@@ -27,7 +27,7 @@ module.exports.getRoleFromPermissions = async ({
             }
         })
         .catch(err => {
-            errorhandler(err);
+            errorhandler({err, fatal: true});
             return {
                 error: true,
                 message: lang.errors.general

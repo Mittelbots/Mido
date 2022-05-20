@@ -122,7 +122,7 @@ module.exports = async ({main_interaction}) => {
                         })
                     })
                     .catch(err => {
-                        errorhandler(err)
+                        errorhandler({err, fatal: true})
                         return reply.reply({
                             content: lang.todo.set_todo_ready.errors.set_todo_ready_error
                         }).then(async msg => {

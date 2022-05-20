@@ -85,7 +85,7 @@ module.exports.addProject = async (main_interaction) => {
                 })
             })
             .catch(err => {
-                return errorhandler(err, lang.projects.errors.failed_add, main_interaction.message.channel);
+                return errorhandler({err, message: lang.projects.errors.failed_add, channel: main_interaction.message.channel, fatal: true});
             });
     });
 
@@ -106,7 +106,7 @@ module.exports.addProject = async (main_interaction) => {
 
 
             }catch(err) {
-                return errorhandler(err);
+                return errorhandler({err, fatal: false});
             }
         }else {
 

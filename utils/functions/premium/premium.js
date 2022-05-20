@@ -27,7 +27,7 @@ module.exports.isUserPremium = async ({user_id}) => {
             }
         })
         .catch(err => {
-            errorhandler(err);
+            errorhandler({err, fatal: true});
             return {
                 error: true,
                 message: "Error while fetching user premium status"
@@ -65,7 +65,7 @@ module.exports.addUserPremium = async ({user_id, premium, platin}) => {
             }
         })
         .catch(err => {
-            errorhandler(err);
+            errorhandler({err, fatal: true});
             return {
                 error: true,
                 message: "Error while adding user premium status"
@@ -99,7 +99,7 @@ module.exports.updateUserPremium = async ({user_id, premium, platin}) => {
             }
         })
         .catch(err => {
-            errorhandler(err);
+            errorhandler({err, fatal: true});
             return {
                 error: true,
                 message: "Error while updating user premium status"
@@ -116,7 +116,7 @@ module.exports.removeUserPremium = async ({user_id}) => {
             }
         })
         .catch(err => {
-            errorhandler(err);
+            errorhandler({err, fatal: true});
             return {
                 error: true,
                 message: "Error while removing user premium status"
@@ -131,7 +131,7 @@ module.exports.getAllPremium = async () => {
             return res;
         })
         .catch(err => {
-            console.log(err);
+            errorhandler({err, fatal: true});
             return false;
         });
 }
