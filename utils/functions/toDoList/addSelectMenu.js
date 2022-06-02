@@ -1,7 +1,7 @@
 const {
     MessageSelectMenu
 } = require('discord.js');
-const { select_ProjectId, add_ProjectId, delete_Project, cancel_delete_project } = require('../../variables/variables');
+const { select_ProjectId, add_ProjectId, delete_Project, cancel_delete_project, personal_projectId } = require('../../variables/variables');
 const { getLang } = require('../getData/getLang');
 
 const addSelectMenu = async (projects, isDelete, guild_id) => {
@@ -27,6 +27,7 @@ const addSelectMenu = async (projects, isDelete, guild_id) => {
                 'description': lang.projects.selectmenu.choose_project_desc,
             }])
         })
+        
         if(!isDelete) {
             menu.addOptions([{
                 'value': delete_Project,
@@ -42,6 +43,12 @@ const addSelectMenu = async (projects, isDelete, guild_id) => {
                 'description': lang.projects.selectmenu.cancel_delete_desc
             }])
         }
+        
+        menu.addOptions([{
+            'value': personal_projectId,
+            'label': `----${lang.projects.selectmenu.personal_project}----`,
+            'description': lang.projects.selectmenu.personal_project_desc
+        }])
     }
 
     return menu;
