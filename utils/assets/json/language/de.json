@@ -38,7 +38,9 @@
             "delete_project": "Lösche ein Project",
             "delete_project_desc": "Klicke hier um ein Projekt zu löschen.",
             "cancel_delete": "Löschen abbrechen",
-            "cancel_delete_desc": "Löschen abbrechen und wieder auf die Startseite gelangen."
+            "cancel_delete_desc": "Löschen abbrechen und wieder auf die Startseite gelangen.",
+            "personal_project": "Persönliches Projekt",
+            "personal_project_desc": "[Premium|Not-Available] Klicke hier um deine persönlichen Projekte zu sehen."
         }
     },
     "todo": {

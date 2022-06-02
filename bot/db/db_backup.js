@@ -1,3 +1,4 @@
+const { errorhandler } = require('../../utils/functions/errorhandler/errorhandler');
 const dbconfig = require('../../_secret/db/db.json');
 const exec = require('child_process').exec;
 
@@ -8,6 +9,7 @@ module.exports.db_backup = () => {
     console.log(stderr);
     if (error !== null) {
         console.log(`Mysql exec error: ${error}`);
+        errorhandler({err: err + ' ' + stderr, fatal: true});
     }
   });
   exec(` cd ${dbconfig.backup.backup_repo} && git pull && git add . && git commit -m "${dbconfig.backup.backup_repo}" && git push`, (error, stdout, stderr) => {
@@ -15,6 +17,7 @@ module.exports.db_backup = () => {
     console.log(stderr);
     if (error !== null) {
         console.log(`Git exec error: ${error}`);
+        errorhandler({err: err + ' ' + stderr, fatal: true});
     }
   });
   
