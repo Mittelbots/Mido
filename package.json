@@ -23,7 +23,7 @@
   "dependencies": {
     "@discordjs/builders": "^0.13.0",
     "@discordjs/rest": "^0.4.1",
-    "discord-api-types": "^0.33.0",
+    "discord-api-types": "^0.33.2",
     "discord.js": "^13.7.0",
     "mysql": "^2.18.1",
     "node-sloc": "^0.2.1",
