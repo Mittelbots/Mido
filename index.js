@@ -63,7 +63,7 @@ deployCommands({
 createSlashCommands();
 
 bot.on('guildCreate', async (guild) => {
-    return await guildCreate({guild: guild, bot: bot})
+    return await guildCreate({guild, bot})
 });
 
 bot.on("messageCreate", message => {
@@ -142,8 +142,6 @@ process.on('unhandledRejection', err => {
     if (secret_config.debug) return console.log(err);
     else errorhandler({err, fatal: true});
 
-    bot.guilds.cache.get(config.debug_info.debug_server).members.cache.get(config.Bot_Owner_ID).send(err).catch(err => {});
-
     errorhandler({err: `---- BOT RESTARTED..., ${new Date()}`, fatal: false});
     spawn(process.argv[1], process.argv.slice(2), {
         detached: true,
@@ -155,8 +153,6 @@ process.on('unhandledRejection', err => {
 process.on('uncaughtException', err => {
     if (secret_config.debug) return console.log(err);
     else errorhandler({err, fatal: true});
-
-    bot.guilds.cache.get(config.debug_info.debug_server).members.cache.get(config.Bot_Owner_ID).send(err).catch(err => {});
 
     errorhandler({err: `---- BOT RESTARTED..., ${new Date()}`, fatal: false});
     spawn(process.argv[1], process.argv.slice(2), {
