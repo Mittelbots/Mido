@@ -15,6 +15,17 @@
 
 # **MIDO CHANGELOG**
 
+## **BETA VERSION 0.14.1**
+
+### Added things:
+    - added permission handling to all commands and select menus
+    - moved todo command to slash commands
+
+### Bug fixes:
+    - /
+
+<br><br>
+
 ## **BETA VERSION 0.14.0**
 
 ### Added things:
