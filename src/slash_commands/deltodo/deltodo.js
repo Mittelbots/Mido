@@ -3,12 +3,9 @@ const { hasPermissions } = require("../../../utils/functions/hasPermissions/hasP
 const {
     getLang
 } = require('../../../utils/functions/getData/getLang');
-const { getArchive } = require("../../../utils/functions/getData/getArchive");
 const { MessageEmbed } = require("discord.js");
-const randomColor = require('randomcolor');
 const { getProject } = require("../../../utils/functions/getData/getProject");
 const { MessageSelectMenu } = require("discord.js");
-const { addSelectMenu } = require("../../../utils/functions/toDoList/addSelectMenu");
 const { MessageActionRow } = require("discord.js");
 const { delete_ready_todo } = require("../../../utils/variables/variables");
 
@@ -41,7 +38,7 @@ module.exports.run = async ({
     const projects = await getProject(main_interaction.channel);
 
     const selectMenu = new MessageSelectMenu()
-        .setCustomId(delete_ready_todo)
+        .setCustomId(delete_ready_todo + ' $'+main_interaction.user.id)
         .setPlaceholder(lang.deltodo.select_placeholder)
         
         projects.map(prj => {

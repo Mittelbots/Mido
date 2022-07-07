@@ -9,7 +9,7 @@ module.exports = async ({main_interaction}) => {
     }
 
     const projects = await getProject(main_interaction.message.channel);
-    var newSelectMenu = await addSelectMenu(projects, false, main_interaction.message.guild.id)
+    var newSelectMenu = await addSelectMenu(main_interaction, projects, false, main_interaction.message.guild.id)
     await main_interaction.message.edit({
         components: [new MessageActionRow({
             components: [newSelectMenu]

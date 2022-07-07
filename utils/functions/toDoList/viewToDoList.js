@@ -14,7 +14,7 @@ module.exports.viewToDoList = async (projects, todo, main_interaction) => {
     await projects.map(async cat => {
         let isInProject;
         try {
-            isInProject = main_interaction.values.indexOf(select_ProjectId + cat.id);
+            isInProject = main_interaction.values[0].split(' ')[0].indexOf(select_ProjectId + cat.id);
         }catch(err) {
             isInProject = main_interaction.customId.search(cat.id) ?? main_interaction.customId.search(config.buttons.add_ToDo.customId);
         } 
