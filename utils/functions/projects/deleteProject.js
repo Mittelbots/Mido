@@ -57,7 +57,7 @@ module.exports.deleteProject = async (main_interaction, categories, isDelete) =>
         });
     } else {
 
-        if(main_interaction.values[0] === cancel_delete_project) {
+        if(main_interaction.values[0].split(' ')[0] === cancel_delete_project) {
             var newMessageEmbed = new MessageEmbed()
             .setTitle((categories) ? lang.projects.choose_new_project : lang.projects.first_add_new_project)
             .setTimestamp()
@@ -74,7 +74,7 @@ module.exports.deleteProject = async (main_interaction, categories, isDelete) =>
         const confirmSelectMenu = await addConfirmMenu();
 
         const confirmMessage = await main_interaction.message.channel.send({
-            content: `Willst du das Projekt ${main_interaction.values[0]} wirklich löschen?`,
+            content: `Willst du das Projekt ${main_interaction.values[0].split(' ')[0]} wirklich löschen?`,
             components: [new MessageActionRow({
                 components: [confirmSelectMenu]
             })]
@@ -106,8 +106,8 @@ module.exports.deleteProject = async (main_interaction, categories, isDelete) =>
                 })
                 return;
             }else {
-                const id = main_interaction.values[0].slice(4, main_interaction.values[0].length);
-                const name = main_interaction.values[0].slice(0, 3);
+                const id = main_interaction.values[0].split(' ')[0].slice(4, main_interaction.values[0].split(' ')[0].length);
+                const name = main_interaction.values[0].split(' ')[0].slice(0, 3);
                 return await database.query(`DELETE FROM ${config.tables.mido_projects} WHERE id = ?; UPDATE mido_todo SET state = ? WHERE cat_id = ?;`, [Number(id), toDoState_Deleted, Number(id)])
                     .then(async () => {
                         errorhandler({err: '', message: `Project removed UserID ${main_interaction.user.id} | GuildID: ${main_interaction.guild.id}`, fatal: false});
