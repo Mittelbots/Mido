@@ -44,11 +44,13 @@ const addSelectMenu = async (projects, isDelete, guild_id) => {
             }])
         }
         
-        menu.addOptions([{
-            'value': personal_projectId,
-            'label': `----${lang.projects.selectmenu.personal_project}----`,
-            'description': lang.projects.selectmenu.personal_project_desc
-        }])
+        if(!isDelete) {
+            menu.addOptions([{
+                'value': personal_projectId,
+                'label': `----${lang.projects.selectmenu.personal_project}----`,
+                'description': lang.projects.selectmenu.personal_project_desc
+            }])
+        }
     }
 
     return menu;

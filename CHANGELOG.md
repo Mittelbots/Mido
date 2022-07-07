@@ -15,6 +15,18 @@
 
 # **MIDO CHANGELOG**
 
+## **BETA VERSION 0.14.0**
+
+### Added things:
+    - added new slash command
+    - - /deltodo
+    - - used to delete all ready tasks in a specific project just with one click
+
+### Bug fixes:
+    - updated deps
+
+<br><br>
+
 ## **BETA VERSION 0.13.2**
 
 ### Added things:

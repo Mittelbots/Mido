@@ -83,7 +83,9 @@ module.exports.run = async (bot, message, args) => {
         components: [new MessageActionRow({
             components: [newMessageEmbedInteraction]
         })]
-    });
+    }).then(msg => {
+        msg.author.hasPermissions = message.author.id;
+    })
 }
 
 module.exports.help = {
