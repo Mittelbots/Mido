@@ -14,7 +14,8 @@
         "int_unexpected_end": "Die Interaktion wurde beendet wegen:",
         "task_already_ready": "Diese Aufgabe wurde schon als fertig makiert!",
         "fetching_config": "Es ist ein Fehler beim Laden der Konfiguration aufgetreten. Versuche es erneut oder kontaktiere einen Bot Supporter",
-        "ignoreModeOn": "Der Bot läuft gerade im IgnoreMode. Währenddessen kannst du keine Interaktion mit dem Bot starten."
+        "ignoreModeOn": "Der Bot läuft gerade im IgnoreMode. Währenddessen kannst du keine Interaktion mit dem Bot starten.",
+        "try_again_or_contact_support": "Bitte versuche es erneut oder kontaktiere den Botsupport."
     },
     "tips": {
         "cancel": "(Tipp: \"cancel\" bricht diesen Vorgang ab!)",
@@ -54,6 +55,7 @@
         "no_reminder": "Keinen Reminder gesetzt",
         "all_open_task_from": "Alle offenen Aufgaben von",
         "no_active_todo": "Dieser Nutzer hat keine aktiven Aufgaben!",
+        "got_mentioned": "Du wurdest in einer Aufgabe erwähnt!",
         "buttons": {
             "add": "Aufgabe hinzufügen",
             "change_project": "Projekt wechseln",
@@ -166,6 +168,17 @@
             "no_bot": "Du kannst keine Bots hinzufügen!",
             "succes": "Erfolgreich hinzugefügt!",
             "error": "Irgendetwas ist schief gelaufen! Der User konnte nicht als Premium hinzugefügt werden."
+        }
+    },
+    "deltodo": {
+        "embed_title": "Lösche alle als fertig makierte Aufgaben mit einem Klick.",
+        "select_placeholder": "Wähle ein Projekt aus.",
+        "embed_desc": "Lösche alle als fertig makierte Aufgaben in diesem Projekt.",
+        "errors": {
+            "failed_to_update": "Es ist ein Fehler aufgetreten beim ändern der state."
+        },
+        "success": {
+            "success_deleted": "Alle mit fertig makierten Aufgaben wurde erfolgreich dem Archiv hinzugefügt."
         }
     }
 }

@@ -3,6 +3,7 @@ module.exports.select_ProjectId = 'select_project';
 module.exports.delete_Project = 'delete_project';
 module.exports.cancel_delete_project = 'cancel_delete_project';
 module.exports.personal_projectId = 'personal_project';
+module.exports.delete_ready_todo = 'delete_ready_todo';
 
 //==========================================================
 //? TODO STATES

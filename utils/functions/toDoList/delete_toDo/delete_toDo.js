@@ -61,6 +61,7 @@ module.exports = async ({main_interaction}) => {
 
             return;
         }
+
         if (isNaN(reply.content)) {
             return reply.reply({
                 content: lang.errors.only_numbers
@@ -76,9 +77,19 @@ module.exports = async ({main_interaction}) => {
                 .then(res => {
                     return res[0]
                 })
-                .catch(err => console.log(err));
+                .catch(err => {
+                    errorhandler({
+                        err,
+                        fatal: true
+                    })
+
+                    decrease_toDoInteractionCount(main_interaction.user.id);
+                    reply.delete().catch(err => {})
+                    del_todoMessage.delete().catch(err => {})
+                });
 
             if (task) {
+
                 return await database.query(`UPDATE ${config.tables.mido_todo} SET state = ? WHERE id = ?`, [toDoState_Deleted, reply.content])
                     .then(async () => {
                         errorhandler({err: '', message: `Todo archived UserID ${main_interaction.user.id} | GuildID: ${main_interaction.guild.id}`, fatal: false});

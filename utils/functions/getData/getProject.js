@@ -18,4 +18,30 @@ async function getProject(channel) {
         });
 }
 
+module.exports.getProjectById = async (project_id, guild_id) => {
+    const lang = require(`../../assets/json/language/${await getLang(guild_id)}.json`)
+
+    return await database.query(`SELECT * FROM ${config.tables.mido_projects} WHERE guild_id = ? AND id = ?`, [guild_id, project_id])
+        .then(res => {
+            if(res.length <= 0) {
+                return {
+                    error: true,
+                    message: 'No Project found with this ID.'
+                }
+            }
+
+            return {
+                error: false,
+                data: res
+            };
+        })
+        .catch(err => {
+            errorhandler({err, fatal: true});
+            return {
+                error: true,
+                message: lang.errors.general
+            };
+        });
+}
+
 module.exports = {getProject};

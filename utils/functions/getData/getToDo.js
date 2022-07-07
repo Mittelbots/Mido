@@ -1,10 +1,10 @@
 const database = require('../../../bot/db/db');
-const { toDoState_Deleted } = require('../../variables/variables');
+const { toDoState_Deleted, toDoState_Ready } = require('../../variables/variables');
 const { errorhandler } = require('../errorhandler/errorhandler');
 const { getLang } = require('./getLang');
 const config = require('../../assets/json/_config/config.json');
 
-async function getToDo(channel, id) {
+module.exports.getToDo = async (channel, id) => {
     const lang = require(`../../assets/json/language/${await getLang(channel.guild.id)}.json`)
     let sql;
     let args;
@@ -30,4 +30,27 @@ async function getToDo(channel, id) {
         });
 }
 
-module.exports = {getToDo};
+
+module.exports.getToDoByProjectId = async (guild_id, project_id) => {
+    const lang = require(`../../assets/json/language/${await getLang(guild_id)}.json`)
+
+    return await database.query(`SELECT * FROM ${config.tables.mido_todo} WHERE guild_id = ? AND cat_id = ? AND state = ?`, [guild_id, project_id, toDoState_Ready])
+        .then(res => {
+            if(res.length <= 0) return {
+                error: true,
+                message: 'No tasks found for this Project ID'
+            }
+
+            return {
+                error: false,
+                data: res
+            }
+        })
+        .catch(err => {
+            errorhandler({err, fatal: true});
+            return {
+                error: true,
+                message: lang.errors.general
+            }
+        })
+}
