@@ -5,7 +5,15 @@ const { MessageActionRow } = require("discord.js");
 const config = require("../../../assets/json/_config/config.json");
 
 module.exports.buttonInteraction = async ({main_interaction, projects, todo}) => {
-   
+
+    let regex = /_[0-9]+/i;
+    let permissions = main_interaction.customId.split('$')[1];
+
+    try {
+        permissions = permissions.replace(permissions.match(regex)[0], '')
+    }catch(err) {}
+
+    if(permissions !== main_interaction.user.id) return;
     
     //=========================================================
 
@@ -52,31 +60,29 @@ module.exports.buttonInteraction = async ({main_interaction, projects, todo}) =>
     }
 
     //=========================================================
-    if(main_interaction.customId.indexOf(config.buttons.add_toDo.customId) !== -1) {
+    if(main_interaction.customId.split(' ')[0].indexOf(config.buttons.add_toDo.customId) !== -1) {
         await require('../newToDo/addNewToDo')(main_interaction);
     }
 
-    if(main_interaction.customId.indexOf(config.buttons.set_todo_ready.customId) !== -1) {
+    if(main_interaction.customId.split(' ')[0].indexOf(config.buttons.set_todo_ready.customId) !== -1) {
         await require('../set_toDo_ready/set_toDo_ready')({main_interaction})
     }
 
-    if(main_interaction.customId.indexOf(config.buttons.delete_toDo.customId) !== -1) {
+    if(main_interaction.customId.split(' ')[0].indexOf(config.buttons.delete_toDo.customId) !== -1) {
         await require('../delete_toDo/delete_toDo')({main_interaction})
     }
 
-    if(main_interaction.customId.indexOf(config.buttons.options.customId) !== -1) {
+    if(main_interaction.customId.split(' ')[0].indexOf(config.buttons.options.customId) !== -1) {
         if(!getCurrentProjectId(main_interaction.user.id)) changeCurrentProjectId(main_interaction.customId.split('_')[1], main_interaction.user.id);
         await require('../optionsButton/optionsButton')({main_interaction})
     }
 
-    if(main_interaction.customId.indexOf(config.buttons.edit_toDo.customId) !== -1) {
+    if(main_interaction.customId.split(' ')[0].indexOf(config.buttons.edit_toDo.customId) !== -1) {
         if(!getCurrentProjectId(main_interaction.user.id)) changeCurrentProjectId(main_interaction.customId.split('_')[1], main_interaction.user.id);
         await require('../editToDoItem/editToDoItem')({main_interaction});
     }
 
-    switch(main_interaction.customId) {
-        case config.buttons.change_prod.customId:
-            await require('../change_prod/change_prod')({main_interaction});
-        break;
+    if(main_interaction.customId.split(' ')[0].indexOf(config.buttons.change_prod.customId) !== -1) {
+        await require('../change_prod/change_prod')({main_interaction});
     }
 }

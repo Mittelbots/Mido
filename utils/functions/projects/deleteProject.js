@@ -48,7 +48,7 @@ module.exports.deleteProject = async (main_interaction, categories, isDelete) =>
             .setDescription(lang.projects.choose_project_to_delete_warning)
             .setTimestamp()
 
-        var newMessageEmbedInteraction = await addSelectMenu(categories, true, main_interaction.message.guild.id);
+        var newMessageEmbedInteraction = await addSelectMenu(main_interaction, categories, true, main_interaction.message.guild.id);
         main_interaction.message.edit({
             embeds: [newMessageEmbed],
             components: [new MessageActionRow({
@@ -62,7 +62,7 @@ module.exports.deleteProject = async (main_interaction, categories, isDelete) =>
             .setTitle((categories) ? lang.projects.choose_new_project : lang.projects.first_add_new_project)
             .setTimestamp()
 
-            var newMessageEmbedInteraction = await addSelectMenu(categories, false, main_interaction.message.guild.id);
+            var newMessageEmbedInteraction = await addSelectMenu(main_interaction, categories, false, main_interaction.message.guild.id);
             main_interaction.message.edit({
                 embeds: [newMessageEmbed],
                 components: [new MessageActionRow({
@@ -96,7 +96,7 @@ module.exports.deleteProject = async (main_interaction, categories, isDelete) =>
                         .setTitle(lang.projects.choose_new_project)
                         .setTimestamp()
 
-                    var newMessageEmbedInteraction = await addSelectMenu(categories, false, main_interaction.message.guild.id);
+                    var newMessageEmbedInteraction = await addSelectMenu(main_interaction,categories, false, main_interaction.message.guild.id);
                     return main_interaction.message.edit({
                         embeds: [newMessageEmbed],
                         components: [new MessageActionRow({
@@ -136,7 +136,7 @@ module.exports.deleteProject = async (main_interaction, categories, isDelete) =>
                             .setTitle((categories) ? lang.projects.choose_new_project : lang.projects.first_add_new_project)
                             .setTimestamp()
         
-                        var newMessageEmbedInteraction = await addSelectMenu(categories, false, main_interaction.message.guild.id);
+                        var newMessageEmbedInteraction = await addSelectMenu(main_interaction, categories, false, main_interaction.message.guild.id);
                         return main_interaction.message.edit({
                             embeds: [newMessageEmbed],
                             components: [new MessageActionRow({

@@ -8,7 +8,6 @@ module.exports.editToDoList = async (projects, todo, main_interaction, isMain) =
     if(!currentToDoList) {
         return decrease_currentSiteCount();   
     }
-
     let buttons;
     if(isMain) {
         buttons = await addButtons({main_interaction});
@@ -20,7 +19,7 @@ module.exports.editToDoList = async (projects, todo, main_interaction, isMain) =
         components: [new MessageActionRow({
             components: [...buttons]
         })]
-    }).catch(async () => {
+    }).catch(async (err) => {
         currentSiteCount = decrease_currentSiteCount();
     });
     return [message];

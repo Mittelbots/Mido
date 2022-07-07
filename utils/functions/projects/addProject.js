@@ -66,7 +66,7 @@ module.exports.addProject = async (main_interaction) => {
                 const refresh = await refreshProject_ToDo(main_interaction);
                 categories = refresh[0];
 
-                const newSelectMenu = await addSelectMenu(categories, null, main_interaction.message.guild.id)
+                const newSelectMenu = await addSelectMenu(main_interaction, categories, null, main_interaction.message.guild.id)
 
                 main_interaction.message.edit({
                     components: [new MessageActionRow({
