@@ -1,4 +1,4 @@
-const { MessageActionRow } = require("discord.js");
+const { ActionRowBuilder } = require("discord.js");
 const database = require("../../../bot/db/db");
 const { delay } = require("../delay/delay");
 const { errorhandler } = require("../errorhandler/errorhandler");
@@ -69,7 +69,7 @@ module.exports.addProject = async (main_interaction) => {
                 const newSelectMenu = await addSelectMenu(main_interaction, categories, null, main_interaction.message.guild.id)
 
                 main_interaction.message.edit({
-                    components: [new MessageActionRow({
+                    components: [new ActionRowBuilder({
                         components: [newSelectMenu]
                     })]
                 });

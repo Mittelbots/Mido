@@ -19,10 +19,16 @@ module.exports.watchToDoList = (bot) => {
                 if (res.length <= 0) return;
 
                 res.map(async task => {
-                    var deadlineTime = new Date(task.deadline)
-                    var currentTime = new Date();
+                    var deadline = task.deadline.split(".");
+
+                    var deadlineTime = new Date(deadline[2], deadline[1], deadline[0]);
+                    deadlineTime.setMonth(deadlineTime.getMonth() - 1)
+                    deadlineTime.setDate(deadlineTime.getDate() + 1)
                     
-                    if (currentTime.getTime() >= deadlineTime.getTime()) { //DeadLine passed
+
+                    var currentTime = new Date();
+
+                    if (currentTime.getTime() <= deadlineTime.getTime()) { //DeadLine passed
 
                         const lang = require(`../../assets/json/language/${await getLang(task.guild_id)}.json`)
 
@@ -32,11 +38,21 @@ module.exports.watchToDoList = (bot) => {
                         const text = task.text;
                         const other_user = task.other_user;
                         const project_id = task.cat_id;
-                        const reminderDate = new Date(task.reminder);
                         const guild = await bot.guilds.cache.get(task.guild_id);
-                        const message = `${lang.todo.watchToDoList.message.the_task} ${title} ${lang.todo.watchToDoList.message.last}`;
+                        const message = `${lang.todo.watchToDoList.message.the_task} **${title}** ${lang.todo.watchToDoList.message.last}`;
 
-                        if (reminderDate && currentTime.getTime() >= reminderDate.getTime()) {
+
+                        task.reminder = task.reminder.split(" ");
+                        var reminderDate = task.reminder[0].split(".");
+                        var reminderTime = task.reminder[1].split(":");
+
+                        reminderDate = new Date(deadline[2], deadline[1], deadline[0], reminderTime[0], reminderTime[1]);
+                        reminderDate.setMonth(reminderDate.getMonth() - 1)
+                        reminderDate.setDate(reminderDate.getDate() + 1)
+
+                        console.log(reminderDate)
+
+                        if (reminderDate && currentTime.getTime() <= reminderDate.getTime()) {
                             return sendMessageToUser();
                         }
 
@@ -45,17 +61,21 @@ module.exports.watchToDoList = (bot) => {
                         async function sendMessageToUser() {
                             try {
                                 if (other_user) {
-                                    var dm_other_user = bot.users.cache.get(other_user);
-                                    dm_other_user.send(message);
-                                    dmCount++;
+                                    other_user = removeMention(other_user);
+                                    other_user = other_user.split(" ");
+                                    for(let i in other_user) {
+                                        let dm_other_user = bot.users.cache.get(other_user[i]);
+                                        dm_other_user.send(message).catch(err => {})
+                                        dmCount++;
+                                    }
                                 }
                             } catch (err) {
                                 //!Cant find user in cache or user has dm closed
                                 failedCount++;
                             }
                             try {
-                                var dm_todo_owner = guild.members.cache.find(member => member.id.includes(user)).user
-                                dm_todo_owner.send(message);
+                                var dm_todo_owner = bot.users.cache.get(user)
+                                dm_todo_owner.send(message).catch(err => {})
                                 dmCount++;
                             } catch (err) {
                                 //!Cant find user in cache or user has dm closed
@@ -74,8 +94,6 @@ module.exports.watchToDoList = (bot) => {
             }).catch(err => {
                 return errorhandler({err, fatal: true})
             });
-
-        console.info(`${count} tasks successfully passed the deadline & ${dmCount} DM's successfully sent. [I coudn't sent a DM to ${failedCount} users.]`)
         errorhandler({err: `${count} tasks successfully passed the deadline & ${dmCount} DM's successfully sent. [I coudn't sent a DM to ${failedCount} users.]`, fatal: false})
-    }, 600000); // 10 MIN |  600000
+    }, 10000); // 10 MIN |  600000
 }

@@ -15,6 +15,8 @@ async function messageCreate(message, bot) {
     var cmd = messageArray[0];
     var args = messageArray.slice(1);
 
+    let events = message.guild.scheduledEvents.cache;
+
     const prefix = await getPrefix({
         guild_id: message.guild.id
     })

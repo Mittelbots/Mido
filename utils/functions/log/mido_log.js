@@ -1,5 +1,5 @@
 const {
-    MessageEmbed
+    EmbedBuilder
 } = require('discord.js');
 const database = require('../../../bot/db/db');
 const config = require('../../assets/json/_config/config.json');
@@ -43,7 +43,7 @@ module.exports.createLog = async ({
     } catch (err) {
         return false;
     }
-    var log_embed = new MessageEmbed();
+    var log_embed = new EmbedBuilder();
 
     var titleemote;
     var isToDo = true;
@@ -70,7 +70,7 @@ module.exports.createLog = async ({
             titleemote = config.buttons.change_prod.emoji;
             isToDo = false;
 
-            log_embed.addField(lang.logs.project_name, data.name);
+            log_embed.addFields([{name: lang.logs.project_name, value: data.name}]);
             
             break;
         case 5:
@@ -78,20 +78,24 @@ module.exports.createLog = async ({
             titleemote = config.buttons.delete_toDo.emoji
             isToDo = false;
 
-            log_embed.addField(lang.logs.project_name, data.name);
-            log_embed.addField('ID', data.id);
+            log_embed.addFields([
+                { name: lang.logs.project_name, value: data.name },
+                { name: 'ID', value: data.id }
+            ]);
 
             break;
 
     }
     if(isToDo) {
-        log_embed.addField(lang.logs.todo_name, data.title)
-        log_embed.addField(lang.logs.todo_content, data.text || 'No Text provided')
-        log_embed.addField(lang.todo.deadline, data.deadline || 'No Deadline provided')
-        log_embed.addField(lang.todo.reminder, data.reminder || 'No Reminder provided')
-        log_embed.addField(lang.todo.other_user, data.other_user|| 'No other user provided')
+        log_embed.addFields([
+            {name: lang.logs.todo_name, value: data.title},
+            {name: lang.logs.todo_content, value: data.text || 'No Text provided'},
+            {name: lang.todo.deadline, value: data.deadline || 'No Deadline provided'},
+            {name: lang.todo.reminder, value: data.reminder || 'No Reminder provided'},
+            {name: lang.todo.other_user, value: data.other_user|| 'No other user provided'}
+        ]);
 
-        if(type !== lang.logs.x_todo_create) log_embed.addField('ID:', data.id.toString())
+        if(type !== lang.logs.x_todo_create) log_embed.addFields([{name: 'ID:', value: data.id.toString()}])
 
     }
 

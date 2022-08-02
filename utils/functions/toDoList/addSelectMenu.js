@@ -1,5 +1,5 @@
 const {
-    MessageSelectMenu
+    SelectMenuBuilder
 } = require('discord.js');
 const { select_ProjectId, add_ProjectId, delete_Project, cancel_delete_project, personal_projectId } = require('../../variables/variables');
 const { getLang } = require('../getData/getLang');
@@ -7,7 +7,7 @@ const { getLang } = require('../getData/getLang');
 const addSelectMenu = async (main_interaction,projects, isDelete, guild_id) => {
     const lang = require(`../../assets/json/language/${await getLang(guild_id)}.json`)
 
-    var menu = new MessageSelectMenu()
+    var menu = new SelectMenuBuilder()
         .setCustomId((isDelete) ? delete_Project : select_ProjectId)
         .setPlaceholder((projects) ? lang.projects.selectmenu.choose_project : lang.projects.selectmenu.add_new_project)
         
@@ -57,7 +57,7 @@ const addSelectMenu = async (main_interaction,projects, isDelete, guild_id) => {
 }
 
 const addConfirmMenu = async () => {
-    let menu = new MessageSelectMenu()
+    let menu = new SelectMenuBuilder()
         .setCustomId('confirmDelete')
         .setPlaceholder('Bitte bestätigen')
         .addOptions([{

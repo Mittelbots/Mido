@@ -1,4 +1,4 @@
-const { MessageActionRow } = require("discord.js");
+const { ActionRowBuilder } = require("discord.js");
 const { decrease_currentSiteCount } = require("../../../variables/variables");
 const { addButtons, addOptionButtons } = require("../addButtonsToList");
 const { viewToDoList } = require("../viewToDoList");
@@ -16,7 +16,7 @@ module.exports.editToDoList = async (projects, todo, main_interaction, isMain) =
     }
     let message = await main_interaction.message.edit({
         embeds: [currentToDoList],
-        components: [new MessageActionRow({
+        components: [new ActionRowBuilder({
             components: [...buttons]
         })]
     }).catch(async (err) => {

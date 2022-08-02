@@ -1,10 +1,11 @@
+const { InteractionType } = require("discord-api-types/v10");
 const { handleSlashCommands } = require("../../src/slash_commands");
 const { isUserPremium } = require("../../utils/functions/premium/premium");
 const { ProjectInteraction } = require("../../utils/functions/toDoList/ProjectInteraction");
 
 module.exports.interactionCreate = (bot) => {
     bot.on('interactionCreate', async (main_interaction) => {
-        if(main_interaction.isCommand()) {
+        if(main_interaction.type === InteractionType.ApplicationCommand) {
             const isPremium = await isUserPremium({user_id: main_interaction.user.id});
 
             if(isPremium.error) return main_interaction.reply({

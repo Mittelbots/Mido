@@ -1,10 +1,10 @@
-const { SlashCommandBuilder } = require("@discordjs/builders")
+const { SlashCommandBuilder } = require("discord.js")
 const { hasPermissions } = require("../../../utils/functions/hasPermissions/hasPermissions")
 const {
     getLang
 } = require('../../../utils/functions/getData/getLang');
 const { getArchive } = require("../../../utils/functions/getData/getArchive");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const randomColor = require('randomcolor');
 
 
@@ -43,18 +43,20 @@ module.exports.run = async ({
         ephemeral: true
 	}).catch(err => {})
 
-	const archiveEmbed = new MessageEmbed()
+	const archiveEmbed = new EmbedBuilder()
 		.setTitle(`${(isGuildArchive) ? lang.archiv.guild : lang.archiv.personal} - ${lang.archiv.title}`)
 		.setColor(randomColor())
 		
 	archive.map(task => {
-		archiveEmbed.addField(`${task.title} ||ID: ${task.id}||`, `
+		archiveEmbed.addFields([{
+            name: `${task.title} ||ID: ${task.id}||`, 
+            value: `
 			${'\n '+task.text || lang.todo.no_text}
 			\n ${lang.todo.deadline}: ${task.deadline || '**'+lang.todo.no_deadline+'**'}
 			${lang.todo.reminder}: ${task.reminder ||  '**'+lang.todo.no_reminder+'**'}
 			${lang.todo.other_user}: ${task.reminder ||  '**'+lang.todo.no_other_user+'**'}
 			~~**------------------------------**~~
-		`);
+		`}]);
 	});
 	
 	return await main_interaction.reply({

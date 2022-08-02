@@ -1,6 +1,6 @@
 const {
-    MessageActionRow,
-    MessageEmbed
+    ActionRowBuilder,
+    EmbedBuilder
 } = require("discord.js");
 const database = require("../../../bot/db/db");
 const { toDoState_Deleted, cancel_delete_project } = require("../../variables/variables");
@@ -43,30 +43,30 @@ module.exports.deleteProject = async (main_interaction, categories, isDelete) =>
     }
 
     if (!isDelete) {
-        var newMessageEmbed = new MessageEmbed()
+        var newEmbedBuilder = new EmbedBuilder()
             .setTitle(lang.projects.choose_project_to_delete)
             .setDescription(lang.projects.choose_project_to_delete_warning)
             .setTimestamp()
 
-        var newMessageEmbedInteraction = await addSelectMenu(main_interaction, categories, true, main_interaction.message.guild.id);
+        var newEmbedBuilderInteraction = await addSelectMenu(main_interaction, categories, true, main_interaction.message.guild.id);
         main_interaction.message.edit({
-            embeds: [newMessageEmbed],
-            components: [new MessageActionRow({
-                components: [newMessageEmbedInteraction]
+            embeds: [newEmbedBuilder],
+            components: [new ActionRowBuilder({
+                components: [newEmbedBuilderInteraction]
             })]
         });
     } else {
 
         if(main_interaction.values[0].split(' ')[0] === cancel_delete_project) {
-            var newMessageEmbed = new MessageEmbed()
+            var newEmbedBuilder = new EmbedBuilder()
             .setTitle((categories) ? lang.projects.choose_new_project : lang.projects.first_add_new_project)
             .setTimestamp()
 
-            var newMessageEmbedInteraction = await addSelectMenu(main_interaction, categories, false, main_interaction.message.guild.id);
+            var newEmbedBuilderInteraction = await addSelectMenu(main_interaction, categories, false, main_interaction.message.guild.id);
             main_interaction.message.edit({
-                embeds: [newMessageEmbed],
-                components: [new MessageActionRow({
-                    components: [newMessageEmbedInteraction]
+                embeds: [newEmbedBuilder],
+                components: [new ActionRowBuilder({
+                    components: [newEmbedBuilderInteraction]
                 })]
             });
             return;
@@ -75,7 +75,7 @@ module.exports.deleteProject = async (main_interaction, categories, isDelete) =>
 
         const confirmMessage = await main_interaction.message.channel.send({
             content: `Willst du das Projekt ${main_interaction.values[0].split(' ')[0]} wirklich löschen?`,
-            components: [new MessageActionRow({
+            components: [new ActionRowBuilder({
                 components: [confirmSelectMenu]
             })]
         });
@@ -92,15 +92,15 @@ module.exports.deleteProject = async (main_interaction, categories, isDelete) =>
                     msg.delete().catch(err => {})
                     confirm_interaction.message.delete().catch(err => {})
 
-                    var newMessageEmbed = new MessageEmbed()
+                    var newEmbedBuilder = new EmbedBuilder()
                         .setTitle(lang.projects.choose_new_project)
                         .setTimestamp()
 
-                    var newMessageEmbedInteraction = await addSelectMenu(main_interaction,categories, false, main_interaction.message.guild.id);
+                    var newEmbedBuilderInteraction = await addSelectMenu(main_interaction,categories, false, main_interaction.message.guild.id);
                     return main_interaction.message.edit({
-                        embeds: [newMessageEmbed],
-                        components: [new MessageActionRow({
-                            components: [newMessageEmbedInteraction]
+                        embeds: [newEmbedBuilder],
+                        components: [new ActionRowBuilder({
+                            components: [newEmbedBuilderInteraction]
                         })]
                     });
                 })
@@ -132,15 +132,15 @@ module.exports.deleteProject = async (main_interaction, categories, isDelete) =>
                         const refresh = await refreshProject_ToDo(main_interaction);
                         categories = refresh[0];
         
-                        var newMessageEmbed = new MessageEmbed()
+                        var newEmbedBuilder = new EmbedBuilder()
                             .setTitle((categories) ? lang.projects.choose_new_project : lang.projects.first_add_new_project)
                             .setTimestamp()
         
-                        var newMessageEmbedInteraction = await addSelectMenu(main_interaction, categories, false, main_interaction.message.guild.id);
+                        var newEmbedBuilderInteraction = await addSelectMenu(main_interaction, categories, false, main_interaction.message.guild.id);
                         return main_interaction.message.edit({
-                            embeds: [newMessageEmbed],
-                            components: [new MessageActionRow({
-                                components: [newMessageEmbedInteraction]
+                            embeds: [newEmbedBuilder],
+                            components: [new ActionRowBuilder({
+                                components: [newEmbedBuilderInteraction]
                             })]
                         });
                     })

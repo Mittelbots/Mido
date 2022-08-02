@@ -1,12 +1,12 @@
-const { SlashCommandBuilder } = require("@discordjs/builders")
+const { SlashCommandBuilder } = require("discord.js")
 const { hasPermissions } = require("../../../utils/functions/hasPermissions/hasPermissions")
 const {
     getLang
 } = require('../../../utils/functions/getData/getLang');
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const { getProject } = require("../../../utils/functions/getData/getProject");
-const { MessageSelectMenu } = require("discord.js");
-const { MessageActionRow } = require("discord.js");
+const { SelectMenuBuilder } = require("discord.js");
+const { ActionRowBuilder } = require("discord.js");
 const { delete_ready_todo } = require("../../../utils/variables/variables");
 
 
@@ -31,13 +31,13 @@ module.exports.run = async ({
         }).catch(err => {})
     }
 
-    const projectEmbed = new MessageEmbed()
+    const projectEmbed = new EmbedBuilder()
         .setTitle(lang.deltodo.embed_title)
         .setTimestamp()
 
     const projects = await getProject(main_interaction.channel);
 
-    const selectMenu = new MessageSelectMenu()
+    const selectMenu = new SelectMenuBuilder()
         .setCustomId(delete_ready_todo + ' $'+main_interaction.user.id)
         .setPlaceholder(lang.deltodo.select_placeholder)
         
@@ -51,7 +51,7 @@ module.exports.run = async ({
 
     main_interaction.reply({
         embeds: [projectEmbed],
-        components: [new MessageActionRow({
+        components: [new ActionRowBuilder({
             components: [selectMenu]
         })]
     })

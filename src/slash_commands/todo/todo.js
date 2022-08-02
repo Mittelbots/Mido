@@ -1,8 +1,8 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 
 const {
-    MessageActionRow,
-    MessageEmbed
+    ActionRowBuilder,
+    EmbedBuilder
 } = require('discord.js');
 const {
     delay
@@ -74,16 +74,16 @@ module.exports.run = async ({main_interaction, bot}) => {
     }
     var categories = await getProject(main_interaction.channel);
 
-    var newMessageEmbed = new MessageEmbed()
+    var newEmbedBuilder = new EmbedBuilder()
         .setTitle((categories) ? lang.projects.choose_new_project : lang.projects.first_add_new_project)
         .setTimestamp()
 
-    var newMessageEmbedInteraction = await addSelectMenu(main_interaction, categories, false, main_interaction.guild.id);
+    var newEmbedBuilderInteraction = await addSelectMenu(main_interaction, categories, false, main_interaction.guild.id);
     
     return await main_interaction.reply({
-        embeds: [newMessageEmbed],
-        components: [new MessageActionRow({
-            components: [newMessageEmbedInteraction]
+        embeds: [newEmbedBuilder],
+        components: [new ActionRowBuilder({
+            components: [newEmbedBuilderInteraction]
         })]
     })
 }

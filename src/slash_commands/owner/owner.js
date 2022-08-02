@@ -1,5 +1,5 @@
 const config = require('../../../utils/assets/json/_config/config.json');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 const { addUserPremium } = require('../../../utils/functions/premium/premium');
 const { getLang } = require('../../../utils/functions/getData/getLang');
 

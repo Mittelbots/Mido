@@ -1,6 +1,6 @@
 const {
     SlashCommandBuilder
-} = require('@discordjs/builders');
+} = require('discord.js');
 const { errorhandler } = require('../../../utils/functions/errorhandler/errorhandler');
 const {
     getLang
