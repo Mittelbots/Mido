@@ -22,7 +22,7 @@
   "homepage": "https://github.com/Mittelbots/Mido#readme",
   "dependencies": {
     "@discordjs/rest": "^1.0.1",
-    "discord-api-types": "^0.37.1",
+    "discord-api-types": "^0.37.11",
     "discord.js": "^14.3.0",
     "mysql": "^2.18.1",
     "node-sloc": "^0.2.1",
