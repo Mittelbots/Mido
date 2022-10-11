@@ -1,8 +1,7 @@
-const { ButtonBuilder } = require('discord.js');
+const { ButtonBuilder, ButtonStyle } = require('discord.js');
 const { getLang } = require('../getData/getLang');
 const config = require('../../assets/json/_config/config.json');
 const { getCurrentProjectId } = require('../../variables/variables');
-const { ButtonStyle } = require('discord-api-types/v10');
 
 module.exports.addButtons = async ({main_interaction}) => {
 
