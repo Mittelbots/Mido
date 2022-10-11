@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const database = require("../../../bot/db/db");
 const { errorhandler } = require("../errorhandler/errorhandler");
 const { getProject } = require("../getData/getProject");
@@ -15,13 +15,13 @@ module.exports.viewUserToDo = async (user_id, guild_id, channel) => {
             }else {
                 const categories = await getProject(channel);
 
-                const newEmbed = new MessageEmbed();
+                const newEmbed = new EmbedBuilder();
                 newEmbed.setDescription(`${lang.todo.all_open_task_from} <@${user_id}>`)
                 
                 res.map(todo => {
                     categories.map(cat => {
                         if(todo.cat_id === cat.id) {
-                            newEmbed.addField(`${lang.projects.project}: ${cat.name}\n⏹️ ${todo.title} ||ID: ${todo.id}||`, `_ ${todo.text || lang.todo.no_text}_ \n\n**${lang.todo.deadline}:** ${todo.deadline || lang.todo.no_deadline} \n**${lang.todo.other_user}:** ${todo.other_user || lang.todo.no_other_user} \n**-----------------**`)
+                            newEmbed.addFields([{name: `${lang.projects.project}: ${cat.name}\n⏹️ ${todo.title} ||ID: ${todo.id}||`, value: `_ ${todo.text || lang.todo.no_text}_ \n\n**${lang.todo.deadline}:** ${todo.deadline || lang.todo.no_deadline} \n**${lang.todo.other_user}:** ${todo.other_user || lang.todo.no_other_user} \n**-----------------**`}])
                         }
                     });
                 });

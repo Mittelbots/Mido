@@ -1,4 +1,4 @@
-const { MessageActionRow } = require("discord.js");
+const { ActionRowBuilder } = require("discord.js");
 const { increase_toDoInteractionCount, decrease_toDoInteractionCount, getCurrentInteractionCount } = require("../../../variables/variables");
 const { getProject } = require("../../getData/getProject");
 const { addSelectMenu } = require("../addSelectMenu");
@@ -11,7 +11,7 @@ module.exports = async ({main_interaction}) => {
     const projects = await getProject(main_interaction.message.channel);
     var newSelectMenu = await addSelectMenu(main_interaction, projects, false, main_interaction.message.guild.id)
     await main_interaction.message.edit({
-        components: [new MessageActionRow({
+        components: [new ActionRowBuilder({
             components: [newSelectMenu]
         })]
     });

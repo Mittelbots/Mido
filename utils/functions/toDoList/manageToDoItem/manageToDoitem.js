@@ -1,7 +1,7 @@
 const database = require("../../../../bot/db/db");
 const { newToDoEmbed } = require("../newToDo/newToDoEmbed");
 const {
-    MessageActionRow
+    ActionRowBuilder
 } = require("discord.js");
 const {
     toDoState_Active, increase_toDoAddCount, decrease_toDoAddCount, decrease_toDoInteractionCount, getCurrentProjectId
@@ -41,10 +41,10 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
 
     var manageTask;
     if(isNewTask) {
-        const buttons = newToDoButtons(false, lang)
+        const buttons = newToDoButtons(main_interaction, false, lang)
         manageTask = await main_interaction.channel.send({
             embeds: [newToDoEmbed()],
-            components: [new MessageActionRow({
+            components: [new ActionRowBuilder({
                 components: [buttons[0], buttons[1], buttons[2], buttons[3], buttons[4]]
             })]
         });
@@ -64,11 +64,11 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
         var old_reminder = toDoItem.reminder;
         var old_user = toDoItem.other_user;
 
-        const buttons = newToDoButtons(false, lang);
+        const buttons = newToDoButtons(main_interaction, false, lang);
 
         manageTask = await main_interaction.channel.send({
             embeds: [editToItemEmbed(toDoItem.title, toDoItem.text, toDoItem.deadline, toDoItem.other_user, toDoId)],
-            components: [new MessageActionRow({
+            components: [new ActionRowBuilder({
                 components: [buttons[0], buttons[1], buttons[2], buttons[3], buttons[4]]
             })]
         });
@@ -84,8 +84,8 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
         if (increase_toDoAddCount(main_interaction.user.id) > 1) {
             return;
         }
-
-        switch (todo_interaction.customId) {
+        
+        switch (todo_interaction.customId.split(' ')[0]) {
             case 'add_title':
                 todo_interaction_reply = await todo_interaction.message.reply({
                     content: lang.todo.newtodo.interaction.add_title
@@ -149,6 +149,22 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
                                 user: main_interaction.user,
                                 guild: main_interaction.guild
                             })
+                            if(user.length > 0) {
+                                user = removeMention(user);
+                                user = user.split(" ");
+                                for(let i in user) {
+                                    main_interaction.guild.members.fetch(user[i]).then(user => {
+                                        if(user) {
+                                            try {
+                                                user.send({
+                                                    content: `${lang.todo.got_mentioned} - **${title}**`
+                                                }).catch(err => {})
+                                            }catch(err){}
+                                        }
+                                    });
+                                }
+                            }
+
                             await todo_interaction.channel.send({
                                 content: lang.todo.newtodo.success.saved
                             }).then(async msg => {
@@ -182,8 +198,8 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
 
             case 'next':
                 await todo_interaction.message.edit({
-                    components: [new MessageActionRow({
-                        components: [newToDoButtons(true, lang)[0], newToDoButtons(true, lang)[1], newToDoButtons(true, lang)[2]]
+                    components: [new ActionRowBuilder({
+                        components: [newToDoButtons(main_interaction,true, lang)[0], newToDoButtons(main_interaction, true, lang)[1], newToDoButtons(main_interaction, true, lang)[2]]
                     })]
                 });
                 decrease_toDoAddCount(main_interaction.user.id);
@@ -199,8 +215,8 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
 
             case 'back':
                 await todo_interaction.message.edit({
-                    components: [new MessageActionRow({
-                        components: [newToDoButtons(false, lang)[0], newToDoButtons(false, lang)[1], newToDoButtons(false, lang)[2], newToDoButtons(false, lang)[3], newToDoButtons(false, lang)[4]]
+                    components: [new ActionRowBuilder({
+                        components: [newToDoButtons(main_interaction, false, lang)[0], newToDoButtons(main_interaction, false, lang)[1], newToDoButtons(main_interaction, false, lang)[2], newToDoButtons(main_interaction, false, lang)[3], newToDoButtons(main_interaction, false, lang)[4]]
                     })]
                 });
                 decrease_toDoAddCount(main_interaction.user.id);
@@ -215,7 +231,7 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
         messageCollector.on('collect', async reply => {
             var customId;
             try {
-                customId = todo_interaction.customId
+                customId = todo_interaction.customId.split(' ')[0]
             }catch(e) {
                 return;
             }
@@ -311,7 +327,8 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
                         const reminderMessage = await reply.channel.send(lang.todo.newtodo.interaction.add_reminder)
                         const collector = main_interaction.message.channel.createMessageCollector({
                             max: 1,
-                            time: 30000
+                            time: 30000,
+                            filter: ((user) => user.author.id === main_interaction.user.id),
                         });
 
                         await collector.on('collect', async reply => {
@@ -349,11 +366,11 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
                             }
 
                             if (!date[2]) date[2] = new Date().getFullYear().toString();
-                            let checkDate = new Date(date[2], date[1], date[0], time[0], time[1]);
-
+                            let checkDate = new Date(date[2], Number(date[1]) - 1, date[0], time[0], time[1]);
+                            console.log(checkDate)
                             await delay(1000);
                             if (JSON.stringify(checkDate) != 'null') {
-                                reminder = `${date[2]}.${date[1]}.${date[0]} ${time[0]}:${time[1]}`;
+                                reminder = `${date[0]}.${date[1]}.${date[2]} ${time[0]}:${time[1]}`;
                                 reminderFormatDC = ` <t:${Math.floor(checkDate/1000)}:R>`
                             } else {
                                 return reply.reply(lang.todo.newtodo.errors.reminder_wrong_date_format).then(async msg => {
@@ -367,13 +384,25 @@ module.exports.manageToDoItem = async ({main_interaction, toDoId, isNewTask}) =>
 
                             manageTask.edit({
                                 embeds: [newToDoEmbed(title, text, deadline + dateFormatDC + `\n🕐 **${lang.todo.reminder}:** ${reminder} ${reminderFormatDC}`, user)]
-                            });
+                            }).then(async () => {
+                                await delay(1000);
+                                reminderMessage.delete().catch(err => {});
+                                reply.delete().catch(err => {});
+                                todo_interaction_reply.delete().catch(err => {});
+                                decrease_toDoAddCount(main_interaction.user.id);
+                            }).catch(async err => {
+                                await delay(1000);
+                                reminderMessage.delete().catch(err => {});
+                                reply.delete().catch(err => {});
+                                todo_interaction_reply.delete().catch(err => {});
+                                decrease_toDoAddCount(main_interaction.user.id);
+                            })
 
                         });
 
                         manageTask.edit({
                             embeds: [newToDoEmbed(title, text, deadline + dateFormatDC, user)]
-                        });
+                        })
                     } else {
                         reply.channel.send({
                             content: lang.todo.newtodo.errors.reminder_wrong_date_format

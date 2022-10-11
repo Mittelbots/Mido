@@ -1,6 +1,6 @@
 const {
     SlashCommandBuilder
-} = require('@discordjs/builders');
+} = require('discord.js');
 const {
     getLang
 } = require('../../../utils/functions/getData/getLang');

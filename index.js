@@ -1,11 +1,8 @@
 //? MODULES --
-const Discord = require("discord.js");
+const {Client, EmbedBuilder, Options, GatewayIntentBits} = require("discord.js");
 const {
     errorhandler
 } = require("./utils/functions/errorhandler/errorhandler");
-const {
-    deployCommands
-} = require("./utils/functions/deployCommands/deployCommands");
 const {
     messageCreate
 } = require("./bot/events/messageCreate");
@@ -19,17 +16,12 @@ const {
     welcome_message
 } = require("./utils/functions/welcome_message/welcome_message");
 const {
-    ProjectInteraction
-} = require("./utils/functions/toDoList/ProjectInteraction");
-const {
     watchToDoList
 } = require("./utils/functions/watchToDoList/watchToDoList");
 const {
     spawn
 } = require('child_process');
-const {
-    MessageEmbed
-} = require("discord.js");
+
 const { createSlashCommands } = require("./utils/functions/createSlashCommands/createSlashCommands");
 const { guildCreate } = require("./bot/events/guildCreate");
 const { db_backup } = require("./bot/db/db_backup");
@@ -41,11 +33,12 @@ const config = require('./utils/assets/json/_config/config.json');
 const activity = require('./utils/assets/json/activity/activity.json');
 const { startUpCache } = require("./utils/functions/cache/startUpCache");
 const { interactionCreate } = require("./bot/events/interactionCreate");
+const { guildScheduledEventCreate } = require("./utils/functions/guildScheduledEvent/guildScheduledEvent");
 const version = require('./package.json').version;
 
-const bot = new Discord.Client({
-    intents: 32767, // ALL INTENTS
-    makeCache: Discord.Options.cacheWithLimits({
+const bot = new Client({
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildVoiceStates , GatewayIntentBits.GuildMessageReactions , GatewayIntentBits.GuildBans, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildScheduledEvents],
+    makeCache: Options.cacheWithLimits({
         MessageManager: 10,
         PresenceManager: 0,
         disableMentions: '@everyone, @here'
@@ -55,10 +48,6 @@ const bot = new Discord.Client({
 
 bot.setMaxListeners(5);
 
-bot.commands = new Discord.Collection();
-deployCommands({
-    bot: bot,
-});
 createSlashCommands();
 
 bot.on('guildCreate', async (guild) => {
@@ -73,6 +62,8 @@ bot.on('guildMemberAdd', async member => {
     return await welcome_message(member);
 });
 
+guildScheduledEventCreate(bot);
+
 bot.once('ready', async function () {
     await startUpCache();
 
@@ -84,7 +75,6 @@ bot.once('ready', async function () {
     }
 
     watchToDoList(bot);
-    
     interactionCreate(bot);
 
     getLinesOfCode((cb) => {
@@ -98,7 +88,7 @@ bot.once('ready', async function () {
     console.info(`****Ready! Logged in as ${bot.user.tag}! I'm on ${bot.guilds.cache.size} Server****`, new Date());
 
     bot.on('debug', (debug) => {
-        var Message = new MessageEmbed()
+        var Message = new EmbedBuilder()
             .setDescription(`**Debug info: ** \n ${debug}`)
 
         try {

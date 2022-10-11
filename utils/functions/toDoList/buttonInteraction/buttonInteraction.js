@@ -1,7 +1,7 @@
 const { increase_currentSiteCount, decrease_currentSiteCount, decrease_toDoInteractionCount, getCurrentProjectId, changeCurrentProjectId } = require("../../../variables/variables");
 const { editToDoList } = require("../editToDoList/editToDoList");
 const { addButtons } = require('../addButtonsToList');
-const { MessageActionRow } = require("discord.js");
+const { ActionRowBuilder } = require("discord.js");
 const config = require("../../../assets/json/_config/config.json");
 
 module.exports.buttonInteraction = async ({main_interaction, projects, todo}) => {
@@ -37,7 +37,7 @@ module.exports.buttonInteraction = async ({main_interaction, projects, todo}) =>
         if(!getCurrentProjectId(main_interaction.user.id)) changeCurrentProjectId(main_interaction.customId.split('_')[1], main_interaction.user.id);
         const buttons = await addButtons({main_interaction});
         main_interaction.message.edit({
-            components: [new MessageActionRow({
+            components: [new ActionRowBuilder({
                 components: [buttons[0], buttons[1], buttons[2], buttons[3], buttons[4]]
             })]
         }).catch(err => {});
