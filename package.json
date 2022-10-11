@@ -30,6 +30,6 @@
     "pm2": "^5.2.0",
     "randomcolor": "^0.6.2",
     "simple-node-logger": "^21.8.12",
-    "sloc": "^0.2.1"
+    "sloc": "^0.1.11"
   }
 }

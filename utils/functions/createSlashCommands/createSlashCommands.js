@@ -3,7 +3,7 @@ const {
 } = require('@discordjs/rest');
 const {
     Routes
-} = require('discord-api-types/v9');
+} = require('discord.js');
 const config = require('../../assets/json/_config/config.json');
 const secret_config = require('../../../_secret/secret_config/secret_config.json');
 const token = require('../../../_secret/token.json');

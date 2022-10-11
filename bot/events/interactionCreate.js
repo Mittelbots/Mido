@@ -1,4 +1,4 @@
-const { InteractionType } = require("discord-api-types/v10");
+const { InteractionType } = require("discord.js");
 const { handleSlashCommands } = require("../../src/slash_commands");
 const { isUserPremium } = require("../../utils/functions/premium/premium");
 const { ProjectInteraction } = require("../../utils/functions/toDoList/ProjectInteraction");
