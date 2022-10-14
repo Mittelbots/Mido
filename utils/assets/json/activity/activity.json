@@ -1,6 +1,3 @@
 {
-    "playing": {
-        "name": "Manage your tasks like a pro. Type !todo |",
-        "type": "PLAYING"
-    }
+    "name": "Manage your tasks like a pro. Type !todo |"
 }

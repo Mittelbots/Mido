@@ -3,26 +3,24 @@ require('dotenv').config();
 const { Client, EmbedBuilder, Options, GatewayIntentBits } = require('discord.js');
 const { errorhandler } = require('./utils/functions/errorhandler/errorhandler');
 const { messageCreate } = require('./bot/events/messageCreate');
-const { getLinesOfCode } = require('./utils/functions/getLinesOfCode/getLinesOfCode');
 const { log } = require('./logs');
 const { welcome_message } = require('./utils/functions/welcome_message/welcome_message');
 const { watchToDoList } = require('./utils/functions/watchToDoList/watchToDoList');
 const { spawn } = require('child_process');
-
 const {
     createSlashCommands,
 } = require('./utils/functions/createSlashCommands/createSlashCommands');
 const { guildCreate } = require('./bot/events/guildCreate');
 const { db_backup } = require('./bot/db/db_backup');
-
-//? JSON --
-const config = require('./utils/assets/json/_config/config.json');
-const activity = require('./utils/assets/json/activity/activity.json');
 const { startUpCache } = require('./utils/functions/cache/startUpCache');
 const { interactionCreate } = require('./bot/events/interactionCreate');
 const {
     guildScheduledEventCreate,
 } = require('./utils/functions/guildScheduledEvent/guildScheduledEvent');
+const { setActivity } = require('./utils/functions/activity/setActivity');
+
+//? JSON --
+const config = require('./utils/assets/json/_config/config.json');
 const version = require('./package.json').version;
 
 const bot = new Client({
@@ -45,6 +43,8 @@ const bot = new Client({
 });
 
 bot.setMaxListeners(5);
+
+bot.version = version;
 
 createSlashCommands();
 
@@ -75,13 +75,10 @@ bot.once('ready', async function () {
     watchToDoList(bot);
     interactionCreate(bot);
 
-    getLinesOfCode((cb) => {
-        var codeLines = ` | Lines of Code: ${cb}` || '';
-        bot.user.setActivity({
-            name: activity.playing.name + ' v' + version + codeLines,
-            type: activity.playing.type,
-        });
-    });
+    setActivity(bot);
+    setInterval(() => {
+        setActivity(bot);
+    }, 60000);
 
     console.info(
         `****Ready! Logged in as ${bot.user.tag}! I'm on ${bot.guilds.cache.size} Server****`,
