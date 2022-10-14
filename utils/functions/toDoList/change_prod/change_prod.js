@@ -1,21 +1,32 @@
-const { ActionRowBuilder } = require("discord.js");
-const { increase_toDoInteractionCount, decrease_toDoInteractionCount, getCurrentInteractionCount } = require("../../../variables/variables");
-const { getProject } = require("../../getData/getProject");
-const { addSelectMenu } = require("../addSelectMenu");
+const { ActionRowBuilder } = require('discord.js');
+const {
+    increase_toDoInteractionCount,
+    decrease_toDoInteractionCount,
+    getCurrentInteractionCount,
+} = require('../../../variables/variables');
+const { getProject } = require('../../getData/getProject');
+const { addSelectMenu } = require('../addSelectMenu');
 
-module.exports = async ({main_interaction}) => {
+module.exports = async ({ main_interaction }) => {
     if (increase_toDoInteractionCount(main_interaction.user.id) > 1) {
         return;
     }
 
     const projects = await getProject(main_interaction.message.channel);
-    var newSelectMenu = await addSelectMenu(main_interaction, projects, false, main_interaction.message.guild.id)
+    var newSelectMenu = await addSelectMenu(
+        main_interaction,
+        projects,
+        false,
+        main_interaction.message.guild.id
+    );
     await main_interaction.message.edit({
-        components: [new ActionRowBuilder({
-            components: [newSelectMenu]
-        })]
+        components: [
+            new ActionRowBuilder({
+                components: [newSelectMenu],
+            }),
+        ],
     });
 
     decrease_toDoInteractionCount(main_interaction.user.id);
     newSelectMenu = null;
-}
+};
