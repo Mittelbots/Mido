@@ -1,5 +1,4 @@
 const { ButtonBuilder, ActionRowBuilder, EmbedBuilder  } = require("discord.js")
-const secret_config = require('../../../_secret/secret_config/secret_config.json');
 
 module.exports.welcome_message = async (member) => {
     if(member.guild.id === '914934447349059645') { //! ONLY ON HAUTNAH.
@@ -11,7 +10,7 @@ module.exports.welcome_message = async (member) => {
             .setTimestamp()
 
         const button =  new ButtonBuilder()
-            .setURL(secret_config.welcome_msg_link)
+            .setURL(process.env.DC_INVITE)
             .setLabel('Meeting beitreten')
             .setStyle('LINK')
 

@@ -1,4 +1,5 @@
 //? MODULES --
+require('dotenv').config();
 const {Client, EmbedBuilder, Options, GatewayIntentBits} = require("discord.js");
 const {
     errorhandler
@@ -27,8 +28,6 @@ const { guildCreate } = require("./bot/events/guildCreate");
 const { db_backup } = require("./bot/db/db_backup");
 
 //? JSON --
-const token = require('./_secret/token.json');
-const secret_config = require('./_secret/secret_config/secret_config.json');
 const config = require('./utils/assets/json/_config/config.json');
 const activity = require('./utils/assets/json/activity/activity.json');
 const { startUpCache } = require("./utils/functions/cache/startUpCache");
@@ -67,7 +66,7 @@ guildScheduledEventCreate(bot);
 bot.once('ready', async function () {
     await startUpCache();
 
-    if(!secret_config.debug) {
+    if(!JSON.parse(process.env.BOT_DEBUG)) {
         db_backup();
         setTimeout(() => {
             db_backup();
@@ -92,7 +91,7 @@ bot.once('ready', async function () {
             .setDescription(`**Debug info: ** \n ${debug}`)
 
         try {
-            if (!secret_config.debug) {
+            if (!JSON.parse(process.env.BOT_DEBUG)) {
                 bot.guilds.cache.get(config.debug_info.debug_server).channels.cache.get(config.debug_info.debug_channel).send({
                     embeds: [Message]
                 });
@@ -101,14 +100,14 @@ bot.once('ready', async function () {
     });
 
 
-    if (!secret_config.debug) log.info('------------BOT SUCCESSFULLY STARTED------------', new Date());
+    if (!JSON.parse(process.env.BOT_DEBUG)) log.info('------------BOT SUCCESSFULLY STARTED------------', new Date());
 });
 
-bot.login(token.BOT_TOKEN);
+bot.login(process.env.BOT_TOKEN);
 
 //! ERROR --
 process.on('unhandledRejection', err => {
-    if (secret_config.debug) return console.log(err);
+    if (JSON.parse(process.env.BOT_DEBUG)) return console.log(err);
     else errorhandler({err, fatal: true});
 
     errorhandler({err: `---- BOT RESTARTED..., ${new Date()}`, fatal: false});
@@ -120,7 +119,7 @@ process.on('unhandledRejection', err => {
 });
 
 process.on('uncaughtException', err => {
-    if (secret_config.debug) return console.log(err);
+    if (JSON.parse(process.env.BOT_DEBUG)) return console.log(err);
     else errorhandler({err, fatal: true});
 
     errorhandler({err: `---- BOT RESTARTED..., ${new Date()}`, fatal: false});

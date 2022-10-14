@@ -5,8 +5,6 @@ const {
     Routes
 } = require('discord.js');
 const config = require('../../assets/json/_config/config.json');
-const secret_config = require('../../../_secret/secret_config/secret_config.json');
-const token = require('../../../_secret/token.json');
 const fs = require('node:fs');
 
 module.exports.createSlashCommands = async () => {
@@ -15,7 +13,7 @@ module.exports.createSlashCommands = async () => {
     const modules = fs.readdirSync('./src/slash_commands').filter(file => file !== 'index.js');
 
     // Place your client and guild ids here
-    const clientId = secret_config.application_id;
+    const clientId = process.env.BOT_APPLICATION_ID;
     const guildId = config.debug_info.debug_server;
 
     for (const cmd_folder of modules) {
@@ -32,13 +30,13 @@ module.exports.createSlashCommands = async () => {
 
     const rest = new REST({
         version: '9'
-    }).setToken(token.BOT_TOKEN);
+    }).setToken(process.env.BOT_TOKEN);
 
     (async () => {
         try {
             console.log('🕐 Started refreshing application (/) commands.');
 
-            if (secret_config.debug) {
+            if (JSON.parse(process.env.BOT_DEBUG)) {
                 console.log('🕐 Started refreshing in Development.');
                 await rest.put(
                     Routes.applicationGuildCommands(clientId, guildId), {
