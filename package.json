@@ -9,7 +9,7 @@
     "restart": "pm2 stop Mido && pm2 start shard.js --name Mido --max-memory-restart 500M && pm2 monit",
     "kill": "pm2 stop Mido && pm2 delete Mido",
     "mido_install": "mkdir _logs && npm i",
-    "format": "prettier --write './**/*.{css,js,vue}'"
+    "format": "prettier --write './**/*.{js}'"
   },
   "repository": {
     "type": "git",
