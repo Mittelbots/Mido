@@ -3,7 +3,7 @@ const exec = require('child_process').exec;
 
 module.exports.db_backup = () => {
     exec(
-        ` mysqldump -u ${process.env.DB_USE} --password='${process.env.DB_PASS}' ${
+        ` mysqldump -u ${process.env.DB_USER} --password='${process.env.DB_PASS}' ${
             process.env.DB_NAME
         } --no-tablespaces > mido-db-backup/${
             new Date().getDay() + '_' + new Date().getMonth() + '_' + new Date().getFullYear()
