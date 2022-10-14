@@ -104,9 +104,6 @@ dist
 
 
 _logs/*
-_secret/token.json
-_secret/db/db.json
 mido-db-backup
-_secret/secret_config/secret_config.json
 
 ._*

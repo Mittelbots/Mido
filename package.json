@@ -8,7 +8,8 @@
     "prod": "pm2 start shard.js --name Mido --max-memory-restart 500M && pm2 monit",
     "restart": "pm2 stop Mido && pm2 start shard.js --name Mido --max-memory-restart 500M && pm2 monit",
     "kill": "pm2 stop Mido && pm2 delete Mido",
-    "mido_install": "mkdir _logs && npm i"
+    "mido_install": "mkdir _logs && npm i",
+    "format": "prettier --write './**/*.{js}'"
   },
   "repository": {
     "type": "git",
@@ -23,12 +24,13 @@
   "dependencies": {
     "@discordjs/rest": "^1.0.1",
     "discord.js": "^14.3.0",
+    "dotenv": "^16.0.3",
     "mysql": "^2.18.1",
     "node-sloc": "^0.2.1",
     "nodemon": "^2.0.20",
-    "pm2": "^5.2.0",
+    "prettier": "^2.7.1",
     "randomcolor": "^0.6.2",
     "simple-node-logger": "^21.8.12",
-    "sloc": "^0.1.11"
+    "sloc": "^0.2.1"
   }
 }

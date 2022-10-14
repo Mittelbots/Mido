@@ -1,38 +1,41 @@
-const { manageToDoItem } = require("../manageToDoItem/manageToDoitem");
-const {increase_toDoInteractionCount, getCurrentProjectId, changeCurrentProjectId
-} = require("../../../variables/variables");
-const { hasPermissions } = require("../../hasPermissions/hasPermissions");
-const { getLang } = require("../../getData/getLang");
+const { manageToDoItem } = require('../manageToDoItem/manageToDoitem');
+const {
+    increase_toDoInteractionCount,
+    getCurrentProjectId,
+    changeCurrentProjectId,
+} = require('../../../variables/variables');
+const { hasPermissions } = require('../../hasPermissions/hasPermissions');
+const { getLang } = require('../../getData/getLang');
 const { delay } = require('../../delay/delay');
 
 module.exports = async (main_interaction) => {
-
-    const lang = require(`../../../assets/json/language/${await getLang(main_interaction.guild.id)}.json`);
+    const lang = require(`../../../assets/json/language/${await getLang(
+        main_interaction.guild.id
+    )}.json`);
 
     const hasPerms = await hasPermissions({
         user: main_interaction.member,
         needed_permission: {
             view_tasks: 1,
             add_tasks: 1,
-        }
+        },
     });
 
-    if(!hasPerms) {
-        return main_interaction.message.reply(lang.errors.noperms)
-            .then(async msg => {
-                await delay(2000);
-                await msg.delete().catch(err => {})
-            })
+    if (!hasPerms) {
+        return main_interaction.message.reply(lang.errors.noperms).then(async (msg) => {
+            await delay(2000);
+            await msg.delete().catch((err) => {});
+        });
     }
 
     if (increase_toDoInteractionCount(main_interaction.user.id) > 1) {
         return;
     }
 
-    if(!getCurrentProjectId(main_interaction.user.id)) changeCurrentProjectId(main_interaction.customId.split('_')[1], main_interaction.user.id)
+    if (!getCurrentProjectId(main_interaction.user.id))
+        changeCurrentProjectId(main_interaction.customId.split('_')[1], main_interaction.user.id);
 
-
-    manageToDoItem({main_interaction, isNewTask: true});
+    manageToDoItem({ main_interaction, isNewTask: true });
 
     // const shortHandMessageCollector = main_interaction.message.channel.createMessageCollector({
     //     filter: ((user) => user.author.id === main_interaction.user.id),
@@ -104,4 +107,4 @@ module.exports = async (main_interaction) => {
     //     });
 
     // });
-}
+};

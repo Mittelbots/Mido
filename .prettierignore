@@ -1,0 +1,5 @@
+node_modules/
+mido-db-backup
+*.min.js
+jquery.js
+._*
