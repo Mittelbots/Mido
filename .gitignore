@@ -107,3 +107,6 @@ _logs/*
 mido-db-backup
 
 ._*
+
+Dockerfile.prod
+docker-compose.override.yml
