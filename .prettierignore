@@ -3,3 +3,12 @@ mido-db-backup
 *.min.js
 jquery.js
 ._*
+LICENSE
+.github
+.git
+core
+_backup
+_logs
+_debugLog
+
+Dockerfile.*

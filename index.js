@@ -11,7 +11,6 @@ const {
     createSlashCommands,
 } = require('./utils/functions/createSlashCommands/createSlashCommands');
 const { guildCreate } = require('./bot/events/guildCreate');
-const { db_backup } = require('./bot/db/db_backup');
 const { startUpCache } = require('./utils/functions/cache/startUpCache');
 const { interactionCreate } = require('./bot/events/interactionCreate');
 const {
@@ -64,13 +63,6 @@ guildScheduledEventCreate(bot);
 
 bot.once('ready', async function () {
     await startUpCache();
-
-    if (!JSON.parse(process.env.BOT_DEBUG)) {
-        db_backup();
-        setTimeout(() => {
-            db_backup();
-        }, 86400000); // 24h
-    }
 
     watchToDoList(bot);
     interactionCreate(bot);

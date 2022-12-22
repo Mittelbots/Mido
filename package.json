@@ -1,36 +1,36 @@
 {
-  "name": "mido",
-  "version": "0.14.1",
-  "description": "Mido. Manage your tasks like a pro",
-  "main": "index.js",
-  "scripts": {
-    "dev": "nodemon index.js",
-    "prod": "pm2 start shard.js --name Mido --max-memory-restart 500M && pm2 monit",
-    "restart": "pm2 stop Mido && pm2 start shard.js --name Mido --max-memory-restart 500M && pm2 monit",
-    "kill": "pm2 stop Mido && pm2 delete Mido",
-    "mido_install": "mkdir _logs && npm i",
-    "format": "prettier --write './**/*.{js}'"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Mittelbots/Mido.git"
-  },
-  "author": "BlackDayz",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Mittelbots/Mido/issues"
-  },
-  "homepage": "https://github.com/Mittelbots/Mido#readme",
-  "dependencies": {
-    "@discordjs/rest": "^1.0.1",
-    "discord.js": "^14.3.0",
-    "dotenv": "^16.0.3",
-    "mysql": "^2.18.1",
-    "node-sloc": "^0.2.1",
-    "nodemon": "^2.0.20",
-    "prettier": "^2.7.1",
-    "randomcolor": "^0.6.2",
-    "simple-node-logger": "^21.8.12",
-    "sloc": "^0.2.1"
-  }
+    "name": "mido",
+    "version": "0.14.1",
+    "description": "Mido. Manage your tasks like a pro",
+    "main": "index.js",
+    "scripts": {
+        "start": "docker compose up -d && docker ps",
+        "stop": "docker compose down",
+        "restart": "npm run stop && npm run start",
+        "mido_install": "mkdir _logs && npm i",
+        "format": "prettier --write . --bracket-same-line=true",
+        "check": "prettier --check . --bracket-same-line=true"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Mittelbots/Mido.git"
+    },
+    "author": "BlackDayz",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Mittelbots/Mido/issues"
+    },
+    "homepage": "https://github.com/Mittelbots/Mido#readme",
+    "dependencies": {
+        "@discordjs/rest": "^1.0.1",
+        "discord.js": "^14.7.1",
+        "dotenv": "^16.0.3",
+        "mysql": "^2.18.1",
+        "node-sloc": "^0.2.1",
+        "nodemon": "^2.0.20",
+        "prettier": "^2.8.1",
+        "randomcolor": "^0.6.2",
+        "simple-node-logger": "^21.8.12",
+        "sloc": "^0.2.1"
+    }
 }
