@@ -9,6 +9,7 @@ networks:
 
 services:
     bot:
+        container_name: mido
         build:
             context: .
             dockerfile: Dockerfile
