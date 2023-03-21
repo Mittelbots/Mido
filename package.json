@@ -28,7 +28,7 @@
         "mysql": "^2.18.1",
         "node-sloc": "^0.2.1",
         "nodemon": "^2.0.20",
-        "prettier": "^2.8.4",
+        "prettier": "^2.8.5",
         "randomcolor": "^0.6.2",
         "simple-node-logger": "^21.8.12",
         "sloc": "^0.2.1"
