@@ -1,4 +1,4 @@
-FROM node:18.8
+FROM node:18.15.0
 
 WORKDIR /app
 
@@ -11,4 +11,4 @@ COPY . .
 
 EXPOSE 5050
 
-CMD [ "nodemon", "index.js" ]
+CMD [ "nodemon", "bot/core/index.js" ]

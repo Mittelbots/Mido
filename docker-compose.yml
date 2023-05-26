@@ -1,11 +1,7 @@
 version: '3.9'
 
 volumes:
-    mysql:
-
-networks:
-    net:
-        driver: bridge
+    mysql_mido:
 
 services:
     bot:
@@ -14,6 +10,8 @@ services:
             context: .
             dockerfile: Dockerfile
         restart: unless-stopped
+        environment:
+            - NODE_ENV=development
         links:
             - mysql_mido
         env_file:
@@ -21,11 +19,10 @@ services:
         volumes:
             - .:/app
         ports:
-            - 5050:5050
-        networks:
-            - net
+            - 5050:5000
 
     mysql_mido:
+        container_name: mido-mysql
         image: mysql:5.7
         environment:
             - MYSQL_ROOT_PASSWORD=root
@@ -36,7 +33,7 @@ services:
         env_file:
             - .env
         volumes:
-            - mysql:/var/lib/mysql
+            - mysql_mido:/var/lib/mysql
         ports:
             - '3308:3306'
         restart: unless-stopped
@@ -47,5 +44,21 @@ services:
             test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
             timeout: 5s
             retries: 10
-        networks:
-            - net
+
+    mysql-backup:
+        image: fradelg/mysql-cron-backup
+        depends_on:
+            - mysql_mido
+        restart: always
+        volumes:
+            - ./backups:/backup
+        environment:
+            - MYSQL_USER=mdio
+            - MYSQL_PASS=root
+            - MYSQL_DB=mido
+            - CRON_TIME=0 0 * * *
+            - MYSQL_HOST=mysql_mido
+            - MYSQL_PORT=3306
+            - TIMEOUT=10s
+            - INIT_BACKUP=1
+            - MAX_BACKUPS=7

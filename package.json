@@ -4,10 +4,10 @@
     "description": "Mido. Manage your tasks like a pro",
     "main": "index.js",
     "scripts": {
-        "start": "docker compose up -d && docker logs -f mido",
+        "start": "docker compose up -d && npm run log",
         "stop": "docker compose down",
         "restart": "npm run stop && npm run start",
-        "mido_install": "mkdir _logs && npm i",
+        "log": "docker logs -f mido",
         "format": "prettier --write . --bracket-same-line=true",
         "check": "prettier --check . --bracket-same-line=true"
     },
@@ -26,11 +26,12 @@
         "discord.js": "^14.11.0",
         "dotenv": "^16.0.3",
         "mysql": "^2.18.1",
+        "mysql2": "^3.3.2",
         "node-sloc": "^0.2.1",
         "nodemon": "^2.0.22",
         "prettier": "^2.8.8",
         "randomcolor": "^0.6.2",
-        "simple-node-logger": "^21.8.12",
+        "sequelize": "^6.31.1",
         "sloc": "^0.2.1"
     }
 }
