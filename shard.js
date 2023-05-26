@@ -3,8 +3,8 @@ require('dotenv').config();
 
 let manager = new ShardingManager('./index.js', {
     token: process.env.BOT_TOKEN,
-    totalShards: process.env.BOT_TOTALSHARDS,
-    respawn: JSON.parse(process.env.BOT_RESPAWN),
+    totalShards: 'auto',
+    respawn: true,
 });
 
 manager.on('shardCreate', (shard) => {

@@ -5,18 +5,14 @@ const { errorhandler } = require('../errorhandler/errorhandler');
 
 module.exports.setActivity = (bot) => {
     getLinesOfCode((cb) => {
-        let membersCount = bot.guilds.cache
+        const membersCount = bot.guilds.cache
             .map((guild) => guild.memberCount)
             .reduce((a, b) => a + b, 0);
-        var codeLines =
+        const codeLines =
             ` | ${bot.guilds.cache.size} guilds with ${membersCount} members | Code: ${cb}` || '';
         bot.user.setActivity({
             name: activity.name + ' v' + bot.version + codeLines,
             type: ActivityType.Playing,
-        });
-        errorhandler({
-            err: '------------BOT ACTIVITY SUCCESSFULLY STARTED------------' + new Date(),
-            fatal: false,
         });
     });
 };

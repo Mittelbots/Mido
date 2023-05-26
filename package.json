@@ -23,15 +23,18 @@
     "homepage": "https://github.com/Mittelbots/Mido#readme",
     "dependencies": {
         "@discordjs/rest": "^1.0.1",
+        "@sentry/node": "^7.53.1",
         "discord.js": "^14.11.0",
         "dotenv": "^16.0.3",
-        "mysql": "^2.18.1",
         "mysql2": "^3.3.2",
         "node-sloc": "^0.2.1",
         "nodemon": "^2.0.22",
-        "prettier": "^2.8.8",
         "randomcolor": "^0.6.2",
         "sequelize": "^6.31.1",
         "sloc": "^0.2.1"
+    },
+    "devDependencies": {
+        "caller-id": "^0.1.0",
+        "prettier": "^2.8.8"
     }
 }

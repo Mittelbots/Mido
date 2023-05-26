@@ -1,27 +1,31 @@
 //? MODULES --
 require('dotenv').config();
+
+const { sentryInit } = require('./sentry');
+sentryInit();
+
 const { Client, EmbedBuilder, Options, GatewayIntentBits } = require('discord.js');
 const { errorhandler } = require('../../utils/functions/errorhandler/errorhandler');
-const { messageCreate } = require('../../bot/events/messageCreate');
-const { welcome_message } = require('../../utils/functions/welcome_message/welcome_message');
 const { watchToDoList } = require('../../utils/functions/watchToDoList/watchToDoList');
 const { spawn } = require('child_process');
 const {
     createSlashCommands,
 } = require('../../utils/functions/createSlashCommands/createSlashCommands');
-const { guildCreate } = require('../../bot/events/guildCreate');
-const { interactionCreate } = require('../../bot/events/interactionCreate');
 const {
     guildScheduledEventCreate,
 } = require('../../utils/functions/guildScheduledEvent/guildScheduledEvent');
 const { setActivity } = require('../../utils/functions/activity/setActivity');
+const { processErrorHandler } = require('../../utils/functions/errorhandler/processErrorHandler');
 
 //? JSON --
 const config = require('../../utils/assets/json/_config/config.json');
 const { startBot } = require('./startup');
 const { delay } = require('../../utils/functions/delay/delay');
-const { acceptBotInteraction } = require('./events/_handle');
-const version = require('../../package.json').version;
+const { acceptBotInteraction } = require('../events/_handle');
+const Sentry = require("@sentry/node");
+const { Partials } = require('discord.js');
+
+processErrorHandler();
 
 const bot = new Client({
     intents: [
@@ -33,26 +37,17 @@ const bot = new Client({
         GatewayIntentBits.GuildBans,
         GatewayIntentBits.MessageContent,
         GatewayIntentBits.GuildScheduledEvents,
+        GatewayIntentBits.DirectMessages,
     ],
+    partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 });
 
-bot.setMaxListeners(5);
+bot.setMaxListeners(0);
 
-bot.version = version;
+bot.version = process.env.npm_package_version;
+bot.config = config;
 
 createSlashCommands();
-
-bot.on('guildCreate', async (guild) => {
-    return await guildCreate({ guild, bot });
-});
-
-bot.on('messageCreate', (message) => {
-    return messageCreate(message, bot);
-});
-
-bot.on('guildMemberAdd', async (member) => {
-    return await welcome_message(member);
-});
 
 guildScheduledEventCreate(bot);
 
@@ -80,26 +75,3 @@ bot.once('ready', async function () {
 });
 
 bot.login(process.env.BOT_TOKEN);
-
-//! ERROR --
-process.on('unhandledRejection', (err) => {
-    errorhandler({ err, fatal: true });
-
-    errorhandler({ err: `---- BOT RESTARTED..., ${new Date()}`, fatal: false });
-    spawn(process.argv[1], process.argv.slice(2), {
-        detached: true,
-        stdio: ['ignore', null, null],
-    }).unref();
-    process.exit();
-});
-
-process.on('uncaughtException', (err) => {
-    errorhandler({ err, fatal: true });
-
-    errorhandler({ err: `---- BOT RESTARTED..., ${new Date()}`, fatal: false });
-    spawn(process.argv[1], process.argv.slice(2), {
-        detached: true,
-        stdio: ['ignore', null, null],
-    }).unref();
-    process.exit();
-});

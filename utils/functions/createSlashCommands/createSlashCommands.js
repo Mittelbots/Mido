@@ -1,6 +1,5 @@
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord.js');
-const config = require('../../assets/json/_config/config.json');
 const fs = require('node:fs');
 
 module.exports.createSlashCommands = async () => {
@@ -9,7 +8,7 @@ module.exports.createSlashCommands = async () => {
 
     // Place your client and guild ids here
     const clientId = process.env.BOT_APPLICATION_ID;
-    const guildId = config.debug_info.debug_server;
+    const guildId = process.env.BOT_DEV_GUILD;
 
     for (const cmd_folder of modules) {
         const files = fs.readdirSync(`./src/slash_commands/${cmd_folder}/`);
@@ -30,9 +29,17 @@ module.exports.createSlashCommands = async () => {
         try {
             console.log('🕐 Started refreshing application (/) commands.');
 
-            await rest.put(Routes.applicationCommands(clientId), {
-                body: commands,
-            });
+            if (process.env.NODE_ENV === 'development') {
+                console.info('🕐 Started refreshing in Development.');
+                await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
+                    body: commands,
+                });
+            } else {
+                console.info('🕐 Started refreshing in Production.');
+                await rest.put(Routes.applicationCommands(clientId), {
+                    body: commands,
+                });
+            }
 
             console.log('✅ Successfully reloaded application (/) commands.');
         } catch (error) {
