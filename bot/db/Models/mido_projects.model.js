@@ -1,9 +1,9 @@
 const { Model, DataTypes } = require('sequelize');
 const database = require('../db');
 
-class MidoConfig extends Model {}
+class MidoProjects extends Model {}
 
-MidoConfig.init(
+MidoProjects.init(
     {
         name: {
             type: DataTypes.STRING,
@@ -25,4 +25,4 @@ MidoConfig.init(
     }
 );
 
-module.exports = MidoConfig;
+module.exports = MidoProjects;

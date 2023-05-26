@@ -11,4 +11,4 @@ COPY . .
 
 EXPOSE 5050
 
-CMD [ "nodemon", "bot/core/index.js" ]
+CMD [ "nodemon", "bot/core/shard.js" ]

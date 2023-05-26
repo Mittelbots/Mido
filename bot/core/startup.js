@@ -1,5 +1,6 @@
 const { setActivity } = require("../../utils/functions/activity/setActivity");
 const { createSlashCommands, loadCommandList } = require("../../utils/functions/createSlashCommands/createSlashCommands");
+const MidoConfig = require("../db/Models/mido_config.model");
 const database = require("../db/db");
 
 module.exports.startBot = async (bot) => {
@@ -35,8 +36,8 @@ module.exports.fetchCache = async (bot) => {
             const guilds = await bot.guilds.fetch();
             console.timeEnd('Fetching guilds in:');
 
-            //console.time('Checking data in database:');
-            //await this.checkGuildsInDatabase(guilds);
+            console.time('Checking data in database:');
+            await this.checkGuildsInDatabase(guilds);
 
             console.timeEnd('Checking data in database:');
 
@@ -68,5 +69,25 @@ module.exports.fetchUsers = async (bot, guilds) => {
                 return resolve(true);
             }
         });
+    });
+};
+
+
+module.exports.checkGuildsInDatabase = async (guilds) => {
+    return new Promise(async (resolve) => {
+        await guilds.map(async (guild) => {
+            await MidoConfig.findOne({
+                where: {
+                    guild_id: guild.id,
+                },
+            }).then(async (guildData) => {
+                if (!guildData) {
+                    await MidoConfig.create({
+                        guild_id: guild.id,
+                    }).catch(() => {});
+                }
+            }).catch(() => {});
+        });
+        resolve(true);
     });
 };

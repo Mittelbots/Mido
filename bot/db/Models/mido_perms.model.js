@@ -1,9 +1,9 @@
 const { Model, DataTypes } = require('sequelize');
 const database = require('../db');
 
-class MidoConfig extends Model {}
+class MidoPerms extends Model {}
 
-MidoConfig.init(
+MidoPerms.init(
     {
         role_id: {
             type: DataTypes.BIGINT,
@@ -26,4 +26,4 @@ MidoConfig.init(
     }
 );
 
-module.exports = MidoConfig;
+module.exports = MidoPerms;

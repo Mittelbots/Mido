@@ -1,9 +1,9 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { hasPermissions } = require('../../../utils/functions/hasPermissions/hasPermissions');
 const { getLang } = require('../../../utils/functions/getData/getLang');
-const { getArchive } = require('../../../utils/functions/getData/getArchive');
 const { EmbedBuilder } = require('discord.js');
 const randomColor = require('randomcolor');
+const Archive = require('../../../utils/class/Task/Archive');
 
 module.exports.run = async ({ main_interaction, bot }) => {
     const lang = require(`../../../utils/assets/json/language/${await getLang(
@@ -29,11 +29,9 @@ module.exports.run = async ({ main_interaction, bot }) => {
             .catch((err) => {});
     }
 
-    const archive = await getArchive({
-        channel: main_interaction.channel,
-        isGuildArchive: isGuildArchive,
-        user_id: main_interaction.member.id,
-    });
+    const archive = isGuildArchive
+        ? await new Archive().getGuild(main_interaction.guild.id)
+        : await new Archive().getUser(main_interaction.guild.id, main_interaction.member.id);
 
     if (!archive)
         return main_interaction

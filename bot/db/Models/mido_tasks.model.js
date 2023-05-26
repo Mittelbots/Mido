@@ -1,9 +1,9 @@
 const { Model, DataTypes } = require('sequelize');
 const database = require('../db');
 
-class MidoConfig extends Model {}
+class MidoTasks extends Model {}
 
-MidoConfig.init(
+MidoTasks.init(
     {
         user_id: {
             type: DataTypes.BIGINT,
@@ -44,4 +44,4 @@ MidoConfig.init(
     }
 );
 
-module.exports = MidoConfig;
+module.exports = MidoTasks;

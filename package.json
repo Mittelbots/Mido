@@ -8,8 +8,8 @@
         "stop": "docker compose down",
         "restart": "npm run stop && npm run start",
         "log": "docker logs -f mido",
-        "format": "prettier --write . --bracket-same-line=true",
-        "check": "prettier --check . --bracket-same-line=true"
+        "format": "npm run stop && docker run --rm -v $(pwd):/app -w /app node:18.8 sh -c \"npm install -g prettier && prettier --write .\"",
+        "check": "docker run --rm -v $(pwd):/app -w /app node:18.8 sh -c \"npm install -g prettier && prettier --check .\""
     },
     "repository": {
         "type": "git",
@@ -34,7 +34,6 @@
         "sloc": "^0.2.1"
     },
     "devDependencies": {
-        "caller-id": "^0.1.0",
-        "prettier": "^2.8.8"
+        "caller-id": "^0.1.0"
     }
 }

@@ -5,17 +5,13 @@ class MidoConfig extends Model {}
 
 MidoConfig.init(
     {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
+        guild_id: {
+            type: DataTypes.BIGINT,
+            unique: 'guild_id',
         },
         lang: {
             type: DataTypes.STRING,
             defaultValue: 'en_EN',
-        },
-        guild_id: {
-            type: DataTypes.BIGINT,
-            allowNull: false,
         },
     },
     {

@@ -82,6 +82,7 @@ database.init = () => {
             .authenticate()
             .then(() => {
                 fs.readdirSync(dir).forEach((file) => {
+                    if (!file.includes('.model.js')) return;
                     console.log('Loading model: ' + file);
                     require(path.join(dir, file));
                 });
