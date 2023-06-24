@@ -1,21 +1,8 @@
 const config = require('../../assets/json/_config/config.json');
 const database = require('../../../bot/db/db');
 const { errorhandler } = require('../errorhandler/errorhandler');
-const { updateCache, getFromCache } = require('../cache/cache');
 
 module.exports.isUserPremium = async ({ user_id }) => {
-    const premiumCache = await getFromCache({
-        cacheName: 'premium',
-        param_id: user_id,
-    });
-
-    if (premiumCache)
-        return {
-            error: false,
-            premium: premiumCache.premium,
-            platin: premiumCache.platin,
-        };
-
     return await database
         .query(`SELECT premium, platin FROM ${config.tables.mido_premium} WHERE user_id = ?`, [
             user_id,
@@ -105,14 +92,6 @@ module.exports.updateUserPremium = async ({ user_id, premium, platin }) => {
             [premium, platin, user_id]
         )
         .then(async () => {
-            await updateCache({
-                cacheName: 'premium',
-                param_id: guild_id,
-                updateVal: {
-                    platin: platin,
-                    premium: premium,
-                },
-            });
             errorhandler({
                 err: '',
                 message: `User premium status added UserId: ${user_id}`,
