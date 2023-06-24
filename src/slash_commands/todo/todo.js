@@ -1,13 +1,11 @@
-const { SlashCommandBuilder } = require('discord.js');
-
-const { ActionRowBuilder, EmbedBuilder } = require('discord.js');
+const { ActionRowBuilder, EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const { delay } = require('../../../utils/functions/delay/delay');
-const { getProject } = require('../../../utils/functions/getData/getProject');
 const { getLang } = require('../../../utils/functions/getData/getLang');
 const { hasPermissions } = require('../../../utils/functions/hasPermissions/hasPermissions');
 const { removeMention } = require('../../../utils/functions/removeCharacters/removeCharacters');
 const { addSelectMenu } = require('../../../utils/functions/toDoList/addSelectMenu');
 const { viewUserToDo } = require('../../../utils/functions/toDoList/viewUserToDo');
+const Project = require('../../../utils/class/Projects/Project');
 
 module.exports.run = async ({ main_interaction, bot }) => {
     const lang = require(`../../../utils/assets/json/language/${await getLang(
@@ -63,15 +61,15 @@ module.exports.run = async ({ main_interaction, bot }) => {
                 .catch((err) => {});
         }
     }
-    var categories = await getProject(main_interaction.channel);
+    const categories = await new Project().get(main_interaction.guild.id);
 
-    var newEmbedBuilder = new EmbedBuilder()
+    const embed = new EmbedBuilder()
         .setTitle(
             categories ? lang.projects.choose_new_project : lang.projects.first_add_new_project
         )
         .setTimestamp();
 
-    var newEmbedBuilderInteraction = await addSelectMenu(
+    const newEmbedInteraction = await addSelectMenu(
         main_interaction,
         categories,
         false,
@@ -79,10 +77,10 @@ module.exports.run = async ({ main_interaction, bot }) => {
     );
 
     return await main_interaction.reply({
-        embeds: [newEmbedBuilder],
+        embeds: [embed],
         components: [
             new ActionRowBuilder({
-                components: [newEmbedBuilderInteraction],
+                components: [newEmbedInteraction],
             }),
         ],
     });

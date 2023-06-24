@@ -1,28 +1,27 @@
-const { getConfig } = require('../getData/getConfig');
-const { getLang } = require('../getData/getLang');
+const Config = require('../../class/Config/Config');
 const { updateLogChannel } = require('../updateData/updateLogChannel');
 
 module.exports.setLogChannel = async ({ main_interaction, newLogChannel }) => {
-    const lang = require(`../../assets/json/language/${await getLang(
-        main_interaction.guild.id
-    )}.json`);
+    return new Promise(async (resolve, reject) => {
+        if (newLogChannel) {
+            const config = await new Config()
+                .get(main_interaction.guild.id)
+                .then((config) => {
+                    return config;
+                })
+                .catch((err) => {
+                    reject(err);
+                });
 
-    if (newLogChannel) {
-        const currentLogChannel = await getConfig({
-            guild_id: main_interaction.guild.id,
-        });
-
-        if (currentLogChannel.error) return currentLogChannel;
-        else if (currentLogChannel.data.log_channel === newLogChannel.id) {
-            return {
-                error: true,
-                message: lang.settings.logChannel.already_exists,
-            };
+            if (config.log_channel === newLogChannel.id) {
+                reject('Already set');
+                return false;
+            }
         }
-    }
 
-    return await updateLogChannel({
-        guild_id: main_interaction.guild.id,
-        newLogChannel: newLogChannel ? newLogChannel.id : null,
+        return await updateLogChannel({
+            guild_id: main_interaction.guild.id,
+            newLogChannel: newLogChannel ? newLogChannel.id : null,
+        });
     });
 };

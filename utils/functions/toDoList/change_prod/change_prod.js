@@ -4,16 +4,16 @@ const {
     decrease_toDoInteractionCount,
     getCurrentInteractionCount,
 } = require('../../../variables/variables');
-const { getProject } = require('../../getData/getProject');
 const { addSelectMenu } = require('../addSelectMenu');
+const Project = require('../../../class/Projects/Project');
 
 module.exports = async ({ main_interaction }) => {
     if (increase_toDoInteractionCount(main_interaction.user.id) > 1) {
         return;
     }
 
-    const projects = await getProject(main_interaction.message.channel);
-    var newSelectMenu = await addSelectMenu(
+    const projects = await new Project().get(main_interaction.guild.id);
+    const newSelectMenu = await addSelectMenu(
         main_interaction,
         projects,
         false,

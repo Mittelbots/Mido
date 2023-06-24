@@ -1,9 +1,9 @@
 const { EmbedBuilder } = require('discord.js');
 const database = require('../../../bot/db/db');
 const { errorhandler } = require('../errorhandler/errorhandler');
-const { getProject } = require('../getData/getProject');
 const { getLang } = require('../getData/getLang');
 const config = require('../../assets/json/_config/config.json');
+const Project = require('../../class/Projects/Project');
 
 module.exports.viewUserToDo = async (user_id, guild_id, channel) => {
     const lang = require(`../../assets/json/language/${await getLang(guild_id)}.json`);
@@ -14,7 +14,7 @@ module.exports.viewUserToDo = async (user_id, guild_id, channel) => {
             if (res.length <= 0) {
                 return false;
             } else {
-                const categories = await getProject(channel);
+                const categories = await new Project().get(guild_id);
 
                 const newEmbed = new EmbedBuilder();
                 newEmbed.setDescription(`${lang.todo.all_open_task_from} <@${user_id}>`);

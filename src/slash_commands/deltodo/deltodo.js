@@ -2,10 +2,10 @@ const { SlashCommandBuilder } = require('discord.js');
 const { hasPermissions } = require('../../../utils/functions/hasPermissions/hasPermissions');
 const { getLang } = require('../../../utils/functions/getData/getLang');
 const { EmbedBuilder } = require('discord.js');
-const { getProject } = require('../../../utils/functions/getData/getProject');
 const { SelectMenuBuilder } = require('discord.js');
 const { ActionRowBuilder } = require('discord.js');
 const { delete_ready_todo } = require('../../../utils/variables/variables');
+const Project = require('../../../utils/class/Projects/Project');
 
 module.exports.run = async ({ main_interaction, bot }) => {
     const lang = require(`../../../utils/assets/json/language/${await getLang(
@@ -30,7 +30,7 @@ module.exports.run = async ({ main_interaction, bot }) => {
 
     const projectEmbed = new EmbedBuilder().setTitle(lang.deltodo.embed_title).setTimestamp();
 
-    const projects = await getProject(main_interaction.channel);
+    const projects = await new Project().get(main_interaction.guild.id);
 
     const selectMenu = new SelectMenuBuilder()
         .setCustomId(delete_ready_todo + ' $' + main_interaction.user.id)

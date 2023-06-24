@@ -20,7 +20,8 @@ module.exports.hasPermissions = async ({ user, needed_permission }) => {
     }
 
     let permissions;
-    for (let i in needed_permission) if (needed_permission[i] == 0) delete needed_permission[i];
+    for (let i in needed_permission) {
+        if (needed_permission[i] == 0) delete needed_permission[i];
 
         permissions = await database
             .query(`SELECT * FROM ${config.tables.mido_perms} WHERE guild_id = ?`, user.guild.id)

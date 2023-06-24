@@ -1,9 +1,9 @@
-const { getProject } = require('./getProject');
+const Project = require('../../class/Projects/Project');
 const { getToDo } = require('./getToDo');
 
 module.exports.refreshProject_ToDo = async (main_interaction) => {
-    let categories = await getProject(main_interaction.message.channel);
-    let todo = await getToDo(main_interaction.message.channel);
+    const categories = await new Project().get(main_interaction.guild.id);
+    const todo = await getToDo(main_interaction.message.channel);
 
     return [categories, todo];
 };
