@@ -11,9 +11,6 @@ const { spawn } = require('child_process');
 const {
     createSlashCommands,
 } = require('../../utils/functions/createSlashCommands/createSlashCommands');
-const {
-    guildScheduledEventCreate,
-} = require('../../utils/functions/guildScheduledEvent/guildScheduledEvent');
 const { setActivity } = require('../../utils/functions/activity/setActivity');
 const { processErrorHandler } = require('../../utils/functions/errorhandler/processErrorHandler');
 
@@ -48,8 +45,6 @@ bot.version = process.env.npm_package_version;
 bot.config = config;
 
 createSlashCommands();
-
-guildScheduledEventCreate(bot);
 
 bot.once('ready', async function () {
 
