@@ -1,37 +1,32 @@
-# <b>Mido - ToDo Discord Bot</b>
+# <center>Mido</center>
 
-Manage your tasks like a pro. <b>Add</b>, <b>remove</b> Projects and Tasks
-Just send one command and then navigate easily through everything with buttons and dropdown menus.
+## Introduction
+This is a simple to use Discord Bot with a user interface only design to add, edit, delete tasks and projects.
+You can also add permissions and set reminders for tasks.
 
-##### Well. You have to type !settings to change things (but, shhh :) )
+> ### Note: This is a work in progress and is not yet ready for use.
 
-<br>
+## Contributions
 
-### <b>❌ No more annoying commands anymore</b>
+### Installation
+1. Clone the repository
 
-### <b>❌ No need to type annoying help commands</b>
+```cmd
+git clone https://github.com/Mittelbots/Mido.git
+```
 
-<br>
-<hr>
-<br>
+2. Install the dependencies
 
-## ✅ JUST TYPE <b>!todo</b>
+```cmd
+npm install
+```
 
-<br>
-<br>
+3. Create a .env file in the root directory and add the data
 
-## <b>❓ Meaning of the Botname</b>
+4. Run the bot
+```cmd
+npm run start
+```
 
-**Mi** = Mi-ttelbot
-<br>
-**Do** = To-Do
-<br>
-
-## <b>🧑‍💻 Development</b>
-
-This masterpice was created by @Mittelblut9 with Node.js & Discord.js version 13
-
-<br>
-<br>
-
-### <img src="https://www.pinclipart.com/picdir/big/531-5317885_research-and-development-icon-clipart.png" width=30 style="margin-bottom: -15px">&nbsp;&nbsp; <b>Current version state: </b> BETA
+### Can I contribute?
+Yes, you can. Just fork the repository and create a pull request. We will review it and merge it.
