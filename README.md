@@ -6,6 +6,9 @@ This is a simple to use Discord Bot with a user interface only design to add, ed
 You can also add permissions and set reminders for tasks.
 
 > ### Note: This is a work in progress and is not yet ready for use.
+>
+> The code was written a while ago and is not up to date with the current standards and best practices.
+> I will try to update it as soon as possible.
 
 ## Contributions
 
